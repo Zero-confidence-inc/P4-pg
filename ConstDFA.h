@@ -1,9 +1,9 @@
-#ifndef NUMBER_DFA_H
-#define NUMBER_DFA_H
+#ifndef CONST_DFA_H
+#define CONST_DFA_H
 
 #include "Token.h"
 
-class NumberDFA {
+class ConstDFA {
 public:
     Token tokenize(const std::string& input);
 };

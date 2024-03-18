@@ -1,0 +1,7 @@
+#include "ConstDFA.h"
+
+Token ConstDFA::tokenize(const std::string& input) {
+    Token token;
+    // DFA logic goes here
+    return token;
+}
