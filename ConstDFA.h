@@ -8,4 +8,4 @@ public:
     Token tokenize(const std::string& input);
 };
 
-#endif // NUMBER_DFA_H
+#endif // CONST_DFA_H

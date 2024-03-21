@@ -3,6 +3,7 @@
 
 #include "Token.h"
 #include "IdentifierDFA.h"
+#include "OperatorDFA.h"
 #include "ConstDFA.h"
 #include <vector>
 
