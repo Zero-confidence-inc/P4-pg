@@ -8,8 +8,7 @@ std::vector<Token> tokenize(const std::string& input) {
     int DFA = 0;
     std::vector<Token> tokens;
     std::string currentToken = "";       
-    for(char c : input)
-    {
+    for(char c : input){
         if(isalpha(c) and DFA == 0){
             currentToken + c;
             DFA = 1;
@@ -23,8 +22,7 @@ std::vector<Token> tokenize(const std::string& input) {
     }
     return tokens;
 }
-bool islink(char c)
-{
+bool islink(char c){
     if (c == '_' or c == '-')
         return true;
     else return false;
