@@ -6,7 +6,8 @@
 enum class TokenType {
     IDENTIFIER,
     NUMBER, 
-    EOF_TOKEN
+    EOF_TOKEN,
+    STRING
 };
 
 struct Token {

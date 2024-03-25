@@ -3,28 +3,28 @@
         {
             "name": "Win32",
             "includePath": [
-<<<<<<< Updated upstream
-                "${default}",
-=======
->>>>>>> Stashed changes
-                "${workspaceFolder}/**"
+                "c:/Users/Tobias/Desktop/P4/P4-pg/**",
+                "${workspaceFolder}"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-<<<<<<< Updated upstream
             "windowsSdkVersion": "10.0.22621.0",
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "windows-gcc-x86",
-            "compilerPath": "C:/MinGW/bin/gcc.exe"
-=======
-            "cStandard": "c17",
-            "cppStandard": "gnu++14",
-            "intelliSenseMode": "windows-gcc-x64"
->>>>>>> Stashed changes
+            "compilerPath": "C:/msys64/ucrt64/bin/gcc.exe",
+            "compilerPathInCppPropertiesJson": "C:/MinGW/bin/gcc.exe",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [
+                    "c:/Users/Tobias/Desktop/P4/P4-pg/**",
+                    "c:/Users/Tobias/Desktop/P4/P4-pg"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
         }
     ],
     "version": 4
