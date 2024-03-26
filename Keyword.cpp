@@ -45,10 +45,10 @@ public:
                     currentString->push_back(c);
                     currentState = State::bool_b;
                 }
-                else if (c == 'a'){
+                else if (c == '?'){
                     currentToken += c;
                     currentString->push_back(c);
-                    currentState = State::array_a1;
+                    currentState = State::random_qmark;
                 }
                 break;
 
@@ -211,38 +211,61 @@ public:
                 }
                 break;
 
-/*
-            case State::array_a1:
-                if (c == 'r'){
-                    currentToken += c;
-                    currentString->push_back(c);
-                    currentState = State::array_r1;
-                }
-                break;
-            case State::array_r1:
-                if (c == 'r'){
-                    currentToken += c;
-                    currentString->push_back(c);
-                    currentState = State::array_r2;
-                }
-                break;
-            case State::array_r2:
-                if (c == 'a'){
-                    currentToken += c;
-                    currentString->push_back(c);
-                    currentState = State::array_a2;
-                }
-                break;
-            case State::array_a2:
-                if (c == 'y'){
 
+            case State::random_qmark:
+                if (c == '<'){
+                    currentToken += c;
+                    currentString->push_back(c);
+                    currentState = State::random_bracet_start;
                 }
-*/
+                break;
+            case State::random_bracet_start:
+                if (c == '0' | c == '1' | c == '2' | c == '3' | c == '4' | c == '5' | c == '6' | c == '7' | c == '8' | c == '9'){
+                    currentToken += c;
+                    currentString->push_back(c);
+                    currentState = State::random_low;
+                }
+                break;
+            case State::random_low:
+                if (c == '0' | c == '1' | c == '2' | c == '3' | c == '4' | c == '5' | c == '6' | c == '7' | c == '8' | c == '9'){
+                    currentToken += c;
+                    currentString->push_back(c);
+                    currentState = State::random_low;
+                }
+                else if (c == ','){
+                    currentToken += c;
+                    currentString->push_back(c);
+                    currentState = State::random_comma;
+                }
+                break;
+            case State::random_comma:
+                if (c == '0' | c == '1' | c == '2' | c == '3' | c == '4' | c == '5' | c == '6' | c == '7' | c == '8' | c == '9'){
+                    currentToken += c;
+                    currentString->push_back(c);
+                    currentState = State::random_high;
+                }
+                break;
+            case State::random_high:
+                if (c == '0' | c == '1' | c == '2' | c == '3' | c == '4' | c == '5' | c == '6' | c == '7' | c == '8' | c == '9'){
+                    currentToken += c;
+                    currentString->push_back(c);
+                    currentState = State::random_high;
+                }
+                else if (c == '>'){
+                    currentToken += c;
+                    currentString->push_back(c);
+                    currentState = State::random_bracet_end;
+                }
+                break;
 
             default:
                 break;
             }
         }
+        if (!currentToken.empty()){
+            tokens.push_back(Token(TokenType::KEYWORD, currentToken));
+        }
+        return tokens;
     };
 
     private:
@@ -275,14 +298,6 @@ public:
             bool_o1,
             bool_o2,
             bool_l,
-            array_a1,
-            array_r1,
-            array_r2,
-            array_a2,
-            array_y,
-            array_bracet_start,
-            array_word,
-            array_bracet_end,
             random_qmark,
             random_bracet_start,
             random_low,
