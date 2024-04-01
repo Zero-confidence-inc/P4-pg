@@ -7,7 +7,8 @@ enum class TokenType {
     IDENTIFIER,
     NUMBER,
     OPERATOR, 
-    EOF_TOKEN
+    EOF_TOKEN,
+    PPUNCTUATION
 };
 
 struct Token {
