@@ -3,7 +3,8 @@
 
 #include "Token.h"
 #include "IdentifierDFA.h"
-#include "NumberDFA.h"
+#include "OperatorDFA.h"
+#include "ConstDFA.h"
 #include <vector>
 
 class Lexer {
@@ -13,7 +14,7 @@ public:
 
 private:
     IdentifierDFA identifierDFA;
-    NumberDFA numberDFA;
+    ConstDFA numberDFA;
     // Add more DFAs as needed
 };
 
