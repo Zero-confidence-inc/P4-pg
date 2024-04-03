@@ -5,7 +5,7 @@
 
 enum class TokenType {
     IDENTIFIER,
-    NUMBER,
+    CONST,
     OPERATOR, 
     EOF_TOKEN,
     PPUNCTUATION
