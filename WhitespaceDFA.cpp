@@ -4,14 +4,14 @@
 
 class WhitespaceDFA {
 public:
-    std::vector<Token> tokenize(const std:: string& inputs) {
+    std::vector<Token> tokenize(const std:: string& input) {
         std::vector<Token> tokens;
         std::string currentToken;
-        State currentToken = State::Start;
+        State currentState = State::Start;
 
         for (char c : input) {
             switch (currentState) {
-                case State::start:
+                case State::Start:
 
                 if (c == ' ' || c == '\n' || c == '\t'){
                     currentToken += c;

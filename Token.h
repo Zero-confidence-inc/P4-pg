@@ -9,7 +9,9 @@ enum class TokenType {
     OPERATOR, 
     EOF_TOKEN,
     PUNCTUATION,
-    STRING
+    STRING,
+    KEYWORD,
+    WHITESPACE
 };
 
 struct Token {
