@@ -30,7 +30,7 @@ public:
         }
         // appends the last token if it is not empty
         if (!currentToken.empty()){
-            tokens.push_back(Token(TokenType::PPUNCTUATION, currentToken));
+            tokens.push_back(Token(TokenType::PUNCTUATION, currentToken));
         }
 
         return tokens;
