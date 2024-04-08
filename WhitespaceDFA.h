@@ -3,7 +3,7 @@
 
 #include "Token.h"
 
-class WhitespaceDFA {
+class WhitespaceDFA : public DFA {
 public:
     Token tokenize(const std::string& input);
 };

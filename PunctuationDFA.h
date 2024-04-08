@@ -3,7 +3,7 @@
 
 #include "Token.h"
 
-class PunctuationDFA {
+class PunctuationDFA : public DFA{
 public:
     Token tokenize(const std::string& input);
 };

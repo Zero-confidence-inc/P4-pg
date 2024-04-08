@@ -2,10 +2,16 @@
 #define LEXER_H
 
 #include "Token.h"
+#include <vector>
+#include <string>
 #include "IdentifierDFA.h"
 #include "OperatorDFA.h"
 #include "ConstDFA.h"
-#include <vector>
+#include "Keyword.h"
+#include "PunctuationDFA.h"
+#include "StringDFA.h"
+#include "WhitespaceDFA.h"
+#include "DFA.h"
 
 class Lexer {
 public:
@@ -14,8 +20,12 @@ public:
 
 private:
     IdentifierDFA identifierDFA;
-    ConstDFA numberDFA;
-    // Add more DFAs as needed
+    ConstDFA constDFA;
+    OperatorDFA operatorDFA;
+    KeywordDFA keywordDFA;
+    PunctuationDFA punctuationDFA;
+    StringDFA stringDFA;
+    WhitespaceDFA whitespaceDFA;
 };
 
 #endif // LEXER_H

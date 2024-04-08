@@ -1,9 +1,9 @@
-#ifndef KEYWORD_H
-#define KEYWORD_H
+#ifndef KEYWORD_DFA_H
+#define KEYWORD_DFA_H
 
 #include "Token.h"
 
-class Keyword {
+class KeywordDFA : public DFA {
 public:
     Token tokenize(const std::string& input);
 };

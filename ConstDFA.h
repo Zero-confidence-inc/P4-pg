@@ -3,7 +3,7 @@
 
 #include "Token.h"
 
-class ConstDFA {
+class ConstDFA : public DFA{
 public:
     Token tokenize(const std::string& input);
 };
