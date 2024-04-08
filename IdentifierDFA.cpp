@@ -40,4 +40,3 @@ void IdentifierDFA::reset() {
     currentState = State::Start;
     currentToken.clear();
 }
-};
