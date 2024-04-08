@@ -5,7 +5,18 @@
 
 class IdentifierDFA {
 public:
-    Token tokenize(const std::string& input);
+    IdentifierDFA();
+    bool processChar(char c) override;
+    Token finalizeToken() override;
+    bool hasToken() const override;
+    void reset() override;
+private:
+    enum class State{
+    Start,
+    Working
+    };
+    State currentState;
+    std::string currentToken;
 };
 
 #endif // IDENTIFIER_DFA_H
