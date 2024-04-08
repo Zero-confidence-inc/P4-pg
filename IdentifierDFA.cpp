@@ -37,4 +37,20 @@ bool islink(char c){
         return true;
     else return false;
 }
+
+Token IdentifierDFA::finalizeToken() {
+    // Assumes IDENTIFIER type exists in your TokenType enum
+    Token token(TokenType::IDENTIFIER, currentToken);
+    reset(); // Prepare for the next token
+    return token;  
+}
+
+bool IdentifierDFA::hasToken() const {
+    return !currentToken.empty();
+}
+
+void IdentifierDFA::reset() {
+    currentState = State::Start;
+    currentToken.clear();
+}
 };
