@@ -20,7 +20,7 @@ bool IdentifierDFA::processChar(char c) {
 }
 //Function that sends back if a character is one that is accepted between letters and numbers #Example "Health_Bar-2"
 bool islink(char c){
-    if (c == '_' or c == '-')
+    if (c == '_')
         return true;
     else return false;
 }
