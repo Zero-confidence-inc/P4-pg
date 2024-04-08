@@ -13,7 +13,7 @@ std::vector<Token> tokenize(const std::string& input) {
     for(char c : input){
         //Checks if character is in the alphabet and is the first character in the currentToken string
         //If it is, the character is added to the currentToken string and DFA is set to 1 indicating that first character has been set
-        if(isalpha(c) and DFA == 0){
+        if(isalpha(c) and DFA == 0 or islink(c) and DFA == 0){
             currentToken + c;
             DFA = 1;
         } 
