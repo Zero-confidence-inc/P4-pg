@@ -2,12 +2,24 @@
 #include <vector>
 #include "Token.h"
 
+std::string Convert_Vector(std::vector<char> Vector){
+    std::string completeString;
+    for (char c : Vector){
+        completeString = completeString+c;
+    }
+    Vector.clear();
+    return(completeString);
+}
+
+
+
 class KeywordDFA {
 public:
     std::vector<Token> tokenize(const std::string& input) {
         std::vector<Token> tokens;
         std::string currentToken;
-        std::string currentString[] = {};
+        std::vector<char> currentString = {};
+        std::string completeString;
         State currentState = State::Start;
         
 
@@ -16,54 +28,43 @@ public:
             {
             case State::Start:
                 if (c == 'i'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::int_i;
                 }
                 else if (c =='u'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::usint_u;
                 }
                 else if (c == 'c' ){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::char_c;
                 }
                 else if (c == 's'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::string_s;
                 }
                 else if (c == 'f'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::float_f;
                 }
                 else if (c == 'b'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::bool_b;
-                }
-                else if (c == '?'){
-                    currentToken += c;
-                    currentString->push_back(c);
-                    currentState = State::random_qmark;
                 }
                 break;
 
 
             case State::int_i:
                 if (c == 'n'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::int_n;
                 }
                 break;
             case State::int_n:
                 if (c == 't'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
+                    completeString = Convert_Vector(currentString);
+                    currentToken += completeString;
                     currentState = State::int_t;
                 }
                 break;
@@ -71,29 +72,27 @@ public:
 
             case State::usint_u:
                 if (c == 's'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::usint_s;
                 }
                 break;
             case State::usint_s:
                 if (c == 'i'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::usint_i;
                 }
                 break;
             case State::usint_i:
                 if (c == 'n'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::usint_n;
                 }
                 break;
             case State::usint_n:
                 if (c == 't'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
+                    completeString = Convert_Vector(currentString);
+                    currentToken += completeString;
                     currentState = State::usint_t;
                 }
                 break;
@@ -101,22 +100,21 @@ public:
 
             case State::char_c:
                 if (c == 'h'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::char_h;
                 }
                 break;
             case State::char_h:
                 if (c == 'a'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::char_a;
                 }
                 break;
             case State::char_a:
                 if (c == 'r'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
+                    completeString = Convert_Vector(currentString);
+                    currentToken += completeString;
                     currentState = State::char_r;
                 }
                 break;
@@ -124,36 +122,33 @@ public:
 
             case State::string_s:
                 if (c == 't'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::string_t;
                 }
                 break;
             case State::string_t:
                 if (c == 'r'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::string_r;
                 }
                 break;
             case State::string_r:
                 if (c == 'i'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::string_i;
                 }
                 break;
             case State::string_i:
                 if (c == 'n'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::string_n;
                 }
                 break;
             case State::string_n:
                 if (c == 'g'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
+                    completeString = Convert_Vector(currentString);
+                    currentToken += completeString;
                     currentState = State::string_g;
                 }
                 break;
@@ -161,29 +156,27 @@ public:
 
             case State::float_f:
                 if (c == 'l'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::float_l;
                 }
                 break;
             case State::float_l:
                 if (c == 'o'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::float_o;
                 }
                 break;
             case State::float_o:
                 if (c == 'a'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::float_a;
                 }
                 break;
             case State::float_a:
                 if (c == 't'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
+                    completeString = Convert_Vector(currentString);
+                    currentToken += completeString;
                     currentState = State::float_t;
                 }
                 break;
@@ -191,70 +184,22 @@ public:
 
             case State::bool_b:
                 if (c == 'o'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::bool_o1;
                 }
                 break;
             case State::bool_o1:
                 if (c == 'o'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
                     currentState = State::bool_o2;
                 }
                 break;
             case State::bool_o2:
                 if (c == 'l'){
-                    currentToken += c;
-                    currentString->push_back(c);
+                    currentString.push_back(c);
+                    completeString = Convert_Vector(currentString);
+                    currentToken += completeString;
                     currentState = State::bool_l;
-                }
-                break;
-
-
-            case State::random_qmark:
-                if (c == '<'){
-                    currentToken += c;
-                    currentString->push_back(c);
-                    currentState = State::random_bracet_start;
-                }
-                break;
-            case State::random_bracet_start:
-                if (c == '0' | c == '1' | c == '2' | c == '3' | c == '4' | c == '5' | c == '6' | c == '7' | c == '8' | c == '9'){
-                    currentToken += c;
-                    currentString->push_back(c);
-                    currentState = State::random_low;
-                }
-                break;
-            case State::random_low:
-                if (c == '0' | c == '1' | c == '2' | c == '3' | c == '4' | c == '5' | c == '6' | c == '7' | c == '8' | c == '9'){
-                    currentToken += c;
-                    currentString->push_back(c);
-                    currentState = State::random_low;
-                }
-                else if (c == ','){
-                    currentToken += c;
-                    currentString->push_back(c);
-                    currentState = State::random_comma;
-                }
-                break;
-            case State::random_comma:
-                if (c == '0' | c == '1' | c == '2' | c == '3' | c == '4' | c == '5' | c == '6' | c == '7' | c == '8' | c == '9'){
-                    currentToken += c;
-                    currentString->push_back(c);
-                    currentState = State::random_high;
-                }
-                break;
-            case State::random_high:
-                if (c == '0' | c == '1' | c == '2' | c == '3' | c == '4' | c == '5' | c == '6' | c == '7' | c == '8' | c == '9'){
-                    currentToken += c;
-                    currentString->push_back(c);
-                    currentState = State::random_high;
-                }
-                else if (c == '>'){
-                    currentToken += c;
-                    currentString->push_back(c);
-                    currentState = State::random_bracet_end;
                 }
                 break;
 
@@ -298,11 +243,5 @@ public:
             bool_o1,
             bool_o2,
             bool_l,
-            random_qmark,
-            random_bracet_start,
-            random_low,
-            random_comma,
-            random_high,
-            random_bracet_end
         };
 };
