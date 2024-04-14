@@ -2,6 +2,7 @@
 #define IDENTIFIER_DFA_H
 
 #include "Token.h"
+#include "DFA.h"
 
 class IdentifierDFA : public DFA{
 public:
@@ -10,11 +11,13 @@ public:
     Token finalizeToken() override;
     bool hasToken() const override;
     void reset() override;
+
 private:
     enum class State{
     Start,
     Working
     };
+    
     State currentState;
     std::string currentToken;
 };

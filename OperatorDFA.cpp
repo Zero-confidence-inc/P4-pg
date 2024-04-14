@@ -86,7 +86,6 @@ bool OperatorDFA::processChar(char c) {
     }
 }
 Token OperatorDFA::finalizeToken() {
-    // Assumes OPERATOR type exists in your TokenType enum
     Token token(TokenType::OPERATOR, currentToken);
     reset(); // Prepare for the next token
     return token;  
