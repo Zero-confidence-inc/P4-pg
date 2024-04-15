@@ -11,13 +11,18 @@ enum class TokenType {
     PUNCTUATION,
     STRING,
     KEYWORD,
-    WHITESPACE
+    WHITESPACE,
+    PHT
 };
 
 struct Token {
     TokenType type;
     std::string value;
 
+    //default token constructor
+    Token() : type(TokenType::PHT), value(""){}
+
+    //parameterized constructor (please use this one when possible)
     Token(TokenType t, const std::string& v) : type(t), value(v) {}
 };
 
