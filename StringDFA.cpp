@@ -1,27 +1,48 @@
-#include <string>
-#include <vector>
-#include <Token.h>
+#include "StringDFA.h"
 
-class StringDFA
-{
-public:
-std::vector<Token> tokenize(const std::string& input){
+StringDFA::StringDFA() : currentState(State::Start) {}
 
-std::vector<Token> tokens;
-std::string currentToken = "";
+bool StringDFA::processChar(char c) {
+    switch (currentState){
+        case State::Start:
+            if (c == '"'){
+                currentString += c;
+                currentState = State::Content;
+                return true;
+            }
+            else return false;
+        
+        case State::Content:
+            if (c == '"'){
+                currentString += c;
+                currentToken = currentString;
+                currentState = State::End;
+                return false;
+            }
 
-for(char c : input){
-
-    currentToken + c;
+            else if (isalnum(c)){
+                currentString += c;
+                currentState = State::Content;
+                return true;
+            }
+            else return false;          
+    }
 }
 
-if (currentToken.empty() != true)
-{
-   tokens.push_back(Token(TokenType::STRING, currentToken));
+Token StringDFA::finalizeToken() {
+    Token token(TokenType::STRING, currentToken);
+    reset();
+    return token;
 }
-return tokens;
 
-
+bool StringDFA::hasToken() const {
+    return !currentToken.empty();
 }
-};
+
+void StringDFA::reset(){
+    currentState = State::Start;
+    currentString.clear();
+    currentToken.clear();
+}
+
 
