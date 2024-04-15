@@ -9,7 +9,7 @@ bool OperatorDFA::processChar(char c) {
             if (c == '/' || c == '%' || c == '*' || c == '^'){
                 currentToken += c;
                 currentState = State::Operator;
-                return true;
+                return false;
 
             }else if (c == '<' || c == '>' || c == '!' || c == '='){
                 currentToken += c;
@@ -40,15 +40,15 @@ bool OperatorDFA::processChar(char c) {
             return false;
             
         case State::Operator:
-            return false;
+            break;
 
         case State::Minus_operator:
             if (c == '-' || c == '='){
                 currentToken += c;
                 currentState = State::Operator;
-                return false;
+                
             }
-            break;
+            return false;
             
         
         // all states below here checks for double operators(also allows for their single counterpart to be used)
@@ -56,33 +56,33 @@ bool OperatorDFA::processChar(char c) {
             if (c == '+' || c == '='){
                 currentToken += c;
                 currentState = State::Operator;
-                return false;
+                
             }
-            break;
+            return false;
 
         case State::Measuring_operator:
             if (c == '='){
                 currentToken += c;
                 currentState = State::Operator;
-                return false;
+                
             }
-            break;
+            return false;
 
         case State::And_operator:
             if (c == '&'){
                 currentToken += c;
                 currentState = State::Operator;
-                return false;
+                
             }
-            break;
+            return false;
 
         case State::Or_operator:
             if (c == '|'){
                 currentToken += c;
                 currentState = State::Operator;
-                return false;
+                
             }
-            break;
+            return false;
     }
 }
 Token OperatorDFA::finalizeToken() {
