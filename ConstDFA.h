@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Token.h"
+#include "DFA.h"
 
 class ConstDFA : public DFA {
 public:

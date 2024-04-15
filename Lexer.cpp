@@ -1,45 +1,60 @@
 #include "Lexer.h"
-#include <iostream>
+#include <algorithm>  // For max_element and sort
 
-// Assuming the constructor initializes all the DFA objects
-Lexer::Lexer(){}
 std::vector<Token> Lexer::tokenize(const std::string& input) {
     std::vector<Token> tokens;
-    // Array of pointers to DFA instances.
-    std::vector<DFA*> activeDFAs = {&IdentifierDFA, &ConstDFA, &KeywordDFA, &OperatorDFA, &PunctuationDFA, &StringDFA, &WhitespaceDFA};
+    std::vector<DFA*> activeDFAs = {&identifierDFA, &constDFA, &keywordDFA, &operatorDFA, &punctuationDFA, &stringDFA, &whitespaceDFA};
+    std::vector<DFA*> tokenReadyDFAs;
 
-    size_t index = 0; // Index to track our position in the input string.
-    while (index < input.length()) {
-        char currentChar = input[index];
-        bool anyActive = false; // Flag to check if any DFA is still processing the current token.
+    size_t tokenStartIndex = 0; // Index of the first character of the current token
 
-        // Processes the current character with each active DFA.
-        for (auto& dfa : activeDFAs) {
-            if (dfa->processChar(currentChar)) {
-                anyActive = true; // At least one DFA successfully processed the character.
-            }
-        }
+    size_t index = 0;
+    while (index <= input.length()) {
+        char currentChar = index < input.length() ? input[index] : '\0';  // Handle end of input
+        bool anyActive = false;
 
-        if (!anyActive) {
-            // All DFAs have failed to process the current character.
-            // This means the end of the current token, so we finalize and reset the DFAs.
-            for (auto& dfa : activeDFAs) {
-                Token token = dfa->finalizeToken();
-                if (token.type != TokenType::WHITESPACE) { // Assuming you might not want to keep whitespace tokens.
-                    tokens.push_back(token);
+        // Process the current character through each DFA
+        for (DFA* dfa : activeDFAs) {
+            if (!dfa->processChar(currentChar)) {
+                if (dfa->hasToken()) {
+                    tokenReadyDFAs.push_back(dfa);
                 }
-                dfa->reset();
+            } else {
+                anyActive = true;
             }
-            // After resetting, all DFAs are considered active again for the next character.
         }
-        ++index;
-    }
 
-    // Handle any final token at the end of the input.
-    for (auto& dfa : activeDFAs) {
-        if (dfa->hasToken()) { // Assuming a method to check if DFA has an unfinished token.
-            tokens.push_back(dfa->finalizeToken());
+        // If no DFAs are active, process ready tokens
+        if (!anyActive && !tokenReadyDFAs.empty()) {
+            Token longestToken;
+            size_t longestLength = 0;
+
+            // Finalize tokens from ready DFAs and find the longest one
+            for (DFA* dfa : tokenReadyDFAs) {
+                Token currentToken = dfa->finalizeToken();
+                if (currentToken.value.length() > longestLength) {
+                    longestLength = currentToken.value.length();
+                    longestToken = currentToken;
+                } else if (currentToken.value.length() == longestLength) {
+                    // Apply tie-breaking logic here, based on DFA type
+                }
+            }
+
+            // checks if token is empty
+            if (longestLength > 0) {
+                tokens.push_back(longestToken);
+            } //add fail logic here
+
+            // Resets all DFAs for the next round of tokenization
+            for (DFA* dfa : activeDFAs) {
+                dfa->reset();
+                tokenStartIndex += longestLength;
+                index = tokenStartIndex - 1;
+            }
+            tokenReadyDFAs.clear();
         }
+
+        index++;  // Moves to the next character
     }
 
     return tokens;
