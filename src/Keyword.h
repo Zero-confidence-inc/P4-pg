@@ -7,6 +7,7 @@
 
 class KeywordDFA : public DFA {
 public:
+    KeywordDFA();
     bool processChar(char c) override;
     Token finalizeToken() override;
     bool hasToken() const override;

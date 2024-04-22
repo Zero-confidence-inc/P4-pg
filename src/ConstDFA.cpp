@@ -32,14 +32,14 @@ bool ConstDFA::processChar(char c) {
 
 
         case State::IntegerPart:
-            // breaks afer complete operator is found
+            // breaks after complete operator is found
             if ( isdigit(c)){
                 currentString += c;
                 currentToken = currentString;
                 currentState = State::IntegerPart;
                 return true;
                 }
-            else if (c=','){
+            else if (c = ','){
             currentString += c;
             currentState = State::Comma;
             return true;

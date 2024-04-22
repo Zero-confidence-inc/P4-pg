@@ -1,6 +1,8 @@
 #include "Lexer.h"
 #include <algorithm>  // For max_element and sort
 
+Lexer::Lexer() {}
+
 std::vector<Token> Lexer::tokenize(const std::string& input) {
     std::vector<Token> tokens;
     std::vector<DFA*> activeDFAs = {&identifierDFA, &constDFA, &keywordDFA, &operatorDFA, &punctuationDFA, &stringDFA, &whitespaceDFA};

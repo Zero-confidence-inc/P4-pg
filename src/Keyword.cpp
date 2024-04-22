@@ -139,7 +139,7 @@ bool KeywordDFA::processChar(char c) {
                 currentState = State::string_t;
                 return true;
             }
-            else false;
+            else return false;
 
         case State::string_t:
             if (c == 'r'){
@@ -278,7 +278,7 @@ bool KeywordDFA::processChar(char c) {
             else return false;
 
         default:
-            false;
+            return false;
         }
 }
 

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/P4-pg.iml" filepath="$PROJECT_DIR$/.idea/P4-pg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/vcs.xml.iml" filepath="$PROJECT_DIR$/.idea/vcs.xml.iml" />
     </modules>
   </component>
 </project>

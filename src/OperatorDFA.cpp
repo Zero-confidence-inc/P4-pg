@@ -84,6 +84,7 @@ bool OperatorDFA::processChar(char c) {
             }
             return false;
     }
+    return false;
 }
 Token OperatorDFA::finalizeToken() {
     Token token(TokenType::OPERATOR, currentToken);

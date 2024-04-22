@@ -24,6 +24,9 @@ struct Token {
 
     //parameterized constructor (please use this one when possible)
     Token(TokenType t, const std::string& v) : type(t), value(v) {}
+
+    const std::string& getText() const { return value; }
+    TokenType getType() const { return type; }
 };
 
 #endif 

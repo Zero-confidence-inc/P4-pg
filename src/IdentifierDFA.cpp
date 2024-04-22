@@ -5,7 +5,7 @@ IdentifierDFA::IdentifierDFA() : currentState(State::Start) {}
 bool IdentifierDFA::processChar(char c) {
     //Checks if character is in the alphabet and is the first character in the currentToken string
     //If it is, the character is added to the currentToken string
-    if((isalpha(c) and currentState == State::Start) or (islink(c) and currentState == State::Start)){
+    if((isalpha(c) and currentState == State::Start) or (c == '_' and currentState == State::Start)){
         currentToken += c;
         currentState = State::Working;
         return true;
@@ -13,18 +13,13 @@ bool IdentifierDFA::processChar(char c) {
         //Checks if the character is in the alphabet, is a number or is an acceptable linking symbol (see function further down)
         //Also checks if the state is "Working" indicating this is not the first character in the string. 
         //If this is true the character is added to the currentToken string.
-    else if ((isalpha(c) and currentState == State::Working) or (isalnum(c) and currentState == State::Working) or (islink(c) and currentState == State::Working)) {
+    else if ((isalpha(c) and currentState == State::Working) or (isalnum(c) and currentState == State::Working) or (c == '_' and currentState == State::Working)) {
         currentToken += c;
         return true;
     }
     return false;
 }
-//Function that sends back if a character is one that is accepted between letters and numbers #Example "Health_Bar-2"
-bool islink(char c){
-    if (c == '_')
-        return true;
-    else return false;
-}
+
 
 Token IdentifierDFA::finalizeToken() {
     // Assumes IDENTIFIER type exists in your TokenType enum
