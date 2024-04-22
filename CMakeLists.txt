@@ -30,6 +30,8 @@ add_executable(P4_pg ${SOURCES})
 set(TEST_SOURCES
     Test/OperatorDFAtests.cpp
     src/OperatorDFA.cpp
+    Test/KeywordDFAtests.cpp
+    src/Keyword.cpp
 )
 add_executable(P4_pg_tests ${TEST_SOURCES})
 
