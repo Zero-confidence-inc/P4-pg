@@ -11,6 +11,7 @@
 #include "PunctuationDFA.h"
 #include "StringDFA.h"
 #include "WhitespaceDFA.h"
+#include "ControlStatDFA.h"
 #include "DFA.h"
 
 class Lexer {
@@ -26,6 +27,8 @@ private:
     PunctuationDFA punctuationDFA;
     StringDFA stringDFA;
     WhitespaceDFA whitespaceDFA;
+    ControlStatDFA controlStatDfa;
+
 };
 
 #endif // LEXER_H

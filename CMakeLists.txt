@@ -23,6 +23,10 @@ set(SOURCES
         src/PunctuationDFA.cpp
         src/StringDFA.cpp
         src/WhitespaceDFA.cpp
+        src/ControlStatDFA.cpp
+        src/ControlStatDFA.h
+        src/ConstDFA.h
+        src/Lexer.h
 )
 add_executable(P4_pg ${SOURCES})
 

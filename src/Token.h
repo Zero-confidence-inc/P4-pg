@@ -13,7 +13,8 @@ enum class TokenType {
     KEYWORD,
     WHITESPACE,
     PHT, // don't even remember what this was supposed to mean
-    FLOAT_CONST
+    FLOAT_CONST,
+    CONTROL,
 };
 
 struct Token {
