@@ -18,10 +18,9 @@ private:
         Start,
         Minus,
         IntegerPart,
-        Comma,
         DecimalPart
     };
-
+    bool isFloatingPoint;
     State currentState;
     std::string currentToken;
     std::string currentString;

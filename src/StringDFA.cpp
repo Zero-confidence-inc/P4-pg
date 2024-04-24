@@ -20,7 +20,7 @@ bool StringDFA::processChar(char c) {
                 return false;
             }
 
-            else if (isalnum(c)){
+            else if (isalnum(c)|| c == ' '){
                 currentString += c;
                 currentState = State::Content;
                 return true;
