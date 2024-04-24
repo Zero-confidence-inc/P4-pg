@@ -25,7 +25,7 @@ bool StringDFA::processChar(char c) {
                 currentState = State::Content;
                 return true;
             }
-            else return false;          
+            else return false;
     }
 }
 
@@ -44,5 +44,3 @@ void StringDFA::reset(){
     currentString.clear();
     currentToken.clear();
 }
-
-

@@ -38,6 +38,8 @@ set(TEST_SOURCES
     src/StringDFA.cpp
     Test/ConstDFAtest.cpp
     src/ConstDFA.cpp
+    Test/PunctuationDFAtest.cpp
+    src/PunctuationDFA.cpp
 )
 add_executable(P4_pg_tests ${TEST_SOURCES})
 
