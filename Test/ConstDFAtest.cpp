@@ -31,8 +31,8 @@ TEST_F(ConstDFATest, RejectsInvalidStartCharacters) {
 
 // Integer part tests
 TEST_F(ConstDFATest, HandlesMultipleDigits) {
-    dfa.processChar('1');
-    dfa.processChar('2');
+    EXPECT_TRUE(dfa.processChar('1'));
+    EXPECT_TRUE(dfa.processChar('2'));
     EXPECT_TRUE(dfa.processChar('3'));
 }
 

@@ -17,16 +17,17 @@ set(SOURCES
         src/main.cpp
         src/ConstDFA.cpp
         src/IdentifierDFA.cpp
-        src/Keyword.cpp
+        src/TypeDFA.cpp
         src/Lexer.cpp
         src/OperatorDFA.cpp
         src/PunctuationDFA.cpp
         src/StringDFA.cpp
         src/WhitespaceDFA.cpp
         src/ControlStatDFA.cpp
-        src/ControlStatDFA.h
-        src/ConstDFA.h
-        src/Lexer.h
+        src/LoopStatDFA.cpp
+        src/JumpStatDFA.cpp
+        src/Parser.cpp
+        src/Parser.h
 )
 add_executable(P4_pg ${SOURCES})
 
@@ -35,7 +36,7 @@ set(TEST_SOURCES
     Test/OperatorDFAtests.cpp
     src/OperatorDFA.cpp
     Test/KeywordDFAtests.cpp
-    src/Keyword.cpp
+        src/TypeDFA.cpp
     Test/IdentifierDFAtest.cpp
     src/IdentifierDFA.cpp
     Test/StringDFAtest.cpp

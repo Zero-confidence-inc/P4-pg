@@ -26,6 +26,7 @@ bool StringDFA::processChar(char c) {
                 return true;
             }
             else return false;
+        default: return false;
     }
 }
 

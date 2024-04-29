@@ -7,11 +7,12 @@
 #include "IdentifierDFA.h"
 #include "OperatorDFA.h"
 #include "ConstDFA.h"
-#include "Keyword.h"
+#include "TypeDFA.h"
 #include "PunctuationDFA.h"
 #include "StringDFA.h"
 #include "WhitespaceDFA.h"
 #include "ControlStatDFA.h"
+#include "LoopStatDFA.h"
 #include "DFA.h"
 
 class Lexer {
@@ -23,11 +24,12 @@ private:
     IdentifierDFA identifierDFA;
     ConstDFA constDFA;
     OperatorDFA operatorDFA;
-    KeywordDFA keywordDFA;
+    TypeDFA typeDFA;
     PunctuationDFA punctuationDFA;
     StringDFA stringDFA;
     WhitespaceDFA whitespaceDFA;
     ControlStatDFA controlStatDfa;
+    LoopStatDFA loopStatDfa;
 
 };
 

@@ -5,7 +5,7 @@ Lexer::Lexer() {}
 
 std::vector<Token> Lexer::tokenize(const std::string& input) {
     std::vector<Token> tokens;
-    std::vector<DFA*> activeDFAs = {&controlStatDfa &identifierDFA, &constDFA, &keywordDFA, &operatorDFA, &punctuationDFA, &stringDFA, &whitespaceDFA};
+    std::vector<DFA*> activeDFAs = {&loopStatDfa, &controlStatDfa, &identifierDFA, &constDFA, &typeDFA, &operatorDFA, &punctuationDFA, &stringDFA, &whitespaceDFA};
     std::vector<DFA*> tokenReadyDFAs;
 
     size_t tokenStartIndex = 0; // Index of the first character of the current token

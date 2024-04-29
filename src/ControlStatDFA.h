@@ -1,5 +1,5 @@
-#ifndef ControlStatDFA_DFA_H
-#define ControlStatDFA_DFA_H
+#ifndef ControlStat_DFA_H
+#define ControlStat_DFA_H
 
 #include "Token.h"
 #include "DFA.h"
@@ -39,4 +39,4 @@ private:
     std::string currentToken;
 };
 
-#endif //ControlStatDFA_H
+#endif //ControlStat_DFA_H

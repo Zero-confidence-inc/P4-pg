@@ -10,11 +10,12 @@ enum class TokenType {
     EOF_TOKEN,
     PUNCTUATION,
     STRING,
-    KEYWORD,
+    TYPE,
     WHITESPACE,
     PHT, // don't even remember what this was supposed to mean
     FLOAT_CONST,
     CONTROL,
+    LOOP
 };
 
 struct Token {
