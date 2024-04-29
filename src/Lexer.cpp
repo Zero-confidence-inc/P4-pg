@@ -1,63 +1,74 @@
 #include "Lexer.h"
-#include <algorithm>  // For max_element and sort
 
-Lexer::Lexer() {}
+
+Lexer::Lexer() : errorOccurred(false), errorMessage("") {
+    // Initialize all DFAs and store them in the vector
+    dfas = {new LoopStatDFA(), new ControlStatDFA(), new IdentifierDFA(), new ConstDFA(),
+            new TypeDFA(), new OperatorDFA(), new PunctuationDFA(), new StringDFA(), new WhitespaceDFA()};
+}
 
 std::vector<Token> Lexer::tokenize(const std::string& input) {
     std::vector<Token> tokens;
-    std::vector<DFA*> activeDFAs = {&loopStatDfa, &controlStatDfa, &identifierDFA, &constDFA, &typeDFA, &operatorDFA, &punctuationDFA, &stringDFA, &whitespaceDFA};
     std::vector<DFA*> tokenReadyDFAs;
+    size_t tokenStartIndex = 0;
 
-    size_t tokenStartIndex = 0; // Index of the first character of the current token
+    for (size_t index = 0; index <= input.length(); ++index) {
+        char currentChar = index < input.length() ? input[index] : '\0'; // Handle end of input
 
-    size_t index = 0;
-    while (index <= input.length()) {
-        char currentChar = index < input.length() ? input[index] : '\0';  // Handle end of input
         bool anyActive = false;
-
-        // Process the current character through each DFA
-        for (DFA* dfa : activeDFAs) {
-            if (!dfa->processChar(currentChar)) {
-                if (dfa->hasToken()) {
-                    tokenReadyDFAs.push_back(dfa);
-                }
-            } else {
+        for (DFA* dfa : dfas) {
+            if (dfa->processChar(currentChar)) {
                 anyActive = true;
+            } else if (dfa->hasToken()) {
+                tokenReadyDFAs.push_back(dfa);
             }
         }
 
-        // If no DFAs are active, process ready tokens
         if (!anyActive && !tokenReadyDFAs.empty()) {
             Token longestToken;
             size_t longestLength = 0;
 
-            // Finalize tokens from ready DFAs and find the longest one
             for (DFA* dfa : tokenReadyDFAs) {
                 Token currentToken = dfa->finalizeToken();
                 if (currentToken.value.length() > longestLength) {
                     longestLength = currentToken.value.length();
                     longestToken = currentToken;
                 } else if (currentToken.value.length() == longestLength) {
-                    // Apply tie-breaking logic here, based on DFA type
+                    // Deprioritize Identifier tokens when there's a tie
+                    if (currentToken.type != TokenType::IDENTIFIER && longestToken.type == TokenType::IDENTIFIER) {
+                        longestToken = currentToken;
+                    }
                 }
             }
 
-            // checks if token is empty
-            if (longestLength > 0) {
+            if (longestLength > 0 && longestToken.type != TokenType::WHITESPACE) {
                 tokens.push_back(longestToken);
-            } //add fail logic here
+                // Update tokenStartIndex based on the length of the token, not the current index
+                tokenStartIndex += longestToken.value.length();
+            } else if (longestToken.type == TokenType::WHITESPACE) {
+                // If it's whitespace and shouldn't be added, still update tokenStartIndex
+                tokenStartIndex += longestToken.value.length();
+            } else {
+                errorOccurred = true;
+                errorMessage = "Error: Unrecognized token starting at position " + std::to_string(tokenStartIndex);
+                break; // Stop processing on error
+            }
 
-            // Resets all DFAs for the next round of tokenization
-            for (DFA* dfa : activeDFAs) {
+            for (DFA* dfa : dfas) {
                 dfa->reset();
-                tokenStartIndex += longestLength;
-                index = tokenStartIndex - 1;
             }
             tokenReadyDFAs.clear();
+            index = tokenStartIndex - 1; // Adjust index to start at the next potential token start
         }
-
-        index++;  // Moves to the next character
     }
 
     return tokens;
+}
+
+bool Lexer::hasError() const {
+    return errorOccurred;
+}
+
+std::string Lexer::getErrorMessage() const {
+    return errorMessage;
 }

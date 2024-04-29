@@ -42,6 +42,7 @@ TEST_F(IdentifierDFATest, ContinueBuildingToken) {
 TEST_F(IdentifierDFATest, HasToken) {
     EXPECT_FALSE(dfa.hasToken()); // Initially no token
     dfa.processChar('a');
+    dfa.processChar(' ');
     EXPECT_TRUE(dfa.hasToken()); // Now should have token
 }
 

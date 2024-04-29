@@ -70,8 +70,8 @@ build CMakeFiles/P4_pg.dir/src/IdentifierDFA.cpp.obj: CXX_COMPILER__P4_pg_unscan
   OBJECT_DIR = CMakeFiles\P4_pg.dir
   OBJECT_FILE_DIR = CMakeFiles\P4_pg.dir\src
 
-build CMakeFiles/P4_pg.dir/src/Keyword.cpp.obj: CXX_COMPILER__P4_pg_unscanned_Debug C$:/Users/Yuki/CLionProjects/P4-pg/src/Keyword.cpp || cmake_object_order_depends_target_P4_pg
-  DEP_FILE = CMakeFiles\P4_pg.dir\src\Keyword.cpp.obj.d
+build CMakeFiles/P4_pg.dir/src/TypeDFA.cpp.obj: CXX_COMPILER__P4_pg_unscanned_Debug C$:/Users/Yuki/CLionProjects/P4-pg/src/TypeDFA.cpp || cmake_object_order_depends_target_P4_pg
+  DEP_FILE = CMakeFiles\P4_pg.dir\src\TypeDFA.cpp.obj.d
   FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/Yuki/CLionProjects/P4-pg/src -IC:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest/include
   OBJECT_DIR = CMakeFiles\P4_pg.dir
@@ -148,7 +148,7 @@ build CMakeFiles/P4_pg.dir/src/Parser.cpp.obj: CXX_COMPILER__P4_pg_unscanned_Deb
 #############################################
 # Link the executable P4_pg.exe
 
-build P4_pg.exe: CXX_EXECUTABLE_LINKER__P4_pg_Debug CMakeFiles/P4_pg.dir/src/Main.cpp.obj CMakeFiles/P4_pg.dir/src/ConstDFA.cpp.obj CMakeFiles/P4_pg.dir/src/IdentifierDFA.cpp.obj CMakeFiles/P4_pg.dir/src/Keyword.cpp.obj CMakeFiles/P4_pg.dir/src/Lexer.cpp.obj CMakeFiles/P4_pg.dir/src/OperatorDFA.cpp.obj CMakeFiles/P4_pg.dir/src/PunctuationDFA.cpp.obj CMakeFiles/P4_pg.dir/src/StringDFA.cpp.obj CMakeFiles/P4_pg.dir/src/WhitespaceDFA.cpp.obj CMakeFiles/P4_pg.dir/src/ControlStatDFA.cpp.obj CMakeFiles/P4_pg.dir/src/LoopStatDFA.cpp.obj CMakeFiles/P4_pg.dir/src/JumpStatDFA.cpp.obj CMakeFiles/P4_pg.dir/src/Parser.cpp.obj
+build P4_pg.exe: CXX_EXECUTABLE_LINKER__P4_pg_Debug CMakeFiles/P4_pg.dir/src/Main.cpp.obj CMakeFiles/P4_pg.dir/src/ConstDFA.cpp.obj CMakeFiles/P4_pg.dir/src/IdentifierDFA.cpp.obj CMakeFiles/P4_pg.dir/src/TypeDFA.cpp.obj CMakeFiles/P4_pg.dir/src/Lexer.cpp.obj CMakeFiles/P4_pg.dir/src/OperatorDFA.cpp.obj CMakeFiles/P4_pg.dir/src/PunctuationDFA.cpp.obj CMakeFiles/P4_pg.dir/src/StringDFA.cpp.obj CMakeFiles/P4_pg.dir/src/WhitespaceDFA.cpp.obj CMakeFiles/P4_pg.dir/src/ControlStatDFA.cpp.obj CMakeFiles/P4_pg.dir/src/LoopStatDFA.cpp.obj CMakeFiles/P4_pg.dir/src/JumpStatDFA.cpp.obj CMakeFiles/P4_pg.dir/src/Parser.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\P4_pg.dir
@@ -181,15 +181,15 @@ build CMakeFiles/P4_pg_tests.dir/src/OperatorDFA.cpp.obj: CXX_COMPILER__P4_pg_te
   OBJECT_DIR = CMakeFiles\P4_pg_tests.dir
   OBJECT_FILE_DIR = CMakeFiles\P4_pg_tests.dir\src
 
-build CMakeFiles/P4_pg_tests.dir/Test/KeywordDFAtests.cpp.obj: CXX_COMPILER__P4_pg_tests_unscanned_Debug C$:/Users/Yuki/CLionProjects/P4-pg/Test/KeywordDFAtests.cpp || cmake_object_order_depends_target_P4_pg_tests
-  DEP_FILE = CMakeFiles\P4_pg_tests.dir\Test\KeywordDFAtests.cpp.obj.d
+build CMakeFiles/P4_pg_tests.dir/Test/TypeDFAtests.cpp.obj: CXX_COMPILER__P4_pg_tests_unscanned_Debug C$:/Users/Yuki/CLionProjects/P4-pg/Test/TypeDFAtests.cpp || cmake_object_order_depends_target_P4_pg_tests
+  DEP_FILE = CMakeFiles\P4_pg_tests.dir\Test\TypeDFAtests.cpp.obj.d
   FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/Yuki/CLionProjects/P4-pg/src -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest/include -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest
   OBJECT_DIR = CMakeFiles\P4_pg_tests.dir
   OBJECT_FILE_DIR = CMakeFiles\P4_pg_tests.dir\Test
 
-build CMakeFiles/P4_pg_tests.dir/src/Keyword.cpp.obj: CXX_COMPILER__P4_pg_tests_unscanned_Debug C$:/Users/Yuki/CLionProjects/P4-pg/src/Keyword.cpp || cmake_object_order_depends_target_P4_pg_tests
-  DEP_FILE = CMakeFiles\P4_pg_tests.dir\src\Keyword.cpp.obj.d
+build CMakeFiles/P4_pg_tests.dir/src/TypeDFA.cpp.obj: CXX_COMPILER__P4_pg_tests_unscanned_Debug C$:/Users/Yuki/CLionProjects/P4-pg/src/TypeDFA.cpp || cmake_object_order_depends_target_P4_pg_tests
+  DEP_FILE = CMakeFiles\P4_pg_tests.dir\src\TypeDFA.cpp.obj.d
   FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/Yuki/CLionProjects/P4-pg/src -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest/include -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest
   OBJECT_DIR = CMakeFiles\P4_pg_tests.dir
@@ -251,6 +251,41 @@ build CMakeFiles/P4_pg_tests.dir/src/PunctuationDFA.cpp.obj: CXX_COMPILER__P4_pg
   OBJECT_DIR = CMakeFiles\P4_pg_tests.dir
   OBJECT_FILE_DIR = CMakeFiles\P4_pg_tests.dir\src
 
+build CMakeFiles/P4_pg_tests.dir/Test/Lexer_integration_test.cpp.obj: CXX_COMPILER__P4_pg_tests_unscanned_Debug C$:/Users/Yuki/CLionProjects/P4-pg/Test/Lexer_integration_test.cpp || cmake_object_order_depends_target_P4_pg_tests
+  DEP_FILE = CMakeFiles\P4_pg_tests.dir\Test\Lexer_integration_test.cpp.obj.d
+  FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Yuki/CLionProjects/P4-pg/src -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest/include -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest
+  OBJECT_DIR = CMakeFiles\P4_pg_tests.dir
+  OBJECT_FILE_DIR = CMakeFiles\P4_pg_tests.dir\Test
+
+build CMakeFiles/P4_pg_tests.dir/src/Lexer.cpp.obj: CXX_COMPILER__P4_pg_tests_unscanned_Debug C$:/Users/Yuki/CLionProjects/P4-pg/src/Lexer.cpp || cmake_object_order_depends_target_P4_pg_tests
+  DEP_FILE = CMakeFiles\P4_pg_tests.dir\src\Lexer.cpp.obj.d
+  FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Yuki/CLionProjects/P4-pg/src -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest/include -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest
+  OBJECT_DIR = CMakeFiles\P4_pg_tests.dir
+  OBJECT_FILE_DIR = CMakeFiles\P4_pg_tests.dir\src
+
+build CMakeFiles/P4_pg_tests.dir/src/LoopStatDFA.cpp.obj: CXX_COMPILER__P4_pg_tests_unscanned_Debug C$:/Users/Yuki/CLionProjects/P4-pg/src/LoopStatDFA.cpp || cmake_object_order_depends_target_P4_pg_tests
+  DEP_FILE = CMakeFiles\P4_pg_tests.dir\src\LoopStatDFA.cpp.obj.d
+  FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Yuki/CLionProjects/P4-pg/src -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest/include -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest
+  OBJECT_DIR = CMakeFiles\P4_pg_tests.dir
+  OBJECT_FILE_DIR = CMakeFiles\P4_pg_tests.dir\src
+
+build CMakeFiles/P4_pg_tests.dir/src/ControlStatDFA.cpp.obj: CXX_COMPILER__P4_pg_tests_unscanned_Debug C$:/Users/Yuki/CLionProjects/P4-pg/src/ControlStatDFA.cpp || cmake_object_order_depends_target_P4_pg_tests
+  DEP_FILE = CMakeFiles\P4_pg_tests.dir\src\ControlStatDFA.cpp.obj.d
+  FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Yuki/CLionProjects/P4-pg/src -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest/include -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest
+  OBJECT_DIR = CMakeFiles\P4_pg_tests.dir
+  OBJECT_FILE_DIR = CMakeFiles\P4_pg_tests.dir\src
+
+build CMakeFiles/P4_pg_tests.dir/src/WhitespaceDFA.cpp.obj: CXX_COMPILER__P4_pg_tests_unscanned_Debug C$:/Users/Yuki/CLionProjects/P4-pg/src/WhitespaceDFA.cpp || cmake_object_order_depends_target_P4_pg_tests
+  DEP_FILE = CMakeFiles\P4_pg_tests.dir\src\WhitespaceDFA.cpp.obj.d
+  FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Yuki/CLionProjects/P4-pg/src -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest/include -isystem C:/Users/Yuki/CLionProjects/P4-pg/googletest/googletest
+  OBJECT_DIR = CMakeFiles\P4_pg_tests.dir
+  OBJECT_FILE_DIR = CMakeFiles\P4_pg_tests.dir\src
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target P4_pg_tests
@@ -259,7 +294,7 @@ build CMakeFiles/P4_pg_tests.dir/src/PunctuationDFA.cpp.obj: CXX_COMPILER__P4_pg
 #############################################
 # Link the executable P4_pg_tests.exe
 
-build P4_pg_tests.exe: CXX_EXECUTABLE_LINKER__P4_pg_tests_Debug CMakeFiles/P4_pg_tests.dir/Test/OperatorDFAtests.cpp.obj CMakeFiles/P4_pg_tests.dir/src/OperatorDFA.cpp.obj CMakeFiles/P4_pg_tests.dir/Test/KeywordDFAtests.cpp.obj CMakeFiles/P4_pg_tests.dir/src/Keyword.cpp.obj CMakeFiles/P4_pg_tests.dir/Test/IdentifierDFAtest.cpp.obj CMakeFiles/P4_pg_tests.dir/src/IdentifierDFA.cpp.obj CMakeFiles/P4_pg_tests.dir/Test/StringDFAtest.cpp.obj CMakeFiles/P4_pg_tests.dir/src/StringDFA.cpp.obj CMakeFiles/P4_pg_tests.dir/Test/ConstDFAtest.cpp.obj CMakeFiles/P4_pg_tests.dir/src/ConstDFA.cpp.obj CMakeFiles/P4_pg_tests.dir/Test/PunctuationDFAtest.cpp.obj CMakeFiles/P4_pg_tests.dir/src/PunctuationDFA.cpp.obj | lib/libgtest.a lib/libgtest_main.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a
+build P4_pg_tests.exe: CXX_EXECUTABLE_LINKER__P4_pg_tests_Debug CMakeFiles/P4_pg_tests.dir/Test/OperatorDFAtests.cpp.obj CMakeFiles/P4_pg_tests.dir/src/OperatorDFA.cpp.obj CMakeFiles/P4_pg_tests.dir/Test/TypeDFAtests.cpp.obj CMakeFiles/P4_pg_tests.dir/src/TypeDFA.cpp.obj CMakeFiles/P4_pg_tests.dir/Test/IdentifierDFAtest.cpp.obj CMakeFiles/P4_pg_tests.dir/src/IdentifierDFA.cpp.obj CMakeFiles/P4_pg_tests.dir/Test/StringDFAtest.cpp.obj CMakeFiles/P4_pg_tests.dir/src/StringDFA.cpp.obj CMakeFiles/P4_pg_tests.dir/Test/ConstDFAtest.cpp.obj CMakeFiles/P4_pg_tests.dir/src/ConstDFA.cpp.obj CMakeFiles/P4_pg_tests.dir/Test/PunctuationDFAtest.cpp.obj CMakeFiles/P4_pg_tests.dir/src/PunctuationDFA.cpp.obj CMakeFiles/P4_pg_tests.dir/Test/Lexer_integration_test.cpp.obj CMakeFiles/P4_pg_tests.dir/src/Lexer.cpp.obj CMakeFiles/P4_pg_tests.dir/src/LoopStatDFA.cpp.obj CMakeFiles/P4_pg_tests.dir/src/ControlStatDFA.cpp.obj CMakeFiles/P4_pg_tests.dir/src/WhitespaceDFA.cpp.obj | lib/libgtest.a lib/libgtest_main.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a
   FLAGS = -g
   LINK_LIBRARIES = lib/libgtest.a  lib/libgtest_main.a  -lpthread  lib/libgtest.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\P4_pg_tests.dir

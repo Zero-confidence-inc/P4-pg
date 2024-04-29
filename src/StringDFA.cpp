@@ -9,6 +9,10 @@ bool StringDFA::processChar(char c) {
                 currentString += c;
                 currentState = State::Content;
                 return true;
+            }else if (c == '\''){
+                currentString += c;
+                currentState = State::ContentAlt;
+                return true;
             }
             else return false;
         
@@ -23,6 +27,21 @@ bool StringDFA::processChar(char c) {
             else if (isalnum(c)|| c == ' '){
                 currentString += c;
                 currentState = State::Content;
+                return true;
+            }
+            else return false;
+
+        case State::ContentAlt:
+            if (c == '\''){
+                currentString += c;
+                currentToken = currentString;
+                currentState = State::End;
+                return false;
+            }
+
+            else if (isalnum(c)|| c == ' '){
+                currentString += c;
+                currentState = State::ContentAlt;
                 return true;
             }
             else return false;

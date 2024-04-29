@@ -9,8 +9,8 @@ bool WhitespaceDFA::processChar(char c) {
         if (c == ' ' || c == '\n' || c == '\t'){
             currentToken += c;
             return false;
-        }  
-        else return false;
+        }
+        default:return false;
     }
 }
 

@@ -18,6 +18,7 @@ private:
     enum class State {
         Start,
         Content,
+        ContentAlt,
         End
     };
 

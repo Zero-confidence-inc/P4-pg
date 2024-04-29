@@ -28,23 +28,29 @@ set(SOURCES
         src/JumpStatDFA.cpp
         src/Parser.cpp
         src/Parser.h
+        src/Lexer.h
 )
 add_executable(P4_pg ${SOURCES})
 
 # Define your test executable
 set(TEST_SOURCES
     Test/OperatorDFAtests.cpp
-    src/OperatorDFA.cpp
-    Test/KeywordDFAtests.cpp
+        src/OperatorDFA.cpp
+    Test/TypeDFAtests.cpp
         src/TypeDFA.cpp
     Test/IdentifierDFAtest.cpp
-    src/IdentifierDFA.cpp
+        src/IdentifierDFA.cpp
     Test/StringDFAtest.cpp
-    src/StringDFA.cpp
+        src/StringDFA.cpp
     Test/ConstDFAtest.cpp
-    src/ConstDFA.cpp
+        src/ConstDFA.cpp
     Test/PunctuationDFAtest.cpp
-    src/PunctuationDFA.cpp
+        src/PunctuationDFA.cpp
+    Test/Lexer_integration_test.cpp
+        src/Lexer.cpp
+        src/LoopStatDFA.cpp
+        src/ControlStatDFA.cpp
+        src/WhitespaceDFA.cpp
 )
 add_executable(P4_pg_tests ${TEST_SOURCES})
 
