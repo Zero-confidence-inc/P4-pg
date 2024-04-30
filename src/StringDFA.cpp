@@ -3,6 +3,7 @@
 StringDFA::StringDFA() : currentState(State::Start) {}
 
 bool StringDFA::processChar(char c) {
+    const std::regex pattern("[^ \'\"]");
     switch (currentState){
         case State::Start:
             if (c == '"'){

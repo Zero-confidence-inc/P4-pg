@@ -4,6 +4,7 @@
 #include "DFA.h"
 #include "Token.h"
 #include <string>
+#include <regex>
 
 class StringDFA : public DFA{
 public:

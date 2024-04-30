@@ -40,6 +40,7 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
     return nullptr; // Return nullptr if no valid declaration is found
 }
 
+
 bool Parser::lookAhead(TokenType expectedType) {
     return pos < tokens.size() && tokens[pos].type == expectedType;
 }

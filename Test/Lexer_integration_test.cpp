@@ -9,7 +9,7 @@
 // Test basic tokenization
 TEST(LexerTest, BasicTokenization) {
 Lexer lexer;
-std::string input = "int xx = 10;"; // weird bug single charater identifiers are now illigal and will be ignored
+std::string input = "+++"; // weird feature single character identifiers are now illegal and will be ignored
 std::cout << "Input: " << input << std::endl;
 
 

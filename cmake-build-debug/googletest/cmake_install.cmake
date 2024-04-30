@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Yuki/CLionProjects/P4-pg/googletest
+# Install script for directory: C:/Users/awmol/CLionProjects/P4-pg/googletest
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/Yuki/CLionProjects/P4-pg/cmake-build-debug/googletest/googlemock/cmake_install.cmake")
+  include("C:/Users/awmol/CLionProjects/P4-pg/cmake-build-debug/googletest/googlemock/cmake_install.cmake")
 
 endif()
 

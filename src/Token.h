@@ -7,15 +7,16 @@ enum class TokenType {
     IDENTIFIER,
     CONST,
     OPERATOR, 
-    EOF_TOKEN,
+    EOF_TOKEN,// also not used
     PUNCTUATION,
     STRING,
     TYPE,
     WHITESPACE,
-    PHT, // don't even remember what this was supposed to mean
+    PHT, //not used disregard
     FLOAT_CONST,
     CONTROL,
-    LOOP
+    LOOP,
+    JUMP
 };
 
 struct Token {

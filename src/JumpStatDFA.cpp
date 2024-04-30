@@ -167,7 +167,7 @@ bool JumpStatDFA::processChar(char c) {
 }
 
 Token JumpStatDFA::finalizeToken(){
-    Token token(TokenType::CONTROL, currentToken);
+    Token token(TokenType::JUMP, currentToken);
     reset();
     return token;
 }

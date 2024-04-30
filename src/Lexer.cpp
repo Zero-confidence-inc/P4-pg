@@ -36,7 +36,9 @@ std::vector<Token> Lexer::tokenize(const std::string& input) {
                 } else if (currentToken.value.length() == longestLength) {
                     // Deprioritize Identifier tokens when there's a tie
                     if (currentToken.type != TokenType::IDENTIFIER && longestToken.type == TokenType::IDENTIFIER) {
-                        longestToken = currentToken;
+                        if (currentToken.type != TokenType::WHITESPACE) {
+                            longestToken = currentToken;
+                        }
                     }
                 }
             }
