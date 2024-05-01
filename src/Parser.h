@@ -50,7 +50,6 @@ public:
     std::shared_ptr<ASTNode> parseDeclaration();
     std::shared_ptr<ASTNode> parseOperator();
 
-
 private:
     std::vector<Token> tokens;
     size_t pos = 0;
