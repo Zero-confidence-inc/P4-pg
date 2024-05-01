@@ -16,7 +16,8 @@ enum class TokenType {
     FLOAT_CONST,
     CONTROL,
     LOOP,
-    JUMP
+    JUMP,
+    COMMENTS
 };
 
 struct Token {
