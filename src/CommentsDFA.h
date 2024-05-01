@@ -21,11 +21,14 @@ private:
     enum class State{
         Start,
         SingleLine_started,
-        MultiLine_started
+        MultiLine_started,
+        SingleLine_Called,
+        MultiLine_Called //added extra needed stats
 
     };
 
     State currentState;
+    std::string currentString; // string to hold not finalized but accepted input
     std::string currentToken;
 
 };
