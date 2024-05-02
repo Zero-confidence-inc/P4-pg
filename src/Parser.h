@@ -38,11 +38,20 @@ struct IfStatementNode : ASTNode {
     IfStatementNode() : condition(nullptr), trueBranch(nullptr), falseBranch(nullptr) {}
 };
 
+struct MathNode : ASTNode {
+    std::string operatorType; //Operator representing the mathematical expression
+    std:: shared_ptr<ASTNode> leftOperand;
+    std:: shared_ptr<ASTNode> rightOperand;
+
+    MathNode() : operatorType(""), leftOperand(nullptr), rightOperand(nullptr) {}
+};
+
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);
     void parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
+    std::shared_ptr<ASTNode> parseMathNode();
 
 private:
     std::vector<Token> tokens;

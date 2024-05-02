@@ -67,3 +67,20 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
     // Dummy implementation for now
     return {};
 }
+
+std::shared_ptr<ASTNode> Parser::parseMathNode() {
+    if (lookAhead(TokenType::OPERATOR)) {
+        auto mathExprNode = std::make_shared<MathNode>();
+        mathExprNode->operatorType = tokens[pos].value;
+        pos++; // Consume the operator
+
+        // Parse left operand
+        mathExprNode->leftOperand = parseExpression();
+
+        // Parse right operand
+        mathExprNode->rightOperand = parseExpression();
+
+        return mathExprNode;
+    }
+    return nullptr; // Not a mathematical expression
+}
