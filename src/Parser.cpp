@@ -76,3 +76,6 @@ std::shared_ptr<ASTNode> Parser::parseFloat(){
     }
     return nullptr;
 };
+std::shared_ptr<ASTNode> Parser::parseComment(){
+    
+}
