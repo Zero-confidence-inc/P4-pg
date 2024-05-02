@@ -67,3 +67,13 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
     // Dummy implementation for now
     return {};
 }
+
+std::shared_ptr<ASTNode> Parser::parseString()
+{
+    if (lookAhead(TokenType::STRING)){
+        auto Stringnode = std::make_shared<StringNode>();
+        Stringnode->StringOfChars=tokens[pos].value;
+        return Stringnode;
+    }
+    return nullptr;
+}
