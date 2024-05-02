@@ -78,4 +78,12 @@ std::shared_ptr<ASTNode> Parser::parseFloat(){
 };
 std::shared_ptr<ASTNode> Parser::parseComment(){
     
+std::shared_ptr<ASTNode> Parser::parseString()
+{
+    if (lookAhead(TokenType::STRING)){
+        auto Stringnode = std::make_shared<StringNode>();
+        Stringnode->StringOfChars=tokens[pos].value;
+        return Stringnode;
+    }
+    return nullptr;
 }

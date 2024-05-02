@@ -47,6 +47,10 @@ struct CommentNode : ASTNode {
     std::string Multi_Comment_Start;        //Multi line comment start      | /*
     std::string Multi_Comment_Content;      //Multi line comment content    | comment
     std::string Multi_Comment_End;          //Multi line comment end        | */
+
+struct StringNode : ASTNode {
+    string StringOfChars;
+
 };
 
 class Parser {
@@ -56,6 +60,7 @@ public:
     std::shared_ptr<ASTNode> parseDeclaration();
     std::shared_ptr<ASTNode> parseFloat();
     std::shared_ptr<ASTNode> parseComment();
+    std::shared_ptr<ASTNode> parseString();
 
 private:
     std::vector<Token> tokens;
