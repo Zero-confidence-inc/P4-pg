@@ -37,12 +37,17 @@ struct IfStatementNode : ASTNode {
 
     IfStatementNode() : condition(nullptr), trueBranch(nullptr), falseBranch(nullptr) {}
 };
+struct FloatNode : ASTNode {
+    float Floating_Point;
+};
+
 
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);
     void parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
+    std::shared_ptr<ASTNode> parseFloat();
 
 private:
     std::vector<Token> tokens;

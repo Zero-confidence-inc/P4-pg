@@ -67,3 +67,12 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
     // Dummy implementation for now
     return {};
 }
+
+std::shared_ptr<ASTNode> Parser::parseFloat(){
+    if (lookAhead(TokenType::FLOAT_CONST)){
+        auto FloatingNode = std::make_shared<FloatNode>();
+        FloatingNode->Floating_Point = std::stof(tokens[pos].value);
+        return FloatingNode;
+    }
+    return nullptr;
+};
