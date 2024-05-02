@@ -39,7 +39,7 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
         }
     }
     return nullptr; // Return nullptr if no valid declaration is found
-}
+};
 
 
 bool Parser::lookAhead(TokenType expectedType) {
@@ -67,6 +67,7 @@ void Parser::match(TokenType expectedType, const std::string& expectedValue) {
 std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
     // Dummy implementation for now
     return {};
+
 }
 
 //Parses the char type
@@ -97,3 +98,27 @@ std::shared_ptr<ASTNode> Parser::parseChar() {
     }
     return nullptr;
 }
+
+};
+
+std::shared_ptr<ASTNode> Parser::parseFloat(){
+    if (lookAhead(TokenType::FLOAT_CONST)){
+        auto FloatingNode = std::make_shared<FloatNode>();
+        FloatingNode->Floating_Point = std::stof(tokens[pos].value);
+        return FloatingNode;
+    }
+    return nullptr;
+};
+
+std::shared_ptr<ASTNode> Parser::parseComment(){
+
+}
+std::shared_ptr<ASTNode> Parser::parseString(){
+    if (lookAhead(TokenType::STRING)){
+        auto Stringnode = std::make_shared<StringNode>();
+        Stringnode->StringOfChars=tokens[pos].value;
+        return Stringnode;
+    }
+    return nullptr;
+};
+

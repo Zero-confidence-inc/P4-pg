@@ -43,12 +43,34 @@ struct IfStatementNode : ASTNode {
     IfStatementNode() : condition(nullptr), trueBranch(nullptr), falseBranch(nullptr) {}
 };
 
+struct FloatNode : ASTNode {
+    float Floating_Point;
+};
+
+struct CommentNode : ASTNode {
+    std::string Single_Comment_Start;       //Single line comment start     | //
+    std::string Single_Comment_Content;     //Single line comment content   | comment
+    std::string Multi_Comment_Start;        //Multi line comment start      | /*
+    std::string Multi_Comment_Content;      //Multi line comment content    | comment
+    std::string Multi_Comment_End;          //Multi line comment end        | */
+};
+
+struct StringNode : ASTNode {
+    std::string StringOfChars;
+};
+
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);
     void parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
+
     std::shared_ptr<ASTNode> parseChar();
+
+    std::shared_ptr<ASTNode> parseFloat();
+    std::shared_ptr<ASTNode> parseComment();
+    std::shared_ptr<ASTNode> parseString();
+
 
 private:
     std::vector<Token> tokens;
