@@ -69,19 +69,24 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
     return {};
 }
 
-
+//Parses the char type
 std::shared_ptr<ASTNode> Parser::parseChar() {
+    //Checks if the type given is actually a char, and creates a char node
     if (lookAhead(TokenType::TYPE) && tokens[pos].value == "char") {
         auto charNode = std::make_shared<CharNode>();
         pos++;
+        //Skips any identifiers, but doesn't check for syntax validity
         while (lookAhead(TokenType::IDENTIFIER)) {
             pos++;
         }
+        //Skips the '=' operator, and return nullptr if the operator used isn't '='
         if(lookAhead(TokenType::OPERATOR) && tokens[pos].value[0] == '=') {
             pos++;
+            //Assigns the first character of the following string as our char
             if(lookAhead(TokenType::STRING)) {
                 charNode->character = tokens[pos].value[0];
                 pos++;
+                //We only only accept this as a proper char if the following character is a ';', since that would mean the declaration has finished properly
                 if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
                     return charNode;
                 } else {
