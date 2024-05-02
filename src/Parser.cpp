@@ -73,7 +73,7 @@ std::shared_ptr<ASTNode> Parser::parseInt() {
 
     //Create int node
     if (lookAhead(TokenType::TYPE) && tokens[pos].value == "int") {
-        auto IntNode = std::make_shared<IntNode>();
+        auto intNode = std::make_shared<IntNode>();
         pos++;
         // Check if '=' operator is used, if not, skip till end
         if (lookAhead(TokenType::OPERATOR) && tokens[pos].value[0] == '=') {
@@ -82,13 +82,13 @@ std::shared_ptr<ASTNode> Parser::parseInt() {
             return nullptr; //If no '=' is found
         }
         if (lookAhead(TokenType::STRING) && tokens[pos].value.size() > 0 && isdigit(tokens[pos])) {
-            IntNode->integer = tokens[pos].value[0];
+            intNode->integer = tokens[pos].value[0];
             pos++;
         } else {
             return nullptr; //if no Integer is found
         }
         if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
-            return IntNode; //If everything matches at the end, then it will return the IntNode
+            return intNode; //If everything matches at the end, then it will return the IntNode
         }
     }
     return nullptr;
