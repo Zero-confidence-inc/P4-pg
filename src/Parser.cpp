@@ -79,20 +79,20 @@ std::shared_ptr<ASTNode> Parser::parseChar() {
         if(lookAhead(TokenType::OPERATOR) && tokens[pos].value[0] == '=') {
             pos++;
             //Assigns the first character of the following string as our char
-            if(lookAhead(TokenType::STRING)) {
+            if(lookAhead(TokenType::STRING) && tokens[pos].value.size() > 0) {
                 charNode->character = tokens[pos].value[0];
                 pos++;
                 //We only only accept this as a proper char if the following character is a ';', since that would mean the declaration has finished properly
                 if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
                     return charNode;
                 } else {
-                    return nullptr;
+                    return nullptr; // Error: Missing semicolon
                 }
             } else {
-                return nullptr;
+                return nullptr; // Error: Missing or empty string
             }
         } else {
-            return nullptr;
+            return nullptr; // Error: Missing operator '='
         }
     }
     return nullptr;
