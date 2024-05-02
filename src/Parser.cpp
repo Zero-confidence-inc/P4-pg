@@ -13,6 +13,7 @@ void Parser::parseProgram() {
             ast.push_back(declaration);
         }
     }
+
     // 'ast' now contains the entire program's AST
 }
 
@@ -66,4 +67,32 @@ void Parser::match(TokenType expectedType, const std::string& expectedValue) {
 std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
     // Dummy implementation for now
     return {};
+}
+
+
+std::shared_ptr<ASTNode> Parser::parseChar() {
+    if (lookAhead(TokenType::TYPE) && tokens[pos].value == "char") {
+        auto charNode = std::make_shared<CharNode>();
+        pos++;
+        while (lookAhead(TokenType::IDENTIFIER)) {
+            pos++;
+        }
+        if(lookAhead(TokenType::OPERATOR) && tokens[pos].value[0] == '=') {
+            pos++;
+            if(lookAhead(TokenType::STRING)) {
+                charNode->character = tokens[pos].value[0];
+                pos++;
+                if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
+                    return charNode;
+                } else {
+                    return nullptr;
+                }
+            } else {
+                return nullptr;
+            }
+        } else {
+            return nullptr;
+        }
+    }
+    return nullptr;
 }

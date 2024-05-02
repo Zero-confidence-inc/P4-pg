@@ -20,6 +20,11 @@ struct DeclarationNode : ASTNode {
     std::string identifier;
 };
 
+struct CharNode : ASTNode {
+    std::string identifier;
+    std::string character;
+};
+
 // Node for function declarations
 struct FunctionNode : DeclarationNode {
     std::vector<std::shared_ptr<ASTNode>> body;
@@ -43,6 +48,7 @@ public:
     explicit Parser(const std::vector<Token>& tokens);
     void parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
+    std::shared_ptr<ASTNode> parseChar();
 
 private:
     std::vector<Token> tokens;
