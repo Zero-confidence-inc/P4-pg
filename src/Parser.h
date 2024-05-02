@@ -37,6 +37,7 @@ struct IfStatementNode : ASTNode {
 
     IfStatementNode() : condition(nullptr), trueBranch(nullptr), falseBranch(nullptr) {}
 };
+
 struct FloatNode : ASTNode {
     float Floating_Point;
 };
@@ -47,10 +48,10 @@ struct CommentNode : ASTNode {
     std::string Multi_Comment_Start;        //Multi line comment start      | /*
     std::string Multi_Comment_Content;      //Multi line comment content    | comment
     std::string Multi_Comment_End;          //Multi line comment end        | */
+};
 
 struct StringNode : ASTNode {
-    string StringOfChars;
-
+    std::string StringOfChars;
 };
 
 class Parser {
