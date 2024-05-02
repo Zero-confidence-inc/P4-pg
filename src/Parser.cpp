@@ -75,10 +75,6 @@ std::shared_ptr<ASTNode> Parser::parseChar() {
     if (lookAhead(TokenType::TYPE) && tokens[pos].value == "char") {
         auto charNode = std::make_shared<CharNode>();
         pos++;
-        //Skips any identifiers, but doesn't check for syntax validity
-        while (lookAhead(TokenType::IDENTIFIER)) {
-            pos++;
-        }
         //Skips the '=' operator, and return nullptr if the operator used isn't '='
         if(lookAhead(TokenType::OPERATOR) && tokens[pos].value[0] == '=') {
             pos++;
