@@ -43,6 +43,7 @@ public:
     explicit Parser(const std::vector<Token>& tokens);
     void parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
+    std::shared_ptr<ASTNode> parseInt();
 
 private:
     std::vector<Token> tokens;
