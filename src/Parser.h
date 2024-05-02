@@ -20,6 +20,11 @@ struct DeclarationNode : ASTNode {
     std::string identifier;
 };
 
+// Node for Integers
+struct intNode : ASTnode {
+    std::int integer;
+
+};
 // Node for function declarations
 struct FunctionNode : DeclarationNode {
     std::vector<std::shared_ptr<ASTNode>> body;
