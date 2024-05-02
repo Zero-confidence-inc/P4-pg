@@ -20,10 +20,11 @@ public:
 private:
     enum class State{
         Start,
-        SingleLine_started,
-        MultiLine_started,
-        SingleLine_Called,
-        MultiLine_Called //added extra needed stats
+        CommentStarted,
+        SingleLineCalled,
+        MultiLineContent,
+        MultiLineEnd1,
+        MultiLineEnd2
 
     };
 

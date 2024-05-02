@@ -78,8 +78,30 @@ std::shared_ptr<ASTNode> Parser::parseFloat(){
 };
 
 std::shared_ptr<ASTNode> Parser::parseComment(){
+    if (lookAhead(TokenType::COMMENTS)){
+        if (tokens[pos].value == "//"){
+            auto Commentnode = std::make_shared<CommentNode>();
+            Commentnode->Single_Comment_Start=tokens[pos].value;
+            pos++;
+            Commentnode->Single_Comment_Content=tokens[pos].value;
+            return Commentnode;
+        }
+        else if (tokens[pos].value == "/*"){
+            auto Commentnode = std::make_shared<CommentNode>();
+            Commentnode->Multi_Comment_Start=tokens[pos].value;
+            pos++;
+            Commentnode->Multi_Comment_Content=tokens[pos].value;
+            pos++;
+            Commentnode->Multi_Comment_End=tokens[pos].value;
+            return Commentnode;
+        }
+        return nullptr;
 
-}
+        
+
+    }
+};
+
 std::shared_ptr<ASTNode> Parser::parseString(){
     if (lookAhead(TokenType::STRING)){
         auto Stringnode = std::make_shared<StringNode>();
