@@ -86,13 +86,13 @@ std::shared_ptr<ASTNode> Parser::parseChar() {
                 if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
                     return charNode;
                 } else {
-                    return nullptr; // Error: Missing semicolon
+                    return nullptr; //Missing semicolon
                 }
             } else {
-                return nullptr; // Error: Missing or empty string
+                return nullptr; //Missing or empty string
             }
         } else {
-            return nullptr; // Error: Missing operator '='
+            return nullptr; //Missing operator '='
         }
     }
     return nullptr;
