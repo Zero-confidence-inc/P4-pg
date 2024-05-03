@@ -42,6 +42,17 @@ struct OperatorNode : ASTNode {
     std::string operatorType; 
 };
 
+struct SwitchNode : ASTNode {
+    std::shared_ptr<ASTNode> condition;
+    std::vector<std::shared_ptr<caseNode>> caseBranch;
+
+    SwitchNode() : condition(nullptr), caseBranch() {}
+};
+
+struct caseNode : ASTNode {
+    std::shared_ptr<ASTNode> sucessCondition;
+    std::shared_ptr<ASTNode> Branch;
+};
 
 class Parser {
 public:
@@ -49,6 +60,11 @@ public:
     void parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
     std::shared_ptr<ASTNode> parseOperator();
+    std::shared_ptr<ASTNode> parseSwitch();
+    std::shared_ptr<ASTNode> parseSwitchStatement();
+    std::shared_ptr<ASTNode> parseExpression();
+    std::shared_ptr<ASTNode> parseStatement();
+
 
 private:
     std::vector<Token> tokens;
