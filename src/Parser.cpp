@@ -125,30 +125,48 @@ std::shared_ptr<ASTNode> Parser::parseString(){
 std::shared_ptr<ASTnode> Parser::parseIf()
 {
 //the irony of using if in if,
-if (lookAhead("if")) //todo make this workie werkie
+if (lookAhead(TokenType::CONTROL) {
+    bool result = false;
+
+
+
+
+    if(tokens[pos].value == "if")
     {
-        lookAhead('(')
-        lookAhead("statement")
-        lookAhead("condtion")
-        lookAhead(')')
-        if (condition)
-        {
-            truebranch()
-        }
-        else
-        {
-            falsebranch()
-        }
+        auto conditionNode = std::make_shared<IfStatementNode>();
+        match(TokenType::PUNCTUATION, "(");
+        conditionNode->condition = tokens[pos].value;
+        match(TokenType::PUNCTUATION, ")");
+        match(TokenType::PUNCTUATION, "{");
+        conditionNode->trueBranch = tokens[pos].value;
+        match(TokenType::PUNCTUATION, "}");
+        return conditionNode;
     }
+    else if(tokens[pos].value == "else if")
+    {
+        auto conditionNode = std::make_shared<IfStatementNode>();
+        match(TokenType::PUNCTUATION, "(");
+        conditionNode->condition = tokens[pos].value;
+        match(TokenType::PUNCTUATION, ")");
+        match(TokenType::PUNCTUATION, "{");
+        conditionNode->trueBranch = tokens[pos].value;
+        match(TokenType::PUNCTUATION, "}");
+        return conditionNode;
+
+    }
+    else if(tokens[pos].value == "else")
+    {
+        auto conditionNode = std::make_shared<IfStatementNode>();
+        match(TokenType::PUNCTUATION, "(");
+        conditionNode->condition = tokens[pos].value;
+        match(TokenType::PUNCTUATION, ")");
+        match(TokenType::PUNCTUATION, "{");
+        conditionNode->falseBranch = tokens[pos].value;
+        match(TokenType::PUNCTUATION, "}");
+        return conditionNode;
+    }
+    return nullptr;
+}
 
 }
-falsebranch()
-{
-    if lookAhead("else if")
-    {
-        //magic
-    }
-    else{
 
-    }
-}
