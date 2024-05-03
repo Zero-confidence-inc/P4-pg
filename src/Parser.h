@@ -43,11 +43,7 @@ struct FloatNode : ASTNode {
 };
 
 struct CommentNode : ASTNode {
-    std::string Single_Comment_Start;       //Single line comment start     | //
-    std::string Single_Comment_Content;     //Single line comment content   | comment
-    std::string Multi_Comment_Start;        //Multi line comment start      | /*
-    std::string Multi_Comment_Content;      //Multi line comment content    | comment
-    std::string Multi_Comment_End;          //Multi line comment end        | */
+    std::string Comment;
 };
 
 struct StringNode : ASTNode {

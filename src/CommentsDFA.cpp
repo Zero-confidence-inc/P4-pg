@@ -29,7 +29,7 @@ bool CommentsDFA::processChar(char c) {
             else return false;
 
         case State::MultiLineContent:
-            if(isalnum(c)|| c == ' '){
+            if(isalnum(c)|| c == ' '|| c == '\n' || c == '\t'){
                 currentString += c;
                 currentState = State::MultiLineContent;
                 return true;
