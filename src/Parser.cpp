@@ -70,6 +70,25 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
 
 }
 
+std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
+    // Dummy implementation for now
+    return {};
+
+}
+
+
+std::shared_ptr<ASTNode> Parser::parseCondition() {
+    // Dummy implementation for now
+    return {};
+
+}
+
+std::shared_ptr<ASTNode> Parser::parseMath() {
+    // Dummy implementation for now
+    return {};
+
+}
+
 //Parses the char type
 std::shared_ptr<ASTNode> Parser::parseChar() {
     //Checks if the type given is actually a char, and creates a char node
@@ -87,7 +106,7 @@ std::shared_ptr<ASTNode> Parser::parseChar() {
                 if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
                     return charNode;
                 } else {
-                    return nullptr; //Missing semicolon
+                    return nullptr; //Missing ';'
                 }
             } else {
                 return nullptr; //Missing or empty string
@@ -96,10 +115,9 @@ std::shared_ptr<ASTNode> Parser::parseChar() {
             return nullptr; //Missing operator '='
         }
     }
-    return nullptr;
+    return nullptr; //Missing "char"
 }
 
-};
 
 std::shared_ptr<ASTNode> Parser::parseFloat(){
     if (lookAhead(TokenType::FLOAT_CONST)){
@@ -122,3 +140,46 @@ std::shared_ptr<ASTNode> Parser::parseString(){
     return nullptr;
 };
 
+//Parses a for loop
+std::shared_ptr<ASTNode> Parser::parseForLoop() {
+    //Check to see if the loop token "for" is given
+    if (lookAhead(TokenType::LOOP) && tokens[pos].value == "for") {
+        auto forLoopNode = std::make_shared<ForLoopNode>();
+        pos++;
+        //skips '(' and parses the declaration
+        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '(') {
+            pos++;
+            auto declarationNode = parseDeclaration();
+            //skips the first ';' and parses the condition
+            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
+                pos++;
+                auto conditionNode = parseCondition();
+                //skips the second ';' and parses the expression
+                if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
+                    pos++;
+                    auto expressionNode = parseMath();
+                    //skip ')' and parses the body of the loop, thereafter it assigns the, declaration, condition, expression and body.
+                    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
+                        pos++;
+                        auto bodyNode = parseLoopBody();
+                        forLoopNode->declaration = declarationNode;
+                        forLoopNode->condition = conditionNode;
+                        forLoopNode->expression = expressionNode;
+                        forLoopNode->body = bodyNode;
+                        return forLoopNode;
+                    } else {
+                        return nullptr; //Missing ')'
+                    }
+                } else {
+                    return nullptr; //Missing ';'
+                }
+            } else {
+                return nullptr; //Missing ';'
+            }
+        } else {
+            return nullptr; //Missing '('
+        }
+    } else {
+        return nullptr; //Missing "for"
+    }
+}

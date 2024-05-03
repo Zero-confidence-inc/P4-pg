@@ -21,8 +21,14 @@ struct DeclarationNode : ASTNode {
 };
 
 struct CharNode : ASTNode {
-    std::string identifier;
     std::string character;
+};
+
+struct ForLoopNode : ASTNode {
+    std::shared_ptr<ASTNode> declaration;
+    std::shared_ptr<ASTNode> condition;
+    std::shared_ptr<ASTNode> expression;
+    std::vector<std::shared_ptr<ASTNode>> body;
 };
 
 // Node for function declarations
@@ -70,6 +76,9 @@ public:
     std::shared_ptr<ASTNode> parseFloat();
     std::shared_ptr<ASTNode> parseComment();
     std::shared_ptr<ASTNode> parseString();
+    std::shared_ptr<ASTNode> parseCondition();
+    std::shared_ptr<ASTNode> parseMath();
+    std::shared_ptr<ASTNode> parseForLoop();
 
 
 private:
@@ -80,6 +89,7 @@ private:
     void match(TokenType expectedType);
     void match(TokenType expectedType, const std::string& expectedValue);
     std::vector<std::shared_ptr<ASTNode>> parseFunctionBody();  // Assume this function parses a function body
+    std::vector<std::shared_ptr<ASTNode>> parseLoopBody();  // Assume this function parses a loop body
 };
 
 #endif // PARSER_H
