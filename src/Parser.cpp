@@ -122,3 +122,33 @@ std::shared_ptr<ASTNode> Parser::parseString(){
     return nullptr;
 };
 
+std::shared_ptr<ASTnode> Parser::parseIf()
+{
+//the irony of using if in if,
+if (lookAhead("if")) //todo make this workie werkie
+    {
+        lookAhead('(')
+        lookAhead("statement")
+        lookAhead("condtion")
+        lookAhead(')')
+        if (condition)
+        {
+            truebranch()
+        }
+        else
+        {
+            falsebranch()
+        }
+    }
+
+}
+falsebranch()
+{
+    if lookAhead("else if")
+    {
+        //magic
+    }
+    else{
+
+    }
+}

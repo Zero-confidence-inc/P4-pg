@@ -20,6 +20,7 @@ struct DeclarationNode : ASTNode {
     std::string identifier;
 };
 
+
 struct CharNode : ASTNode {
     std::string identifier;
     std::string character;
