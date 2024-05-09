@@ -16,7 +16,7 @@ public:
     void enterScope();
     void exitScope();
     void declareVariable(const std::string& name,const std::string& type);
-    std::string LookUpVariable(const std::string& name);
+    std::string lookUpVariable(const std::string& name);
 private:
     std::vector<std::map<std::string,std::string>> scopes;
 
@@ -30,6 +30,11 @@ private:
     void kowalskiFunction(const std::shared_ptr<FunctionNode>& node);
     void kowalskiVariable(const std::shared_ptr<VariableNode>& node);
     void kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node);
+    void kowalskiChar(const std::shared_ptr<CharNode>& node);
+    void kowalskiIf(const std::shared_ptr<IfStatementNode>& node);
+    void kowalskiFloat(const std::shared_ptr<FloatNode>& node);
+    void KowalskiString (const std::shared_ptr<StringNode>& node);
+
 
 };
 
