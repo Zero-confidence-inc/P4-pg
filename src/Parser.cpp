@@ -128,3 +128,51 @@ std::shared_ptr<ASTNode> Parser::parseString(){
     return nullptr;
 };
 
+//Operators 
+std::shared_ptr<ASTNode> Parser::parseOperator() {
+    if(lookAhead(TokenType::OPERATOR)){
+        auto opeNode = std::make_shared<OperatorNode>();
+        opeNode->operatorType = tokens[pos].value;
+        return opeNode;
+    }
+    return nullptr;
+}
+
+//Switch
+std::shared_ptr<ASTNode> Parser::parseSwitchStatement() {
+    if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
+        return parseSwitch();
+    }
+    return nullptr;
+}
+
+std::shared_ptr<ASTNode> Parser::parseSwitch() {
+    if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
+        pos++;
+        auto swNode = std::make_shared<SwitchNode>();
+        swNode->condition = parseExpression();
+
+        while (lookAhead(TokenType::CONTROL) && tokens[pos].value == "case"){
+            auto cNode = std::make_shared<caseNode>();
+            cNode->sucessCondition = parseStatement();
+            pos++;
+            cNode->Branch = parseStatement();
+
+            swNode->caseBranch.push_back(cNode);
+        }
+
+        return swNode;
+    }
+    return nullptr;
+}
+
+std::shared_ptr<ASTNode> Parser::parseStatement(){
+    //placeholder for now
+    return nullptr;
+}
+
+std::shared_ptr<ASTNode> Parser::parseExpression(){
+    //placeholder for now
+    return nullptr;
+}
+
