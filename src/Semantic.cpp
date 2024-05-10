@@ -3,6 +3,7 @@
 //
 #include "Semantic.h
 #include <iostream>
+#include <string>
 
 void SymbolTable::enterScope(){
 scopes.push_back({});
@@ -80,13 +81,15 @@ void SemanticAnalyser::kowalskiFunction(const std::shared_ptr<FunctionNode>& nod
     {
 
     }
-void SemanticAnalyser::kowalskiVariable(const std::shared_ptr<VariableNode>& node);
+void SemanticAnalyser::kowalskiVariable(const std::shared_ptr<VariableNode>& node); // this one declares varaiable
     {
-
+        string name = node.identifier;
+        string type = node.type;
+        declareVariable(const std::string& name,const std::string& type)
     }
 void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node);
     {
-
+        throw runtime_error("not fully declared variable, if i read the code correctly cuz this node is ever made")
     }
 void SemanticAnalyser::kowalskiChar(const std::shared_ptr<CharNode>& node);
     {
