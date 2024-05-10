@@ -76,35 +76,31 @@ std::string SymbolTable::lookUpVariable(const std::string& name);
 // todo: make case for each node type, define each node method,
 // todo: make sure the first 4 methods are using in methods going forward, approiatly :3
 
-void analyseNode(const std::shared_ptr<ASTNode>& node)
+void SemanticAnalyser::kowalskiFunction(const std::shared_ptr<FunctionNode>& node);
     {
 
     }
-void kowalskiFunction(const std::shared_ptr<FunctionNode>& node);
+void SemanticAnalyser::kowalskiVariable(const std::shared_ptr<VariableNode>& node);
     {
 
     }
-void kowalskiVariable(const std::shared_ptr<VariableNode>& node);
+void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node);
     {
 
     }
-void kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node);
+void SemanticAnalyser::kowalskiChar(const std::shared_ptr<CharNode>& node);
     {
 
     }
-void kowalskiChar(const std::shared_ptr<CharNode>& node);
+void SemanticAnalyser::kowalskiIf(const std::shared_ptr<IfStatementNode>& node);
     {
 
     }
-void kowalskiIf(const std::shared_ptr<IfStatementNode>& node);
+void SemanticAnalyser::kowalskiFloat(const std::shared_ptr<FloatNode>& node);
     {
 
     }
-void kowalskiFloat(const std::shared_ptr<FloatNode>& node);
-    {
-
-    }
-void KowalskiString (const std::shared_ptr<StringNode>& node);
+void SemanticAnalyser::KowalskiString (const std::shared_ptr<StringNode>& node);
     {
 
     }
