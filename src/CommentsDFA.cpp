@@ -8,44 +8,48 @@ bool CommentsDFA::processChar(char c) {
     switch (currentState){
         case State::Start:
 
-            if (c == '/')
-            {
-                currentString += c; //changed to currentString instead of token cus token isn't recognized yet
-                currentState = State::SingleLine_started;
-                return true;
-            } else if (c == '*')
-            {
+            if (c == '/'){
                 currentString += c;
-                currentState = State::MultiLine_started;
+                currentState = State::CommentStarted;
                 return true;
             }
             else return false;
-        case State::SingleLine_started: //new case to recognize full singleLine token
-            if(c == '/')
-            {
+        case State::CommentStarted:
+            if(c == '/'){
                 currentString += c;
                 currentToken = currentString;
-                currentState = State::SingleLine_Called;
-                return false; //return false as we recognize token and can't accept any future input without reset
+                currentState = State::SingleLineCalled;
+                return false;
+            }
+            else if (c=='*'){
+                currentString+= c;
+                currentState = State::MultiLineContent;
+                return true;
             }
             else return false;
 
-        case State::MultiLine_started: // same as above case but for multiline
-            if(c == '/')
-            {
+        case State::MultiLineContent:
+            if(isalnum(c)|| c == ' '|| c == '\n' || c == '\t'){
                 currentString += c;
-                currentToken = currentString;
-                currentState = State::MultiLine_Called;
-                return false; //return false as we recognize token and can't accept any future input without reset
+                currentState = State::MultiLineContent;
+                return true;
+            }
+            else if(c == '*'){
+                currentString += c;
+                currentState = State::MultiLineEnd1;
+                return true;
             }
             else return false;
-
+        case State::MultiLineEnd1:
+            if(c == '/'){
+                currentString += c;
+                currentToken = currentString;
+                currentState = State::MultiLineEnd2;
+                return false;
+            }
         default: return false;
     }
-
-
 }
-
 
     Token CommentsDFA::finalizeToken() {
         Token token(TokenType::COMMENTS, currentToken);

@@ -54,15 +54,27 @@ struct FloatNode : ASTNode {
 };
 
 struct CommentNode : ASTNode {
-    std::string Single_Comment_Start;       //Single line comment start     | //
-    std::string Single_Comment_Content;     //Single line comment content   | comment
-    std::string Multi_Comment_Start;        //Multi line comment start      | /*
-    std::string Multi_Comment_Content;      //Multi line comment content    | comment
-    std::string Multi_Comment_End;          //Multi line comment end        | */
+    std::string Comment;
 };
 
 struct StringNode : ASTNode {
     std::string StringOfChars;
+};
+
+struct OperatorNode : ASTNode {
+    std::string operatorType; 
+};
+
+struct SwitchNode : ASTNode {
+    std::shared_ptr<ASTNode> condition;
+    std::vector<std::shared_ptr<caseNode>> caseBranch;
+
+    SwitchNode() : condition(nullptr), caseBranch() {}
+};
+
+struct caseNode : ASTNode {
+    std::shared_ptr<ASTNode> sucessCondition;
+    std::shared_ptr<ASTNode> Branch;
 };
 
 class Parser {
@@ -79,6 +91,13 @@ public:
     std::shared_ptr<ASTNode> parseCondition();
     std::shared_ptr<ASTNode> parseMath();
     std::shared_ptr<ASTNode> parseForLoop();
+
+    std::shared_ptr<ASTNode> parseDeclaration();
+    std::shared_ptr<ASTNode> parseOperator();
+    std::shared_ptr<ASTNode> parseSwitch();
+    std::shared_ptr<ASTNode> parseSwitchStatement();
+    std::shared_ptr<ASTNode> parseExpression();
+    std::shared_ptr<ASTNode> parseStatement();
 
 
 private:
