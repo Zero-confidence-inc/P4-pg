@@ -72,21 +72,16 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
     auto bodyNode = std::make_shared<LoopBodyNode>();
-  
-  if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '{') {
-    pos++;
-    
-    while (lookAhead(TokenType::PUNCTUATION) != tokens[pos].value[0] != '}') {
-      auto contentsNode = parseDeclaration();
-      bodyNode->body = contentsNode;
+    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '{') {
+        pos++;
+        while (tokens[pos].value[0] != '}') {
+            auto contents = parseDeclaration();
+            bodyNode->body.push_back(contents);
+        }
+    } else {
+        return nullptr; 
     }
-  } else {
-    
-    return nullptr; 
-  }
-  
-  return bodyNode;
-
+    return bodyNode;
 }
 
 
