@@ -23,10 +23,10 @@ private:
 };
 class SemanticAnalyser{
 public:
-    void kowalski(const std::shared_ptr<ASTNode>& Root);
+    void kowalski(const std::shared_ptr<ASTNode>& root);
 private:
     SymbolTable symbolTable;
-    void analyseNode(const std::shared_ptr<ASTNode>& Node);
+    void analyseNode(const std::shared_ptr<ASTNode>& node);
     void kowalskiFunction(const std::shared_ptr<FunctionNode>& node);
     void kowalskiVariable(const std::shared_ptr<VariableNode>& node);
     void kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node);
