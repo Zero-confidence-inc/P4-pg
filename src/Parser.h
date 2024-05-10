@@ -31,10 +31,6 @@ struct ForLoopNode : ASTNode {
     std::vector<std::shared_ptr<ASTNode>> body;
 };
 
-struct LoopBodyNode : ASTNode {
-    std::vector<std::shared_ptr<ASTNode>> body;
-};
-
 // Node for function declarations
 struct FunctionNode : DeclarationNode {
     std::vector<std::shared_ptr<ASTNode>> body;
@@ -93,7 +89,7 @@ private:
     void match(TokenType expectedType);
     void match(TokenType expectedType, const std::string& expectedValue);
     std::vector<std::shared_ptr<ASTNode>> parseFunctionBody();  // Assume this function parses a function body
-    std::vector<std::shared_ptr<ASTNode>> parseLoopBody();  // Assume this function parses a loop body
+    std::vector<std::shared_ptr<ASTNode>> parseLoopBody();
 };
 
 #endif // PARSER_H
