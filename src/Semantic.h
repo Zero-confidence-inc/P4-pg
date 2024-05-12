@@ -33,7 +33,7 @@ private:
     void kowalskiChar(const std::shared_ptr<CharNode>& node);
     void kowalskiIf(const std::shared_ptr<IfStatementNode>& node);
     void kowalskiFloat(const std::shared_ptr<FloatNode>& node);
-    void KowalskiString (const std::shared_ptr<StringNode>& node);
+    void kowalskiString(const std::shared_ptr<StringNode>& node);
 
 
 };
