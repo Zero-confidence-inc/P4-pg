@@ -85,7 +85,7 @@ void SemanticAnalyser::kowalskiVariable(const std::shared_ptr<VariableNode>& nod
     {
         string name = node.identifier;
         string type = node.type;
-        declareVariable(const std::string& name,const std::string& type)
+        declareVariable(const std::string& name,const std::string& type);
     }
 void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node)
     {
@@ -93,7 +93,9 @@ void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode
     }
 void SemanticAnalyser::kowalskiChar(const std::shared_ptr<CharNode>& node)
     {
-
+        string name = node.identifier;
+        string character = node.character;
+        declareVariable(const std::string& name, const std::string& character);
     }
 void SemanticAnalyser::kowalskiIf(const std::shared_ptr<IfStatementNode>& node)
     {
