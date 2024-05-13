@@ -317,12 +317,8 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
         if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '(') {
             pos++;
             auto conditionNode = parseCondition();
-            //skips the ';' and parses the expression
-            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
-                pos++;
-                auto expressionNode = parseMath();
-                //skip ')' and parses the body of the loop, thereafter it assigns the, declaration, condition, expression and body.
-                if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
+            //skip ')' and parses the body of the loop, thereafter it assigns the, declaration, condition, expression and body.
+            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
                     pos++;
                     auto bodyNode = parseLoopBody();
                     whileLoopNode->condition = conditionNode;
@@ -332,8 +328,6 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
                 } else {
                     return nullptr; //Missing ')'
                 }
-            } else {
-                return nullptr; //Missing ';'
             }
         }
     } else {
