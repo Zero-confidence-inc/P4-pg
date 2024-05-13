@@ -2,7 +2,6 @@
 // Created by Yuki on 29/04/2024.
 //
 #include "Parser.h"
-#include <cctype>
 
 Parser::Parser(const std::vector<Token>& tokens) : tokens(tokens) {}
 
@@ -14,6 +13,7 @@ void Parser::parseProgram() {
             ast.push_back(declaration);
         }
     }
+
     // 'ast' now contains the entire program's AST
 }
 
@@ -39,7 +39,7 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
         }
     }
     return nullptr; // Return nullptr if no valid declaration is found
-}
+};
 
 
 bool Parser::lookAhead(TokenType expectedType) {
@@ -65,67 +65,251 @@ void Parser::match(TokenType expectedType, const std::string& expectedValue) {
 }
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
-    // Dummy implementation for now
-    return {};
-}
-//Parse the Int Type
-std::shared_ptr<ASTNode> Parser::parseInt() {
-
-    //Create int node
-    if (lookAhead(TokenType::TYPE) && tokens[pos].value == "int") {
-        auto intNode = std::make_shared<IntNode>();
+    std::vector<std::shared_ptr<ASTNode>> contents;
+    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '{') {
         pos++;
-        // Check if '=' operator is used, if not, skip till end
-        if (lookAhead(TokenType::OPERATOR) && tokens[pos].value[0] == '=') {
-            pos++
-        } else {
-            return nullptr; //If no '=' is found
+        while (tokens[pos].value[0] != '}') {
+            auto declaration = parseDeclaration();
+            auto forLoop = parseForLoop();
+            auto switchCase = parseSwitch();
+            auto array = parseArray();
+            auto ifStatement = parseIfStatement();
+            auto whileLoop = parseWhileLoop();
+            contents.push_back(declaration);
+            contents.push_back(forLoop);
+            contents.push_back(switchCase);
+            contents.push_back(array);
+            contents.push_back(ifStatement);
+            contents.push_back(whileLoop);
         }
-        if (lookAhead(TokenType::STRING) && tokens[pos].value.size() > 0 && isdigit(tokens[pos])) {
-            intNode->integer = tokens[pos].value[0];
-            pos++;
-        } else {
-            return nullptr; //if no Integer is found
+    } else {
+        return {};
+    }
+    return contents;
+}
+
+std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
+    std::vector<std::shared_ptr<ASTNode>> contents;
+    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '{') {
+        pos++;
+        while (tokens[pos].value[0] != '}') {
+            auto declaration = parseDeclaration();
+            auto forLoop = parseForLoop();
+            auto switchCase = parseSwitch();
+            auto array = parseArray();
+            auto ifStatement = parseIfStatement();
+            auto whileLoop = parseWhileLoop();
+            contents.push_back(declaration);
+            contents.push_back(forLoop);
+            contents.push_back(switchCase);
+            contents.push_back(array);
+            contents.push_back(ifStatement);
+            contents.push_back(whileLoop);
         }
-        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
-            return intNode; //If everything matches at the end, then it will return the IntNode
+    } else {
+        return {};
+    }
+    return contents;
+}
+
+
+std::shared_ptr<ASTNode> Parser::parseCondition() {
+    if (lookAhead(TokenType::OPERATOR)){
+        if (tokens[pos].value == "==" || tokens[pos].value == "!=" || tokens[pos].value == "<" 
+        || tokens[pos].value == ">" || tokens[pos].value == "<=" || tokens[pos].value == ">=") {
+            auto conditionNode = std::make_shared<ConditionNode>();
+            conditionNode->condition = tokens[pos].value;
+            return conditionNode;
         }
+        return nullptr;
     }
     return nullptr;
-    }
+}
 
-if (lookAhead(TokenType::LOOP) && tokens[pos].value == "while") {
-    auto whileLoopNode = std::make_shared<ForLoopNode>();
-    pos++;
-//skips '(' and parses the condition
-if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '(') {
-    pos++;
-    auto conditionNode = parseCondition();
-//skips the ';' and parses the expression
-if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
-    pos++;
-    auto expressionNode = parseMath();
-//skip ')' and parses the body of the loop, thereafter it assigns the, declaration, condition, expression and body.
-if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
-    pos++;
-    auto bodyNode = parseLoopBody();
-    whileLoopNode->condition = conditionNode;
-    whileLoopNode->expression = expressionNode;
-    whileLoopNode->body = bodyNode;
-    return whileLoopNode;
-} else {
-    return nullptr; //Missing ')'
+std::shared_ptr<ASTNode> Parser::parseMath() {
+    // Dummy implementation for now
+    return {};
+
 }
-} else {
-    return nullptr; //Missing ';'
+
+//Parses the char type
+std::shared_ptr<ASTNode> Parser::parseChar() {
+    //Checks if the type given is actually a char, and creates a char node
+    if (lookAhead(TokenType::TYPE) && tokens[pos].value == "char") {
+        auto charNode = std::make_shared<CharNode>();
+        pos++;
+        //Skips the '=' operator, and return nullptr if the operator used isn't '='
+        if(lookAhead(TokenType::OPERATOR) && tokens[pos].value[0] == '=') {
+            pos++;
+            //Assigns the first character of the following string as our char
+            if(lookAhead(TokenType::STRING) && tokens[pos].value.size() > 0) {
+                charNode->character = tokens[pos].value[0];
+                pos++;
+                //We only only accept this as a proper char if the following character is a ';', since that would mean the declaration has finished properly
+                if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
+                    return charNode;
+                } else {
+                    return nullptr; //Missing ';'
+                }
+            } else {
+                return nullptr; //Missing or empty string
+            }
+        } else {
+            return nullptr; //Missing operator '='
+        }
+    }
+    return nullptr; //Missing "char"
 }
-} else {
-    return nullptr; //Missing ';'
+
+
+std::shared_ptr<ASTNode> Parser::parseFloat(){
+    if (lookAhead(TokenType::FLOAT_CONST)){
+        auto FloatingNode = std::make_shared<FloatNode>();
+        FloatingNode->Floating_Point = std::stof(tokens[pos].value);
+        return FloatingNode;
+    }
+    return nullptr;
+};
+
+std::shared_ptr<ASTNode> Parser::parseComment(){
+    if (lookAhead(TokenType::COMMENTS)){
+        auto Commentnode = std::make_shared<CommentNode>();
+        Commentnode->Comment=tokens[pos].value;
+        return Commentnode;
+    };
+    return nullptr;
+};
+
+std::shared_ptr<ASTNode> Parser::parseString(){
+    if (lookAhead(TokenType::STRING)){
+        auto Stringnode = std::make_shared<StringNode>();
+        Stringnode->StringOfChars=tokens[pos].value;
+        return Stringnode;
+    }
+    return nullptr;
+};
+
+
+//Parses a for loop
+std::shared_ptr<ASTNode> Parser::parseForLoop() {
+    //Check to see if the loop token "for" is given
+    if (lookAhead(TokenType::LOOP) && tokens[pos].value == "for") {
+        auto forLoopNode = std::make_shared<ForLoopNode>();
+        pos++;
+        //skips '(' and parses the declaration
+        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '(') {
+            pos++;
+            auto declarationNode = parseDeclaration();
+            //skips the first ';' and parses the condition
+            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
+                pos++;
+                auto conditionNode = parseCondition();
+                //skips the second ';' and parses the expression
+                if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
+                    pos++;
+                    auto expressionNode = parseMath();
+                    //skip ')' and parses the body of the loop, thereafter it assigns the, declaration, condition, expression and body.
+                    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
+                        pos++;
+                        auto bodyNode = parseLoopBody();
+                        forLoopNode->declaration = declarationNode;
+                        forLoopNode->condition = conditionNode;
+                        forLoopNode->expression = expressionNode;
+                        forLoopNode->body = bodyNode;
+                        return forLoopNode;
+                    } else {
+                        return nullptr; //Missing ')'
+                    }
+                } else {
+                    return nullptr; //Missing ';'
+                }
+            } else {
+                return nullptr; //Missing ';'
+            }
+        } else {
+            return nullptr; //Missing '('
+        }
+    } else {
+        return nullptr; //Missing "for"
+    }
 }
-} else {
-    return nullptr; //Missing '('
+
+//Operators 
+std::shared_ptr<ASTNode> Parser::parseOperator() {
+    if(lookAhead(TokenType::OPERATOR)){
+        auto opeNode = std::make_shared<OperatorNode>();
+        opeNode->operatorType = tokens[pos].value;
+        return opeNode;
+    }
+    return nullptr;
 }
-} else {
-    return nullptr; //Missing "while"
+
+//Switch
+std::shared_ptr<ASTNode> Parser::parseSwitchStatement() {
+    if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
+        return parseSwitch();
+    }
+    return nullptr;
 }
+
+std::shared_ptr<ASTNode> Parser::parseSwitch() {
+    if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
+        pos++;
+        auto swNode = std::make_shared<SwitchNode>();
+        swNode->condition = parseCondition();
+
+        while (lookAhead(TokenType::CONTROL) && tokens[pos].value == "case"){
+            auto cNode = std::make_shared<caseNode>();
+            cNode->sucessCondition = parseStatement();
+            pos++;
+            cNode->Branch = parseStatement();
+
+            swNode->caseBranch.push_back(cNode);
+        }
+
+        return swNode;
+    }
+    return nullptr;
+}
+
+std::shared_ptr<ASTNode> Parser::parseStatement(){
+    //placeholder for now
+    return nullptr;
+}
+
+std::shared_ptr<ASTNode> Parser::parseArray(){
+    //placeholder for now
+    return nullptr;
+}
+
+std::shared_ptr<ASTNode> Parser::parseIfStatement(){
+    //Check to see if the loop token "if" is given
+    if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "if") {
+        auto ifNode = std::make_shared<IfNode>();
+        pos++;
+        //skips '(' and parses the condition
+        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '(') {
+            pos++;
+            auto conditionNode = parseCondition();
+            //skip ')' and parses the body of the if statement, thereafter it assigns the condition and body.
+            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
+                pos++;
+                auto bodyNode = parseLoopBody();
+                ifNode->condition = conditionNode;
+                ifNode->body = bodyNode;
+                return ifNode;
+            } else {
+                return nullptr; //Missing ')'
+            }
+        } else {
+            return nullptr; //Missing '('
+        }
+    } else {
+        return nullptr; //Missing "if"
+    }
+}
+
+std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
+    //placeholder for now
+    return nullptr;
 }

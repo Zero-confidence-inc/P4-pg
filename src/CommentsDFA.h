@@ -20,12 +20,16 @@ public:
 private:
     enum class State{
         Start,
-        SingleLine_started,
-        MultiLine_started
+        CommentStarted,
+        SingleLineCalled,
+        MultiLineContent,
+        MultiLineEnd1,
+        MultiLineEnd2
 
     };
 
     State currentState;
+    std::string currentString; // string to hold not finalized but accepted input
     std::string currentToken;
 
 };
