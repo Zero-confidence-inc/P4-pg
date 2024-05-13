@@ -329,11 +329,8 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
                     return nullptr; //Missing ')'
                 }
             }
-        }
-    } else {
+        } else {
         return nullptr; //Missing '('
+    } else {
+        return nullptr; //Missing "while"
     }
-} else {
-return nullptr; //Missing "while"
-    return nullptr;
-}
