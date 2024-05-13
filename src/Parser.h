@@ -86,6 +86,13 @@ struct ConditionNode : ASTNode {
     std::string condition;
 };
 
+struct whileNode : ASTNode {
+    std::shared_ptr<ASTNode> condition;
+    std::shared_ptr<ASTNode> expression;
+    std::vector<std::shared_ptr<ASTNode>> body;
+
+};
+
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);
