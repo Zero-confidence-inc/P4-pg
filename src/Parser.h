@@ -31,6 +31,11 @@ struct ForLoopNode : ASTNode {
     std::vector<std::shared_ptr<ASTNode>> body;
 };
 
+struct IfNode : ASTNode {
+    std::shared_ptr<ASTNode> condition;
+    std::vector<std::shared_ptr<ASTNode>> body;
+};
+
 // Node for function declarations
 struct FunctionNode : DeclarationNode {
     std::vector<std::shared_ptr<ASTNode>> body;
@@ -77,6 +82,10 @@ struct caseNode : ASTNode {
     std::shared_ptr<ASTNode> Branch;
 };
 
+struct ConditionNode : ASTNode {
+    std::string condition;
+};
+
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);
@@ -98,6 +107,10 @@ public:
     std::shared_ptr<ASTNode> parseSwitchStatement();
     std::shared_ptr<ASTNode> parseExpression();
     std::shared_ptr<ASTNode> parseStatement();
+
+    std::shared_ptr<ASTNode> parseArray();
+    std::shared_ptr<ASTNode> parseIfStatement();
+    std::shared_ptr<ASTNode> parseWhileLoop();
 
 
 private:
