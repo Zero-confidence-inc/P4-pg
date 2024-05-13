@@ -29,6 +29,8 @@ set(SOURCES
         src/Parser.cpp
         src/Parser.h
         src/Lexer.h
+        src/CommentsDFA.cpp
+        src/CommentsDFA.h
 )
 add_executable(P4_pg ${SOURCES})
 
