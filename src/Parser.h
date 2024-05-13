@@ -103,6 +103,10 @@ public:
     std::shared_ptr<ASTNode> parseExpression();
     std::shared_ptr<ASTNode> parseStatement();
 
+    std::shared_ptr<ASTNode> parseArray();
+    std::shared_ptr<ASTNode> parseIfStatement();
+    std::shared_ptr<ASTNode> parseWhileLoop();
+
 
 private:
     std::vector<Token> tokens;

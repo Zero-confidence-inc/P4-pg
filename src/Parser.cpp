@@ -65,9 +65,27 @@ void Parser::match(TokenType expectedType, const std::string& expectedValue) {
 }
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
-    // Dummy implementation for now
-    return {};
-
+    std::vector<std::shared_ptr<ASTNode>> contents;
+    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '{') {
+        pos++;
+        while (tokens[pos].value[0] != '}') {
+            auto declaration = parseDeclaration();
+            auto forLoop = parseForLoop();
+            auto switchCase = parseSwitch();
+            auto array = parseArray();
+            auto ifStatement = parseIfStatement();
+            auto whileLoop = parseWhileLoop();
+            contents.push_back(declaration);
+            contents.push_back(forLoop);
+            contents.push_back(switchCase);
+            contents.push_back(array);
+            contents.push_back(ifStatement);
+            contents.push_back(whileLoop);
+        }
+    } else {
+        return {};
+    }
+    return contents;
 }
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
@@ -245,6 +263,21 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
 }
 
 std::shared_ptr<ASTNode> Parser::parseStatement(){
+    //placeholder for now
+    return nullptr;
+}
+
+std::shared_ptr<ASTNode> Parser::parseArray(){
+    //placeholder for now
+    return nullptr;
+}
+
+std::shared_ptr<ASTNode> Parser::parseIfStatement(){
+    //placeholder for now
+    return nullptr;
+}
+
+std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
     //placeholder for now
     return nullptr;
 }
