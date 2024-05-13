@@ -21,7 +21,6 @@ struct DeclarationNode : ASTNode {
 };
 
 struct whileNode : ASTNode {
-    std::shared_ptr<ASTNode> declaration;
     std::shared_ptr<ASTNode> condition;
     std::shared_ptr<ASTNode> expression;
     std::vector<std::shared_ptr<ASTNode>> body;

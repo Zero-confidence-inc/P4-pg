@@ -97,15 +97,11 @@ std::shared_ptr<ASTNode> Parser::parseInt() {
 if (lookAhead(TokenType::LOOP) && tokens[pos].value == "while") {
     auto whileLoopNode = std::make_shared<ForLoopNode>();
     pos++;
-//skips '(' and parses the declaration
+//skips '(' and parses the condition
 if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '(') {
     pos++;
-    auto declarationNode = parseDeclaration();
-    //skips the first ';' and parses the condition
-if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
-    pos++;
     auto conditionNode = parseCondition();
-//skips the second ';' and parses the expression
+//skips the ';' and parses the expression
 if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
     pos++;
     auto expressionNode = parseMath();
@@ -113,7 +109,6 @@ if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
 if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
     pos++;
     auto bodyNode = parseLoopBody();
-    whileLoopNode->declaration = declarationNode;
     whileLoopNode->condition = conditionNode;
     whileLoopNode->expression = expressionNode;
     whileLoopNode->body = bodyNode;
