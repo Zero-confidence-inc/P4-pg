@@ -77,6 +77,10 @@ struct caseNode : ASTNode {
     std::shared_ptr<ASTNode> Branch;
 };
 
+struct ConditionNode : ASTNode {
+    std::string condition;
+};
+
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);

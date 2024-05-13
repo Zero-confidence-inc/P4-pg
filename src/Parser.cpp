@@ -86,9 +86,16 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
 
 
 std::shared_ptr<ASTNode> Parser::parseCondition() {
-    // Dummy implementation for now
-    return {};
-
+    if (lookAhead(TokenType::OPERATOR)){
+        if (tokens[pos].value == "==" || tokens[pos].value == "!=" || tokens[pos].value == "<" 
+        || tokens[pos].value == ">" || tokens[pos].value == "<=" || tokens[pos].value == ">=") {
+            auto conditionNode = std::make_shared<ConditionNode>();
+            conditionNode->condition = tokens[pos].value;
+            return conditionNode;
+        }
+        return nullptr;
+    }
+    return nullptr;
 }
 
 std::shared_ptr<ASTNode> Parser::parseMath() {
@@ -221,7 +228,7 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
     if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
         pos++;
         auto swNode = std::make_shared<SwitchNode>();
-        swNode->condition = parseExpression();
+        swNode->condition = parseCondition();
 
         while (lookAhead(TokenType::CONTROL) && tokens[pos].value == "case"){
             auto cNode = std::make_shared<caseNode>();
@@ -238,11 +245,6 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
 }
 
 std::shared_ptr<ASTNode> Parser::parseStatement(){
-    //placeholder for now
-    return nullptr;
-}
-
-std::shared_ptr<ASTNode> Parser::parseExpression(){
     //placeholder for now
     return nullptr;
 }
