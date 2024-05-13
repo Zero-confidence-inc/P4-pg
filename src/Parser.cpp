@@ -93,8 +93,18 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
     if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '{') {
         pos++;
         while (tokens[pos].value[0] != '}') {
-            auto contentsNode = parseDeclaration();
-            contents.push_back(contentsNode);
+            auto declaration = parseDeclaration();
+            auto forLoop = parseForLoop();
+            auto switchCase = parseSwitch();
+            auto array = parseArray();
+            auto ifStatement = parseIfStatement();
+            auto whileLoop = parseWhileLoop();
+            contents.push_back(declaration);
+            contents.push_back(forLoop);
+            contents.push_back(switchCase);
+            contents.push_back(array);
+            contents.push_back(ifStatement);
+            contents.push_back(whileLoop);
         }
     } else {
         return {};
