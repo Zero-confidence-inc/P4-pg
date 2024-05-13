@@ -273,8 +273,30 @@ std::shared_ptr<ASTNode> Parser::parseArray(){
 }
 
 std::shared_ptr<ASTNode> Parser::parseIfStatement(){
-    //placeholder for now
-    return nullptr;
+    //Check to see if the loop token "if" is given
+    if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "if") {
+        auto ifNode = std::make_shared<IfNode>();
+        pos++;
+        //skips '(' and parses the condition
+        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '(') {
+            pos++;
+            auto conditionNode = parseCondition();
+            //skip ')' and parses the body of the if statement, thereafter it assigns the condition and body.
+            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
+                pos++;
+                auto bodyNode = parseLoopBody();
+                ifNode->condition = conditionNode;
+                ifNode->body = bodyNode;
+                return ifNode;
+            } else {
+                return nullptr; //Missing ')'
+            }
+        } else {
+            return nullptr; //Missing '('
+        }
+    } else {
+        return nullptr; //Missing "if"
+    }
 }
 
 std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
