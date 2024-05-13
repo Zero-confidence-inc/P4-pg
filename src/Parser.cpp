@@ -65,9 +65,27 @@ void Parser::match(TokenType expectedType, const std::string& expectedValue) {
 }
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
-    // Dummy implementation for now
-    return {};
-
+    std::vector<std::shared_ptr<ASTNode>> contents;
+    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '{') {
+        pos++;
+        while (tokens[pos].value[0] != '}') {
+            auto declaration = parseDeclaration();
+            auto forLoop = parseForLoop();
+            auto switchCase = parseSwitch();
+            auto array = parseArray();
+            auto ifStatement = parseIfStatement();
+            auto whileLoop = parseWhileLoop();
+            contents.push_back(declaration);
+            contents.push_back(forLoop);
+            contents.push_back(switchCase);
+            contents.push_back(array);
+            contents.push_back(ifStatement);
+            contents.push_back(whileLoop);
+        }
+    } else {
+        return {};
+    }
+    return contents;
 }
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
@@ -75,8 +93,18 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
     if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '{') {
         pos++;
         while (tokens[pos].value[0] != '}') {
-            auto contentsNode = parseDeclaration();
-            contents.push_back(contentsNode);
+            auto declaration = parseDeclaration();
+            auto forLoop = parseForLoop();
+            auto switchCase = parseSwitch();
+            auto array = parseArray();
+            auto ifStatement = parseIfStatement();
+            auto whileLoop = parseWhileLoop();
+            contents.push_back(declaration);
+            contents.push_back(forLoop);
+            contents.push_back(switchCase);
+            contents.push_back(array);
+            contents.push_back(ifStatement);
+            contents.push_back(whileLoop);
         }
     } else {
         return {};
@@ -86,9 +114,16 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
 
 
 std::shared_ptr<ASTNode> Parser::parseCondition() {
-    // Dummy implementation for now
-    return {};
-
+    if (lookAhead(TokenType::OPERATOR)){
+        if (tokens[pos].value == "==" || tokens[pos].value == "!=" || tokens[pos].value == "<" 
+        || tokens[pos].value == ">" || tokens[pos].value == "<=" || tokens[pos].value == ">=") {
+            auto conditionNode = std::make_shared<ConditionNode>();
+            conditionNode->condition = tokens[pos].value;
+            return conditionNode;
+        }
+        return nullptr;
+    }
+    return nullptr;
 }
 
 std::shared_ptr<ASTNode> Parser::parseMath() {
@@ -221,7 +256,7 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
     if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
         pos++;
         auto swNode = std::make_shared<SwitchNode>();
-        swNode->condition = parseExpression();
+        swNode->condition = parseCondition();
 
         while (lookAhead(TokenType::CONTROL) && tokens[pos].value == "case"){
             auto cNode = std::make_shared<caseNode>();
@@ -242,7 +277,39 @@ std::shared_ptr<ASTNode> Parser::parseStatement(){
     return nullptr;
 }
 
-std::shared_ptr<ASTNode> Parser::parseExpression(){
+std::shared_ptr<ASTNode> Parser::parseArray(){
+    //placeholder for now
+    return nullptr;
+}
+
+std::shared_ptr<ASTNode> Parser::parseIfStatement(){
+    //Check to see if the loop token "if" is given
+    if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "if") {
+        auto ifNode = std::make_shared<IfNode>();
+        pos++;
+        //skips '(' and parses the condition
+        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '(') {
+            pos++;
+            auto conditionNode = parseCondition();
+            //skip ')' and parses the body of the if statement, thereafter it assigns the condition and body.
+            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
+                pos++;
+                auto bodyNode = parseLoopBody();
+                ifNode->condition = conditionNode;
+                ifNode->body = bodyNode;
+                return ifNode;
+            } else {
+                return nullptr; //Missing ')'
+            }
+        } else {
+            return nullptr; //Missing '('
+        }
+    } else {
+        return nullptr; //Missing "if"
+    }
+}
+
+std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
     //placeholder for now
     return nullptr;
 }
