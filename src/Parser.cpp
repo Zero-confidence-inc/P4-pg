@@ -310,7 +310,7 @@ std::shared_ptr<ASTNode> Parser::parseIfStatement(){
 }
 
 std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
-    //Check to see if the loop token "if" is given
+    //Check to see if the loop token "while" is given
     if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "while") {
         auto ifNode = std::make_shared<IfNode>();
         pos++;
