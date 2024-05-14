@@ -1,10 +1,10 @@
 #include "Lexer.h"
 
-
 Lexer::Lexer() : errorOccurred(false), errorMessage("") {
     // Initialize all DFAs and store them in the vector
     dfas = {new LoopStatDFA(), new ControlStatDFA(), new IdentifierDFA(), new ConstDFA(),
-            new TypeDFA(), new OperatorDFA(), new PunctuationDFA(), new StringDFA(), new WhitespaceDFA()};
+            new TypeDFA(), new OperatorDFA(), new PunctuationDFA(), new StringDFA(), 
+            new WhitespaceDFA(), new CommentsDFA()};
 }
 
 std::vector<Token> Lexer::tokenize(const std::string& input) {
@@ -43,7 +43,7 @@ std::vector<Token> Lexer::tokenize(const std::string& input) {
                 }
             }
 
-            if (longestLength > 0 && longestToken.type != TokenType::WHITESPACE) {
+            if (longestLength > 0 && longestToken.type != TokenType::WHITESPACE && longestToken.type != TokenType::COMMENTS) {
                 tokens.push_back(longestToken);
                 // Update tokenStartIndex based on the length of the token, not the current index
                 tokenStartIndex += longestToken.value.length();
@@ -52,7 +52,7 @@ std::vector<Token> Lexer::tokenize(const std::string& input) {
                 tokenStartIndex += longestToken.value.length();
             } else {
                 errorOccurred = true;
-                errorMessage = "Error: Unrecognized token starting at position " + std::to_string(tokenStartIndex);
+                errorMessage = "Error: Unrecognized Charater at position " + std::to_string(tokenStartIndex);
                 break; // Stop processing on error
             }
 

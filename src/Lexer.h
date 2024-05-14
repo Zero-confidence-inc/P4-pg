@@ -15,6 +15,7 @@
 #include "WhitespaceDFA.h"
 #include "ControlStatDFA.h"
 #include "LoopStatDFA.h"
+#include "CommentsDFA.h"
 #include <iostream>
 
 class Lexer {
