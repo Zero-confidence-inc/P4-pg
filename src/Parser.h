@@ -93,7 +93,14 @@ struct ConditionNode : ASTNode {
 struct whileNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
     std::vector<std::shared_ptr<ASTNode>> body;
+};
 
+struct MathNode : ASTNode {
+    std::string operatorType; //Operator representing the mathematical expression
+    std:: shared_ptr<ASTNode> leftOperand;
+    std:: shared_ptr<ASTNode> rightOperand;
+
+    MathNode() : operatorType(""), leftOperand(nullptr), rightOperand(nullptr) {}
 };
 
 class Parser {
@@ -101,6 +108,7 @@ public:
     explicit Parser(const std::vector<Token>& tokens);
     void parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
+    std::shared_ptr<ASTNode> parseMathNode();
 
     std::shared_ptr<ASTNode> parseChar();
 
@@ -114,6 +122,7 @@ public:
     std::shared_ptr<ASTNode> parseDeclaration();
     std::shared_ptr<ASTNode> parseOperator();
     std::shared_ptr<ASTNode> parseSwitch();
+    std::shared_ptr<ASTNode> parseStruct();
     std::shared_ptr<ASTNode> parseSwitchStatement();
     std::shared_ptr<ASTNode> parseExpression();
     std::shared_ptr<ASTNode> parseStatement();
@@ -131,6 +140,7 @@ private:
     void match(TokenType expectedType);
     void match(TokenType expectedType, const std::string& expectedValue);
     std::vector<std::shared_ptr<ASTNode>> parseFunctionBody();  // Assume this function parses a function body
+    std::vector<std::shared_ptr<ASTNode>> parseStructBody();
     std::vector<std::shared_ptr<ASTNode>> parseLoopBody();
 };
 
