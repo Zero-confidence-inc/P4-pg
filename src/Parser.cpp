@@ -211,6 +211,15 @@ std::shared_ptr<ASTNode> Parser::parseFloat(){
     return nullptr;
 };
 
+std::shared_ptr<ASTNode> Parser::parseInt(){
+    if (lookAhead(TokenType::CONST)){
+        auto intNode = std::make_shared<IntNode>();
+        intNode->integer = std::stoi(tokens[pos].value);
+        return intNode;
+    }
+    return nullptr;
+};
+
 std::shared_ptr<ASTNode> Parser::parseComment(){
     if (lookAhead(TokenType::COMMENTS)){
         auto Commentnode = std::make_shared<CommentNode>();

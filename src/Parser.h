@@ -62,6 +62,10 @@ struct FloatNode : ASTNode {
     float Floating_Point;
 };
 
+struct IntNode : ASTNode {
+    int integer;
+};
+
 struct CommentNode : ASTNode {
     std::string Comment;
 };
@@ -113,6 +117,7 @@ public:
     std::shared_ptr<ASTNode> parseChar();
 
     std::shared_ptr<ASTNode> parseFloat();
+    std::shared_ptr<ASTNode> parseInt();
     std::shared_ptr<ASTNode> parseComment();
     std::shared_ptr<ASTNode> parseString();
     std::shared_ptr<ASTNode> parseCondition();
