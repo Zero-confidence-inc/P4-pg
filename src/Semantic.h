@@ -35,7 +35,11 @@ private:
     void kowalskiFloat(const std::shared_ptr<FloatNode>& node);
     void kowalskiString(const std::shared_ptr<StringNode>& node);
 
-
+    void kowalskiWhile(const std::shared_ptr<whileNode>& node);
+    void kowalskiFor(const std::shared_ptr< ForLoopNode>& node);
+    void kowalskiSwitch(const std::shared_ptr<SwitchNode>& node);
+    void kowalskiOperator(const std::shared_ptr<OperatorNode>& node);
+    void kowalskiKondi(const std::shared_ptr<ConditionNode>& node);
 };
 
 

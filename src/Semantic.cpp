@@ -109,3 +109,25 @@ void SemanticAnalyser::kowalskiString(const std::shared_ptr<StringNode>& node)
     {
 
     }
+
+void SemanticAnalyser::kowalskiWhile(const std::shared_ptr<whileNode>& node);
+{
+
+}
+void SemanticAnalyser::kowalskiFor(const std::shared_ptr< ForLoopNode>& node);
+{
+
+}
+void SemanticAnalyser::kowalskiSwitch(const std::shared_ptr<SwitchNode>& node);
+{
+
+}
+void SemanticAnalyser::kowalskiOperator(const std::shared_ptr<OperatorNode>& node);
+{
+    //you did math YAY!
+    // mental assault towards human
+}
+void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node);
+{
+
+}
