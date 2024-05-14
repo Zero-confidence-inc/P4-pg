@@ -4,7 +4,7 @@
 
 class ParserTest : public ::testing::Test{
 protected:
-    
+    tokens TestStream[];
 
     void SetUp() override{
 
@@ -12,6 +12,5 @@ protected:
 };
 
 TEST_F(ParserTest, ParserIntTest){
-    EXPECT_TRUE();
-    EXPECT_EQ();
+
 };
