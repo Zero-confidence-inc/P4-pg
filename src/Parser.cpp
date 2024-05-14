@@ -30,13 +30,14 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
             match(TokenType::PUNCTUATION, "{");
             match(TokenType::PUNCTUATION, "}");
             return functionNode;
+
         } else if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == ";") {
-            auto variableNode = std::make_shared<VariableNode>();
-            variableNode->type = type;
-            variableNode->identifier = identifier;
-            match(TokenType::PUNCTUATION, ";");
-            return variableNode;
-        }
+        auto variableNode = std::make_shared<VariableNode>();
+        variableNode->type = type;
+        variableNode->identifier = identifier;
+        match(TokenType::PUNCTUATION, ";");
+        return variableNode;
+    }
     }
     return nullptr; // Return nullptr if no valid declaration is found
 };
@@ -88,6 +89,25 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
     return contents;
 }
 
+std::vector<std::shared_ptr<ASTNode>> Parser::parseStructBody() {
+    std::vector<std::shared_ptr<ASTNode>> contents;
+    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '{') {
+        pos++;
+        while (tokens[pos].value[0] != '}') {
+            auto declaration = parseDeclaration();
+            auto array = parseArray();
+            auto string = parseString();
+            contents.push_back(declaration);
+            contents.push_back(array);
+            contents.push_back(string);
+        }
+    } else {
+        return {};
+    }
+    return contents;
+}
+
+
 std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
     if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '{') {
@@ -113,6 +133,25 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
 }
 
 
+std::shared_ptr<ASTNode> Parser::parseStruct() {
+    if (lookAhead(TokenType::TYPE)) {
+        std::string type = tokens[pos++].value;
+        std::string identifier = tokens[pos++].value;
+        if (lookAhead(TokenType::PUNCTUATION && tokens[pos].value == "struct")){
+            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{") {
+                auto structNode = std::make_shared<StructNode>();
+                structNode->type = type;
+                structNode->identifier = identifier;
+                structNode->body = parseStructBody();
+                match(TokenType::PUNCTUATION, "{");
+                match(TokenType::PUNCTUATION, "}");
+                return structNode;
+        }
+    }
+
+
+}
+
 std::shared_ptr<ASTNode> Parser::parseCondition() {
     if (lookAhead(TokenType::OPERATOR)){
         if (tokens[pos].value == "==" || tokens[pos].value == "!=" || tokens[pos].value == "<" 
@@ -125,6 +164,7 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
     }
     return nullptr;
 }
+
 
 std::shared_ptr<ASTNode> Parser::parseMath() {
     // Dummy implementation for now

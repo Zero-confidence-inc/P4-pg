@@ -35,7 +35,10 @@ struct IfNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
     std::vector<std::shared_ptr<ASTNode>> body;
 };
-
+// Node for Struct declarations
+struct StructNode : DeclarationNode {
+    std::vector<std::shared_ptr<ASTNode>> body;
+};
 // Node for function declarations
 struct FunctionNode : DeclarationNode {
     std::vector<std::shared_ptr<ASTNode>> body;
