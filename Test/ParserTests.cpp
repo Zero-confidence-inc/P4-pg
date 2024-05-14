@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <parser.h>
+#include <Parser.h>
 
 
 class ParserTest : public ::testing::Test{
@@ -11,7 +11,7 @@ protected:
     }
 };
 
-TEST_F(){
-    
-    ASSERT_EQ() << "Int was not parsed"
+TEST_F(ParserTest, ParserIntTest){
+    EXPECT_TRUE();
+    EXPECT_EQ();
 };

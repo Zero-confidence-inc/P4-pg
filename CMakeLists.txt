@@ -66,6 +66,10 @@ set(TEST_SOURCES
         src/LoopStatDFA.cpp
         src/ControlStatDFA.cpp
         src/WhitespaceDFA.cpp
+    Test/ParserTests.cpp
+        src/Parser.cpp
+        src/Parser.h
+        
 )
 add_executable(P4_pg_tests ${TEST_SOURCES})
 
