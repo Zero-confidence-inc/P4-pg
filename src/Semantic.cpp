@@ -70,12 +70,27 @@ std::string SymbolTable::lookUpVariable(const std::string& name);
                 case nodetype::String:
                     kowalskiString(std::static_pointer_cast<StringNode>(node));
                     break;
+                case nodetype::whileNode:
+                    kowalskiWhile(std::static_pointer_cast<whileNode>& node);
+                    break;
+                case nodetype::ForLoopNode:
+                    kowalskiFor(std::static_pointer_cast<ForLoopNode>& node);
+                    break;
+                case nodetype::SwitchNode:
+                    kowalskiSwitch(std::static_pointer_cast<SwitchNode>& node);
+                    break;
+                    kowalskiOperator(std::static_pointer_cast<OperatorNode>& node);
+                case nodetype::ConditionNode:
+                    kowalskiKondi(std::static_pointer_cast<ConditionNode>& node);
+                    break;
+
                 default:
                     throw std::runtime_error("unknown node type");
             }
         }
 // todo: make case for each node type, define each node method,
 // todo: make sure the first 4 methods are using in methods going forward, approiatly :3
+// it goes through all nodes, some nodes needs to do nothing but still need a case so we don't default
 
 void SemanticAnalyser::kowalskiFunction(const std::shared_ptr<FunctionNode>& node)
     {
