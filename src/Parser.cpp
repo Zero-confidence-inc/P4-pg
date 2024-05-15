@@ -18,29 +18,37 @@ void Parser::parseProgram() {
 }
 
 std::shared_ptr<ASTNode> Parser::parseDeclaration() {
-    if (lookAhead(TokenType::TYPE)) {
-        std::string type = tokens[pos++].value;
-        std::string identifier = tokens[pos++].value;
-
-        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{") {
-            auto functionNode = std::make_shared<FunctionNode>();
-            functionNode->type = type;
-            functionNode->identifier = identifier;
-            functionNode->body = parseFunctionBody();
-            match(TokenType::PUNCTUATION, "{");
-            match(TokenType::PUNCTUATION, "}");
-            return functionNode;
-
-        } else if (lookAhead(TokenType::OPERATOR) && tokens[pos].value == "=") {
-        auto variableNode = std::make_shared<VariableNode>();
-        auto variables = tokens[++pos].value;
-        variableNode->type = type;
-        variableNode->identifier = identifier;
-        variableNode->variable = variables;
-        match(TokenType::PUNCTUATION, ";");
-        return variableNode;
+    if (lookAhead(TokenType::TYPE)){
+        if (tokens[pos].value=="int?" || tokens[pos].value=="float?" || tokens[pos].value=="bool?"){
+            auto randomNode = std::make_shared<RandomNode>();
+            randomNode->random = parseRandom();
+            std::string identifier = tokens[pos++].value;
+            randomNode->identifier = identifier;
+            return randomNode;
         }
-    }
+        else{
+            std::string type = tokens[pos++].value;
+            std::string identifier = tokens[pos++].value;
+            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{"){
+                auto functionNode = std::make_shared<FunctionNode>();
+                functionNode->type = type;
+                functionNode->identifier = identifier;
+                functionNode->body = parseFunctionBody();
+                match(TokenType::PUNCTUATION, "{");
+                match(TokenType::PUNCTUATION, "}");
+                return functionNode;
+            }
+            else if (lookAhead(TokenType::OPERATOR) && tokens[pos].value == "="){
+                auto variableNode = std::make_shared<VariableNode>();
+                auto variables = tokens[++pos].value;
+                variableNode->type = type;
+                variableNode->identifier = identifier;
+                variableNode->variable = variables;
+                match(TokenType::PUNCTUATION, ";");
+                return variableNode;
+            }
+        }
+}
     return nullptr; // Return nullptr if no valid declaration is found
 };
 
@@ -380,7 +388,7 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
 
 std::shared_ptr<ASTNode> Parser::parseRandom(){
     if (lookAhead(TokenType::TYPE) && tokens[pos].value=="int?"){ //Random Int
-        auto randomIntNode = std::make_shared<randomNode>();
+        auto randomIntNode = std::make_shared<RandomNode>();
         pos++;
         if (lookAhead(TokenType::CONST)){
             int RandomIntRangeLowBound = tokens[pos].value[0];
@@ -397,7 +405,7 @@ std::shared_ptr<ASTNode> Parser::parseRandom(){
         }
     }
     else if(lookAhead(TokenType::TYPE) && tokens[pos].value=="float?"){ //Random Float
-        auto randomFloatNode = std::make_shared<randomNode>();
+        auto randomFloatNode = std::make_shared<RandomNode>();
         pos++;
         if (lookAhead(TokenType::CONST)){
             float RandomFloatRangeLowBound = tokens[pos].value[0];
@@ -414,7 +422,7 @@ std::shared_ptr<ASTNode> Parser::parseRandom(){
         }
     }
     else if(lookAhead(TokenType::TYPE) && tokens[pos].value=="bool?"){//Random bool
-        auto randomBoolNode = std::make_shared<randomNode>();
+        auto randomBoolNode = std::make_shared<RandomNode>();
         randomBoolNode->randomBool;
         return randomBoolNode;
     }
