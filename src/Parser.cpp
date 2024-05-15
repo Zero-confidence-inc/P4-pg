@@ -154,11 +154,21 @@ std::shared_ptr<ASTNode> Parser::parseStruct() {
 
 std::shared_ptr<ASTNode> Parser::parseCondition() {
     if (lookAhead(TokenType::OPERATOR)){
+        pos--;
+        switch(tokens[pos].TokenType) {
+            case TokenType::CONST:
+                auto _aNode = std::make_shared<intNode>();
+                break;
+            case TokenType:::
+        }
+        pos++;
         if (tokens[pos].value == "==" || tokens[pos].value == "!=" || tokens[pos].value == "<" 
         || tokens[pos].value == ">" || tokens[pos].value == "<=" || tokens[pos].value == ">=" 
         || tokens[pos].value == "||" || tokesn[pos].value == "&&") {
             auto conditionNode = std::make_shared<ConditionNode>();
             conditionNode->condition = tokens[pos].value;
+            conditionNode->aNode = _aNode;
+            pos++
             return conditionNode;
         }
         return nullptr;
@@ -248,7 +258,7 @@ std::shared_ptr<ASTNode> Parser::parseForLoop() {
                 //skips the second ';' and parses the expression
                 if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
                     pos++;
-                    auto expressionNode = parseMath();
+                    auto expressionNode = parseMathNode();
                     //skip ')' and parses the body of the loop, thereafter it assigns the, declaration, condition, expression and body.
                     if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
                         pos++;

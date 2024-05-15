@@ -124,6 +124,8 @@ struct caseNode : ASTNode {
 
 struct ConditionNode : ASTNode {
     std::string condition;
+    std::shared_ptr<ASTNode> aNode;
+    std::shared_pptr<ASTNode> bNode;
     nodeType getName() const override {return nodeType::conditionNode}
 };
 

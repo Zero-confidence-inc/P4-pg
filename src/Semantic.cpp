@@ -86,7 +86,9 @@ std::string SymbolTable::lookUpVariable(const std::string& name);
                 case nodeType::ConditionNode:
                     kowalskiKondi(std::static_pointer_cast<ConditionNode>(node));
                     break;
-
+                case nodeType::mathNode:
+                    kowalskiMath(std::static_pointer_cast<MathNode>(node));
+                    break;
                 default:
                     throw std::runtime_error("unknown node type");
             }
@@ -147,9 +149,9 @@ void SemanticAnalyser::kowalskiOperator(const std::shared_ptr<OperatorNode>& nod
 void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node){
     string condition = node.condition;
     declareVariable(const std::string& name, "condition");
-    string bSide = bNode.getName();
+    string bSide = node.bNode.getName();
     //todo:: if statement to check if both sides allow || and &&
-    switch(aNode.getName()){
+    switch(node.aNode.getName()){
         case "floatNode":
             if(bSide != "floatNode" && bSide != "intNode")
                 throw runtime_error("Floats only accept integer and float comparaisons.")
