@@ -93,7 +93,7 @@ struct ConditionNode : ASTNode {
     std::string condition;
 };
 
-struct whileNode : ASTNode {
+struct WhileNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
     std::vector<std::shared_ptr<ASTNode>> body;
 };
