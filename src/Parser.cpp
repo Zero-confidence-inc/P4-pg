@@ -165,10 +165,43 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
     return nullptr;
 }
 
+ std::shared_ptr<ASTNode> Parser::parseMath() {
+    return parseExpression();
+}
 
-std::shared_ptr<ASTNode> Parser::parseMath() {
-    // Dummy implementation for now
-    return {};
+std::shared_ptr<ASTNode> Parser::parseExpression() {
+    auto leftTerm = parseTerm();
+
+    while (true) {
+        if (lookAhead(TokenType::OPERATOR)) {
+            auto op = tokens[pos++].value;
+            auto rightTerm = parseTerm();
+            leftTerm = std::make_shared<MathNode>(op, leftTerm, rightTerm);
+        } else {
+            break;
+        }
+    }
+
+    return leftTerm;
+}
+
+std::shared_ptr<ASTNode> Parser::parseTerm() {
+    if (lookAhead(TokenType::INT) || lookAhead(TokenType::FLOAT) || lookAhead(TokenType::IDENTIFIER)) {
+        // Parse int, float, or identifier as a term
+        return tokens[pos++].value;
+    } else if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "(") {
+        // Parse expression within parentheses
+        match(TokenType::PUNCTUATION, "(");
+        auto expression = parseExpression();
+        match(TokenType::PUNCTUATION, ")");
+        return expression;
+    } else {
+        
+        std::cerr << "Syntax error, expected term" << std::endl;
+        return nullptr;
+    }
+}
+
 
 }
 
@@ -317,9 +350,56 @@ std::shared_ptr<ASTNode> Parser::parseStatement(){
     return nullptr;
 }
 
-std::shared_ptr<ASTNode> Parser::parseArray(){
-    //placeholder for now
-    return nullptr;
+std::shared_ptr<ASTNode> Parser::parseArray() {
+    if (!lookAhead(TokenType::TYPE)) {
+        return nullptr;
+    }
+
+    auto type = tokens[pos++].value;
+
+    if (!lookAhead(TokenType::IDENTIFIER)) {
+        std::cerr << "Syntax error, expected identifier after array type" << std::endl;
+        return nullptr;
+    }
+
+    auto identifier = tokens[pos++].value;
+
+    if (!lookAhead(TokenType::PUNCTUATION) || tokens[pos].value != "[") {
+        std::cerr << "Syntax error, expected '[' after array identifier" << std::endl;
+        return nullptr;
+    }
+
+    pos++;
+
+    // Parse array size
+    if (!lookAhead(TokenType::INT)) {
+        std::cerr << "Syntax error, expected array size" << std::endl;
+        return nullptr;
+    }
+
+    auto arraySize = std::stoi(tokens[pos++].value);
+
+    if (!lookAhead(TokenType::PUNCTUATION) || tokens[pos].value != "]") {
+        std::cerr << "Syntax error, expected ']' after array size" << std::endl;
+        return nullptr;
+    }
+
+    pos++;
+
+    // Ensure semicolon at the end
+    if (!lookAhead(TokenType::PUNCTUATION) || tokens[pos].value != ";") {
+        std::cerr << "Syntax error, expected ';' after array declaration" << std::endl;
+        return nullptr;
+    }
+
+    pos++;
+
+    auto arrayNode = std::make_shared<ArrayNode>();
+    arrayNode->type = type;
+    arrayNode->identifier = identifier;
+    arrayNode->size = arraySize;
+
+    return arrayNode;
 }
 
 std::shared_ptr<ASTNode> Parser::parseIfStatement(){
@@ -375,21 +455,5 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
         return nullptr; //Missing "while"
     }
 }
-}
 
-std::shared_ptr<ASTNode> Parser::parseMathNode() {
-    if (lookAhead(TokenType::OPERATOR)) {
-        auto mathExprNode = std::make_shared<MathNode>();
-        mathExprNode->operatorType = tokens[pos].value;
-        pos++; // Consume the operator
 
-        // Parse left operand
-        mathExprNode->leftOperand = parseExpression();
-
-        // Parse right operand
-        mathExprNode->rightOperand = parseExpression();
-
-        return mathExprNode;
-    }
-    return nullptr; // Not a mathematical expression
-}

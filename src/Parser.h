@@ -96,11 +96,18 @@ struct whileNode : ASTNode {
 };
 
 struct MathNode : ASTNode {
-    std::string operatorType; //Operator representing the mathematical expression
-    std:: shared_ptr<ASTNode> leftOperand;
-    std:: shared_ptr<ASTNode> rightOperand;
+    std::string operatorType;
+    std::shared_ptr<ASTNode> leftOperand;
+    std::shared_ptr<ASTNode> rightOperand;
 
-    MathNode() : operatorType(""), leftOperand(nullptr), rightOperand(nullptr) {}
+    MathNode(const std::string& opType, std::shared_ptr<ASTNode> left, std::shared_ptr<ASTNode> right) 
+        : operatorType(opType), leftOperand(left), rightOperand(right) {}
+};
+
+struct ArrayNode : ASTNode {
+    std::string type;
+    std::string identifier;
+    int size;
 };
 
 class Parser {
