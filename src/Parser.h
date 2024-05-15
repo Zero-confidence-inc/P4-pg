@@ -35,9 +35,11 @@ struct ForLoopNode : ASTNode {
 struct IfNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
     std::vector<std::shared_ptr<ASTNode>> body;
+    std::vector<std::shared_ptr<ASTNode>> elseBody;
 };
 // Node for Struct declarations
 struct StructNode : DeclarationNode {
+    std::string identifier;
     std::vector<std::shared_ptr<ASTNode>> body;
 };
 // Node for function declarations
@@ -50,12 +52,9 @@ struct VariableNode : DeclarationNode {
     // Additional properties can be added here
 };
 
-struct IfStatementNode : ASTNode {
-    std::shared_ptr<ASTNode> condition;  // Node representing the condition expression
-    std::shared_ptr<ASTNode> trueBranch;  // Node representing the statements to execute if the condition is true
-    std::shared_ptr<ASTNode> falseBranch;  // Node representing the statements to execute if the condition is false (optional)
-
-    IfStatementNode() : condition(nullptr), trueBranch(nullptr), falseBranch(nullptr) {}
+struct ReturnNode : ASTNode {
+    std::string returning;
+    std::string identifier;
 };
 
 struct FloatNode : ASTNode {
@@ -94,10 +93,11 @@ struct ConditionNode : ASTNode {
     std::string condition;
 };
 
-struct whileNode : ASTNode {
+struct WhileNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
     std::vector<std::shared_ptr<ASTNode>> body;
 };
+
 
 struct randomNode : ASTNode {
     std::shared_ptr<ASTNode> randomInt;
@@ -107,12 +107,14 @@ struct randomNode : ASTNode {
     std::vector<float> RandomFloatRange;
 };
 
-struct MathNode : ASTNode {
-    std::string operatorType; //Operator representing the mathematical expression
-    std:: shared_ptr<ASTNode> leftOperand;
-    std:: shared_ptr<ASTNode> rightOperand;
 
-    MathNode() : operatorType(""), leftOperand(nullptr), rightOperand(nullptr) {}
+
+
+
+struct ArrayNode : ASTNode {
+    std::string type;
+    std::string identifier;
+    int size;
 };
 
 class Parser {
@@ -120,14 +122,12 @@ public:
     explicit Parser(const std::vector<Token>& tokens);
     void parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
-    std::shared_ptr<ASTNode> parseMathNode();
     std::shared_ptr<ASTNode> parseChar();
     std::shared_ptr<ASTNode> parseFloat();
     std::shared_ptr<ASTNode> parseInt();
     std::shared_ptr<ASTNode> parseComment();
     std::shared_ptr<ASTNode> parseString();
     std::shared_ptr<ASTNode> parseCondition();
-    std::shared_ptr<ASTNode> parseMath();
     std::shared_ptr<ASTNode> parseForLoop();
     std::shared_ptr<ASTNode> parseOperator();
     std::shared_ptr<ASTNode> parseSwitch();
@@ -136,8 +136,13 @@ public:
     std::shared_ptr<ASTNode> parseStatement();
     std::shared_ptr<ASTNode> parseArray();
     std::shared_ptr<ASTNode> parseIfStatement();
+  
     std::shared_ptr<ASTNode> parseWhileLoop();
+
     std::shared_ptr<ASTNode> parseRandom();
+
+    std::shared_ptr<ASTNode> parseReturn();
+
 
 
 private:
