@@ -173,7 +173,7 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
         }
     }
     return nullptr;
-};
+}
 
 //Parses the char type
 std::shared_ptr<ASTNode> Parser::parseChar() {
@@ -301,10 +301,45 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
     return nullptr;
 };
 
-std::shared_ptr<ASTNode> Parser::parseArray(){
-    //placeholder for now
+std::shared_ptr<ASTNode> Parser::parseArray() {
+    if (lookAhead(TokenType::TYPE)) {
+        auto type = tokens[pos].value;
+
+        if (lookAhead(TokenType::IDENTIFIER)) {
+            auto identifier = tokens[pos].value;
+
+            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "[") {
+                pos++;
+
+                // Parse int, float, identifier, char, string, bool, function
+                if (lookAhead(TokenType::CONST) || (lookAhead(TokenType::FLOAT_CONST)) || (lookAhead(TokenType::IDENTIFIER)) || 
+                    (lookAhead(TokenType::TYPE)) || (lookAhead(TokenType::CONTROL)))  {
+                    
+                    auto arraySize = std::stoi(tokens[pos].value);
+
+                    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "]") {
+                        pos++;
+
+                        // Ensure semicolon at the end
+                        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == ";") {
+                            pos++;
+
+                            auto arrayNode = std::make_shared<ArrayNode>();
+                            arrayNode->type = type;
+                            arrayNode->identifier = identifier;
+                            arrayNode->size = arraySize;
+
+                            return arrayNode;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     return nullptr;
 };
+
 
 std::shared_ptr<ASTNode> Parser::parseIfStatement(){
     //Check to see if the loop token "if" is given
@@ -354,3 +389,4 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
     }
     return nullptr;
 };
+

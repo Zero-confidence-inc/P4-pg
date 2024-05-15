@@ -98,6 +98,12 @@ struct WhileNode : ASTNode {
     std::vector<std::shared_ptr<ASTNode>> body;
 };
 
+struct ArrayNode : ASTNode {
+    std::string type;
+    std::string identifier;
+    int size;
+};
+
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);
