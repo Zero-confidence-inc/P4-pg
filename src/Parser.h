@@ -35,6 +35,7 @@ struct ForLoopNode : ASTNode {
 struct IfNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
     std::vector<std::shared_ptr<ASTNode>> body;
+    std::vector<std::shared_ptr<ASTNode>> elseBody;
 };
 // Node for Struct declarations
 struct StructNode : DeclarationNode {
@@ -130,6 +131,7 @@ public:
     std::shared_ptr<ASTNode> parseArray();
     std::shared_ptr<ASTNode> parseIfStatement();
     std::shared_ptr<ASTNode> parseWhileLoop();
+    std::shared_ptr<ASTNode> parseReturn();
 
 
 private:

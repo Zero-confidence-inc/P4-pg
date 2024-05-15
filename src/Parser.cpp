@@ -83,11 +83,26 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
             contents.push_back(ifStatement);
             contents.push_back(whileLoop);
         }
+        if (lookAhead(TokenType::JUMP) && tokens[pos].value == "return") {
+            auto returns = parseReturn();
+        }
     } else {
         return {};
     }
     return contents;
 };
+
+std::shared_ptr<ASTNode> Parser::parseReturn(){
+    if (lookAhead(TokenType::JUMP)){
+        auto returnNode = std::make_shared<ReturnNode>();
+        returnNode->returning = tokens[pos].value;
+        returnNode->identifier = tokens[pos].value;
+        return returnNode;
+    }
+    return nullptr;
+};
+
+
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseStructBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
@@ -317,6 +332,11 @@ std::shared_ptr<ASTNode> Parser::parseIfStatement(){
                 auto bodyNode = parseLoopBody();
                 ifNode->condition = conditionNode;
                 ifNode->body = bodyNode;
+                if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "else") {
+                    pos++;
+                    auto elseBodyNode = parseLoopBody();
+                    ifNode->elseBody = elseBodyNode;
+                }
                 return ifNode;
             }
         }
