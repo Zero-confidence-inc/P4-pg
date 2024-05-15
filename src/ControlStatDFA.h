@@ -31,7 +31,22 @@ private:
         case_1,
         case_2,
         case_3,
-        case_4
+        case_4,
+        default_1,
+        default_2,
+        default_3,
+        default_4,
+        default_5,
+        default_6,
+        default_7,
+        function_1,
+        function_2,
+        function_3,
+        function_4,
+        function_5,
+        function_6,
+        function_7,
+        function_8
     };
 
     State currentState;
