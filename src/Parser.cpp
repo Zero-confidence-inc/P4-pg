@@ -31,13 +31,15 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
             match(TokenType::PUNCTUATION, "}");
             return functionNode;
 
-        } else if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == ";") {
+        } else if (lookAhead(TokenType::OPERATOR) && tokens[pos].value == "=") {
         auto variableNode = std::make_shared<VariableNode>();
+        auto variables = tokens[++pos].value;
         variableNode->type = type;
         variableNode->identifier = identifier;
+        variableNode->variable = variables;
         match(TokenType::PUNCTUATION, ";");
         return variableNode;
-    }
+        }
     }
     return nullptr; // Return nullptr if no valid declaration is found
 };
@@ -217,15 +219,6 @@ std::shared_ptr<ASTNode> Parser::parseInt(){
     return nullptr;
 };
 
-std::shared_ptr<ASTNode> Parser::parseComment(){
-    if (lookAhead(TokenType::COMMENTS)){
-        auto Commentnode = std::make_shared<CommentNode>();
-        Commentnode->Comment=tokens[pos].value;
-        return Commentnode;
-    };
-    return nullptr;
-};
-
 std::shared_ptr<ASTNode> Parser::parseString(){
     if (lookAhead(TokenType::STRING)){
         auto Stringnode = std::make_shared<StringNode>();
@@ -271,16 +264,6 @@ std::shared_ptr<ASTNode> Parser::parseForLoop() {
     return nullptr;
 };
 
-//Operators 
-std::shared_ptr<ASTNode> Parser::parseOperator() {
-    if(lookAhead(TokenType::OPERATOR)){
-        auto opeNode = std::make_shared<OperatorNode>();
-        opeNode->operatorType = tokens[pos].value;
-        return opeNode;
-    }
-    return nullptr;
-};
-
 std::shared_ptr<ASTNode> Parser::parseSwitch() {
     if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
         pos++;
@@ -291,7 +274,7 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
             auto cNode = std::make_shared<caseNode>();
             cNode->sucessCondition = parseCondition();
             pos++;
-            cNode->Branch = parseCondition();
+            cNode->Branch.push_back(parseDeclaration());
 
             swNode->caseBranch.push_back(cNode);
         }
@@ -325,6 +308,11 @@ std::shared_ptr<ASTNode> Parser::parseIfStatement(){
                     pos++;
                     auto elseBodyNode = parseLoopBody();
                     ifNode->elseBody = elseBodyNode;
+                }
+                if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "else" && tokens[++pos].value == "if") {
+                    pos++;
+                    auto elseIfBodyNode = parseLoopBody();
+                    ifNode->body = elseIfBodyNode;
                 }
                 return ifNode;
             }

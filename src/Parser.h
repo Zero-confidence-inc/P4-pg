@@ -18,6 +18,7 @@ struct ASTNode {
 struct DeclarationNode : ASTNode {
     std::string type;
     std::string identifier;
+    std::string variable;
 };
 
 
@@ -49,7 +50,6 @@ struct FunctionNode : DeclarationNode {
 
 // Node for variable declarations
 struct VariableNode : DeclarationNode {
-    // Additional properties can be added here
 };
 
 struct ReturnNode : ASTNode {
@@ -65,16 +65,8 @@ struct IntNode : ASTNode {
     int integer;
 };
 
-struct CommentNode : ASTNode {
-    std::string Comment;
-};
-
 struct StringNode : ASTNode {
     std::string StringOfChars;
-};
-
-struct OperatorNode : ASTNode {
-    std::string operatorType; 
 };
 
 struct SwitchNode : ASTNode {
@@ -86,7 +78,7 @@ struct SwitchNode : ASTNode {
 
 struct caseNode : ASTNode {
     std::shared_ptr<ASTNode> sucessCondition;
-    std::shared_ptr<ASTNode> Branch;
+    std::vector<std::shared_ptr<ASTNode>> Branch;
 };
 
 struct ConditionNode : ASTNode {
@@ -106,11 +98,9 @@ public:
     std::shared_ptr<ASTNode> parseChar();
     std::shared_ptr<ASTNode> parseFloat();
     std::shared_ptr<ASTNode> parseInt();
-    std::shared_ptr<ASTNode> parseComment();
     std::shared_ptr<ASTNode> parseString();
     std::shared_ptr<ASTNode> parseCondition();
     std::shared_ptr<ASTNode> parseForLoop();
-    std::shared_ptr<ASTNode> parseOperator();
     std::shared_ptr<ASTNode> parseSwitch();
     std::shared_ptr<ASTNode> parseStruct();
     std::shared_ptr<ASTNode> parseSwitchStatement();
