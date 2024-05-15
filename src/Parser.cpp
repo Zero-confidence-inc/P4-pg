@@ -151,7 +151,7 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
 
 
 std::shared_ptr<ASTNode> Parser::parseStruct() {
-    if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "struct"){
+    if (lookAhead(TokenType::TYPE) && tokens[pos].value == "struct"){
         pos++;
         auto identify = tokens[pos].value;
         if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{") {
