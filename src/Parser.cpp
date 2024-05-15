@@ -270,15 +270,8 @@ std::shared_ptr<ASTNode> Parser::parseOperator() {
 };
 
 //Switch
-std::shared_ptr<ASTNode> Parser::parseSwitchStatement() {
-    if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
-        return parseSwitch();
-    }
-    return nullptr;
-};
-
 std::shared_ptr<ASTNode> Parser::parseSwitch() {
-    if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
+    if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
         pos++;
         auto swNode = std::make_shared<SwitchNode>();
         swNode->condition = parseCondition();
@@ -362,4 +355,48 @@ std::shared_ptr<ASTNode> Parser::parseMathNode() {
         return mathExprNode;
     }
     return nullptr; // Not a mathematical expression
+};
+
+
+std::shared_ptr<ASTNode> Parser::parseRandom(){
+    if (lookAhead(TokenType::TYPE) && tokens[pos].value=="int?"){ //Random Int
+        auto randomIntNode = std::make_shared<randomNode>();
+        pos++;
+        if (lookAhead(TokenType::CONST)){
+            int RandomIntRangeLowBound = tokens[pos].value[0];
+            randomIntNode->RandomIntRange.push_back(RandomIntRangeLowBound);
+            pos++;
+            if (tokens[pos].value==".."){
+                pos++;
+                if (lookAhead(TokenType::CONST) && tokens[pos].value[0]>RandomIntRangeLowBound){
+                    int RandomIntRangeHighBound = tokens[pos].value[0];
+                    randomIntNode->RandomIntRange.push_back(RandomIntRangeHighBound);
+                    return randomIntNode;
+                }
+            }
+        }
+    }
+    else if(lookAhead(TokenType::TYPE) && tokens[pos].value=="float?"){ //Random Float
+        auto randomFloatNode = std::make_shared<randomNode>();
+        pos++;
+        if (lookAhead(TokenType::CONST)){
+            float RandomFloatRangeLowBound = tokens[pos].value[0];
+            randomFloatNode->RandomFloatRange.push_back(RandomFloatRangeLowBound);
+            pos++;
+            if (tokens[pos].value==".."){
+                pos++;
+                if (lookAhead(TokenType::CONST) && tokens[pos].value[0]>RandomFloatRangeLowBound){
+                    float RandomFLoatRangeHighBound = tokens[pos].value[0];
+                    randomFloatNode->RandomFloatRange.push_back(RandomFLoatRangeHighBound);
+                    return randomFloatNode;
+                }
+            }
+        }
+    }
+    else if(lookAhead(TokenType::TYPE) && tokens[pos].value=="bool?"){//Random bool
+        auto randomBoolNode = std::make_shared<randomNode>();
+        randomBoolNode->randomBool;
+        return randomBoolNode;
+    }
+    else return nullptr;
 };

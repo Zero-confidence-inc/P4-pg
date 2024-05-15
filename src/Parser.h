@@ -99,6 +99,14 @@ struct whileNode : ASTNode {
     std::vector<std::shared_ptr<ASTNode>> body;
 };
 
+struct randomNode : ASTNode {
+    std::shared_ptr<ASTNode> randomInt;
+    std::shared_ptr<ASTNode> randomFloat;
+    std::shared_ptr<ASTNode> randomBool;
+    std::vector<int> RandomIntRange;
+    std::vector<float> RandomFloatRange;
+};
+
 struct MathNode : ASTNode {
     std::string operatorType; //Operator representing the mathematical expression
     std:: shared_ptr<ASTNode> leftOperand;
@@ -124,12 +132,12 @@ public:
     std::shared_ptr<ASTNode> parseOperator();
     std::shared_ptr<ASTNode> parseSwitch();
     std::shared_ptr<ASTNode> parseStruct();
-    std::shared_ptr<ASTNode> parseSwitchStatement();
     std::shared_ptr<ASTNode> parseExpression();
     std::shared_ptr<ASTNode> parseStatement();
     std::shared_ptr<ASTNode> parseArray();
     std::shared_ptr<ASTNode> parseIfStatement();
     std::shared_ptr<ASTNode> parseWhileLoop();
+    std::shared_ptr<ASTNode> parseRandom();
 
 
 private:
