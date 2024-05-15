@@ -23,7 +23,6 @@ enum nodeType{
     conditionNode,
     caseNode,
     switchNode,
-    mathNode,
     intNode
 };
 // Base class for all AST nodes
@@ -39,10 +38,6 @@ struct DeclarationNode : ASTNode {
     std::string identifier;
 };
 
-struct MathNode : ASTNode {
-    nodeType getType() const override {return nodeType::mathNode;}
-
-};
 
 
 struct CharNode : DeclarationNode {
@@ -73,12 +68,14 @@ struct StructNode : DeclarationNode {
 // Node for function declarations
 struct FunctionNode : DeclarationNode {
     std::vector<std::shared_ptr<ASTNode>> body;
+    std::string type;
     nodeType getType() const override {return nodeType::functionNode;}
 };
 
 // Node for variable declarations
 struct VariableNode : DeclarationNode {
     nodeType getType() const override {return nodeType::variableNode;}
+    std::string type;
     // Additional properties can be added here
 };
 
@@ -100,7 +97,7 @@ struct FloatNode : DeclarationNode {
     nodeType getType() const override {return nodeType::floatNode;}
 };
 
-struct IntNode : ASTNode {
+struct IntNode : DeclarationNode {
     int integer;
     nodeType getType() const override {return nodeType::intNode;}
 };
@@ -120,12 +117,12 @@ struct OperatorNode : DeclarationNode {
 
 struct SwitchNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
-    std::vector<std::shared_ptr<caseNode>> caseBranch;
+    std::vector<std::shared_ptr<CaseNode>> caseBranch;
     nodeType getType() const override {return nodeType::switchNode;}
     SwitchNode() : condition(nullptr), caseBranch() {}
 };
 
-struct caseNode : ASTNode {
+struct CaseNode : ASTNode {
     std::shared_ptr<ASTNode> sucessCondition;
     std::shared_ptr<ASTNode> Branch;
     public: nodeType getType() const override {return nodeType::caseNode;}
@@ -135,13 +132,13 @@ struct ConditionNode : ASTNode {
     std::string condition;
     std::shared_ptr<ASTNode> aNode;
     std::shared_ptr<ASTNode> bNode;
-    nodeType getType() const override {return nodeType::conditionNode}
+    nodeType getType() const override {return nodeType::conditionNode;}
 };
 
 struct WhileNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
     std::vector<std::shared_ptr<ASTNode>> body;
-    nodeType getType() const override {return nodeType::whileNode}
+    nodeType getType() const override {return nodeType::whileNode;}
 };
 
 class Parser {

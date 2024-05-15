@@ -313,7 +313,7 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
         swNode->condition = parseCondition();
 
         while (lookAhead(TokenType::CONTROL) && tokens[pos].value == "case"){
-            auto cNode = std::make_shared<caseNode>();
+            auto cNode = std::make_shared<CaseNode>();
             cNode->sucessCondition = parseCondition();
             pos++;
             cNode->Branch = parseCondition();
