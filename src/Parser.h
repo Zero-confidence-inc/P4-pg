@@ -39,6 +39,7 @@ struct IfNode : ASTNode {
 };
 // Node for Struct declarations
 struct StructNode : DeclarationNode {
+    std::string identifier;
     std::vector<std::shared_ptr<ASTNode>> body;
 };
 // Node for function declarations

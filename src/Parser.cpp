@@ -149,19 +149,16 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
 
 
 std::shared_ptr<ASTNode> Parser::parseStruct() {
-    if (lookAhead(TokenType::TYPE)) {
-        std::string type = tokens[pos++].value;
-        std::string identifier = tokens[pos++].value;
-        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "struct"){
-            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{") {
-                auto structNode = std::make_shared<StructNode>();
-                structNode->type = type;
-                structNode->identifier = identifier;
-                structNode->body = parseStructBody();
-                match(TokenType::PUNCTUATION, "{");
-                match(TokenType::PUNCTUATION, "}");
-                return structNode;
-            }
+    if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "struct"){
+        pos++;
+        auto identify = tokens[pos].value;
+        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{") {
+            auto structNode = std::make_shared<StructNode>();
+            structNode->identifier = identify;
+            structNode->body = parseStructBody();
+            match(TokenType::PUNCTUATION, "{");
+            match(TokenType::PUNCTUATION, "}");
+            return structNode;
         }
     }
 };
