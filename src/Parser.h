@@ -113,9 +113,7 @@ public:
     void parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
     std::shared_ptr<ASTNode> parseMathNode();
-
     std::shared_ptr<ASTNode> parseChar();
-
     std::shared_ptr<ASTNode> parseFloat();
     std::shared_ptr<ASTNode> parseInt();
     std::shared_ptr<ASTNode> parseComment();
@@ -123,15 +121,12 @@ public:
     std::shared_ptr<ASTNode> parseCondition();
     std::shared_ptr<ASTNode> parseMath();
     std::shared_ptr<ASTNode> parseForLoop();
-
-    std::shared_ptr<ASTNode> parseDeclaration();
     std::shared_ptr<ASTNode> parseOperator();
     std::shared_ptr<ASTNode> parseSwitch();
     std::shared_ptr<ASTNode> parseStruct();
     std::shared_ptr<ASTNode> parseSwitchStatement();
     std::shared_ptr<ASTNode> parseExpression();
     std::shared_ptr<ASTNode> parseStatement();
-
     std::shared_ptr<ASTNode> parseArray();
     std::shared_ptr<ASTNode> parseIfStatement();
     std::shared_ptr<ASTNode> parseWhileLoop();
