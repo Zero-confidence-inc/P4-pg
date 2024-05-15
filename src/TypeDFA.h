@@ -44,6 +44,16 @@ private:
         bool_o2,
         bool_l,
         random_qmark,
+        void_1,
+        void_2,
+        void_3,
+        void_4,
+        struct_1,
+        struct_2,
+        struct_3,
+        struct_4,
+        struct_5,
+        struct_6
     };
 
     State currentState;

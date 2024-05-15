@@ -42,6 +42,17 @@ bool TypeDFA::processChar(char c) {
                 currentState = State::bool_b;
                 return true;
             }
+            else if (c == 'v') {
+                currentString += c;
+                currentState = State::void_1;
+                return true;
+            }
+            else if (c == 's') {
+                currentString += c;
+                currentState = State::struct_1;
+                return true;
+            }
+
             else return false;
 
 
@@ -253,7 +264,7 @@ bool TypeDFA::processChar(char c) {
             }
             else return false;
 
-            case State::float_t:
+        case State::float_t:
             if (c == '?'){
                 currentString += c;
                 currentToken = currentString;
@@ -262,7 +273,7 @@ bool TypeDFA::processChar(char c) {
             }
             else return false;
 
-            case State::bool_l:
+        case State::bool_l:
             if (c == '?'){
                 currentString += c;
                 currentToken = currentString;
@@ -270,6 +281,73 @@ bool TypeDFA::processChar(char c) {
                 return false;
             }
             else return false;
+
+        case State::struct_1:
+            if (c == 't') {
+                currentString += c;
+                currentState = State::struct_2;
+                return true;
+            }
+            else return false;
+
+        case State::struct_2:
+            if (c == 'r') {
+                currentString += c;
+                currentState = State::struct_3;
+                return true;
+            }
+            else return false;
+
+        case State::struct_3:
+            if (c == 'u') {
+                currentString += c;
+                currentState = State::struct_4;
+                return true;
+            }
+            else return false;
+
+        case State::struct_4:
+            if (c == 'c') {
+                currentString += c;
+                currentState = State::struct_5;
+                return true;
+            }
+            else return false;
+
+        case State::struct_5:
+            if (c == 't') {
+                currentString += c;
+                currentToken = currentString;
+                currentState = State::struct_6;
+                return false;
+            }
+            else return false;
+
+        case State::void_1:
+            if (c == 'o') {
+                currentString += c;
+                currentState = State::void_2;
+                return true;
+            }
+            else return false;
+
+        case State::void_2:
+            if (c == 'i') {
+                currentString += c;
+                currentState = State::void_3;
+                return true;
+            }
+            else return false;
+
+        case State::void_3:
+            if (c == 'd') {
+                currentString += c;
+                currentToken = currentString;
+                currentState = State::void_4;
+                return false; 
+            }
+            else return false;
+
 
         default:
             return false;
