@@ -8,20 +8,44 @@
 #include <vector>
 #include <memory>
 #include <iostream>
-
+enum nodeType{
+    declarationNode,
+    charNode,
+    forLoopNode,
+    ifNode,
+    structNode,
+    functionNode,
+    variableNode,
+    floatNode,
+    stringNode,
+    operatorNode,
+    whileNode,
+    conditionNode,
+    caseNode,
+    switchNode,
+    mathNode
+};
 // Base class for all AST nodes
 struct ASTNode {
     virtual ~ASTNode() {}
+public:
+    nodeType getName();
 };
 
 // Node for declarations
 struct DeclarationNode : ASTNode {
-    std::string type;
+    nodeType getName() const override {return nodeType::declarationNode}
     std::string identifier;
 };
 
+struct MathNode : ASTNode {
+    nodeType getName() const override {return nodeType::mathNode}
+    
+};
 
-struct CharNode : ASTNode {
+
+struct CharNode : DeclarationNode {
+    nodeType getName() const override {return nodeType::charNode}
     std::string character;
 };
 
@@ -30,69 +54,82 @@ struct ForLoopNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
     std::shared_ptr<ASTNode> expression;
     std::vector<std::shared_ptr<ASTNode>> body;
+    nodeType getName() const override {return nodeType::forLoopNode}
 };
 
 struct IfNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
     std::vector<std::shared_ptr<ASTNode>> body;
+    nodeType getName() const override {return nodeType::ifNode}
 };
 // Node for Struct declarations
 struct StructNode : DeclarationNode {
     std::vector<std::shared_ptr<ASTNode>> body;
+    nodeType getName() const override {return nodeType::structNode}
 };
 // Node for function declarations
 struct FunctionNode : DeclarationNode {
     std::vector<std::shared_ptr<ASTNode>> body;
+    nodeType getName() const override {return nodeType::functionNode}
 };
 
 // Node for variable declarations
 struct VariableNode : DeclarationNode {
+    nodeType getName() const override {return nodeType::variableNode}
     // Additional properties can be added here
 };
 
-struct IfStatementNode : ASTNode {
+ /* struct IfStatementNode : ASTNode {
     std::shared_ptr<ASTNode> condition;  // Node representing the condition expression
     std::shared_ptr<ASTNode> trueBranch;  // Node representing the statements to execute if the condition is true
     std::shared_ptr<ASTNode> falseBranch;  // Node representing the statements to execute if the condition is false (optional)
-
+    nodeType getName() const override {return nodeType::ifStatementNode}
     IfStatementNode() : condition(nullptr), trueBranch(nullptr), falseBranch(nullptr) {}
-};
+}; */
 
-struct FloatNode : ASTNode {
+struct FloatNode : DeclarationNode {
     float Floating_Point;
+    nodeType getName() const override {return nodeType::floatNode}
 };
 
+/*I made the comment into a comment MWAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA
 struct CommentNode : ASTNode {
     std::string Comment;
-};
+};*/
 
-struct StringNode : ASTNode {
+
+struct StringNode : DeclarationNode {
     std::string StringOfChars;
+    nodeType getName() const override {return nodeType::stringNode}
 };
 
-struct OperatorNode : ASTNode {
-    std::string operatorType; 
+struct OperatorNode : DeclarationNode {
+    std::string operatorType;
+    nodeType getName() const override {return nodeType:operatorNode}
 };
 
 struct SwitchNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
     std::vector<std::shared_ptr<caseNode>> caseBranch;
-
+    nodeType getName() const override {return nodeType::SwitchNode}
     SwitchNode() : condition(nullptr), caseBranch() {}
 };
 
 struct caseNode : ASTNode {
     std::shared_ptr<ASTNode> sucessCondition;
     std::shared_ptr<ASTNode> Branch;
+    nodeType getName() const override {return nodeType::caseNode}
 };
 
 struct ConditionNode : ASTNode {
     std::string condition;
+    nodeType getName() const override {return nodeType::conditionNode}
 };
 
 struct whileNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
     std::vector<std::shared_ptr<ASTNode>> body;
+    nodeType getName() const override {return nodeType::whileNode}
 
 };
 

@@ -2,7 +2,7 @@
 // Created by Yuki on 29/04/2024.
 //
 #include "Parser.h"
-
+//todo:: when we get math we need names from idenetifer so we can search up typy wypys
 Parser::Parser(const std::vector<Token>& tokens) : tokens(tokens) {}
 
 void Parser::parseProgram() {
@@ -146,16 +146,16 @@ std::shared_ptr<ASTNode> Parser::parseStruct() {
                 match(TokenType::PUNCTUATION, "{");
                 match(TokenType::PUNCTUATION, "}");
                 return structNode;
+            }
         }
     }
-
-
 }
 
 std::shared_ptr<ASTNode> Parser::parseCondition() {
     if (lookAhead(TokenType::OPERATOR)){
         if (tokens[pos].value == "==" || tokens[pos].value == "!=" || tokens[pos].value == "<" 
-        || tokens[pos].value == ">" || tokens[pos].value == "<=" || tokens[pos].value == ">=") {
+        || tokens[pos].value == ">" || tokens[pos].value == "<=" || tokens[pos].value == ">=" 
+        || tokens[pos].value == "||" || tokesn[pos].value == "&&") {
             auto conditionNode = std::make_shared<ConditionNode>();
             conditionNode->condition = tokens[pos].value;
             return conditionNode;
