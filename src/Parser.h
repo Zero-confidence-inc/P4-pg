@@ -62,9 +62,11 @@ struct IfNode : ASTNode {
     std::shared_ptr<ASTNode> condition;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override {return nodeType::ifNode;}
+    std::vector<std::shared_ptr<ASTNode>> elseBody;
 };
 // Node for Struct declarations
 struct StructNode : DeclarationNode {
+    std::string identifier;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override {return nodeType::structNode;}
 };
@@ -87,6 +89,10 @@ struct VariableNode : DeclarationNode {
     nodeType getName() const override {return nodeType::ifStatementNode}
     IfStatementNode() : condition(nullptr), trueBranch(nullptr), falseBranch(nullptr) {}
 }; */
+struct ReturnNode : ASTNode {
+    std::string returning;
+    std::string identifier;
+};
 
 
 struct FloatNode : DeclarationNode {
@@ -94,7 +100,6 @@ struct FloatNode : DeclarationNode {
     nodeType getType() const override {return nodeType::floatNode;}
 };
 
-//I made the comment into a comment MWAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA
 struct IntNode : ASTNode {
     int integer;
     nodeType getType() const override {return nodeType::intNode;}
@@ -139,27 +144,17 @@ struct WhileNode : ASTNode {
     nodeType getType() const override {return nodeType::whileNode}
 };
 
-struct MathNode : ASTNode {
-    std::string operatorType; //Operator representing the mathematical expression
-    std:: shared_ptr<ASTNode> leftOperand;
-    std:: shared_ptr<ASTNode> rightOperand;
-
-    MathNode() : operatorType(""), leftOperand(nullptr), rightOperand(nullptr) {}
-};
-
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);
     void parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
-    std::shared_ptr<ASTNode> parseMathNode();
     std::shared_ptr<ASTNode> parseChar();
     std::shared_ptr<ASTNode> parseFloat();
     std::shared_ptr<ASTNode> parseInt();
     std::shared_ptr<ASTNode> parseComment();
     std::shared_ptr<ASTNode> parseString();
     std::shared_ptr<ASTNode> parseCondition();
-    std::shared_ptr<ASTNode> parseMath();
     std::shared_ptr<ASTNode> parseForLoop();
     std::shared_ptr<ASTNode> parseOperator();
     std::shared_ptr<ASTNode> parseSwitch();
@@ -170,6 +165,7 @@ public:
     std::shared_ptr<ASTNode> parseArray();
     std::shared_ptr<ASTNode> parseIfStatement();
     std::shared_ptr<ASTNode> parseWhileLoop();
+    std::shared_ptr<ASTNode> parseReturn();
 
 
 private:
