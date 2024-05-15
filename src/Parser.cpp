@@ -336,7 +336,7 @@ std::shared_ptr<ASTNode> Parser::parseIfStatement(){
 std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
     //Check to see if the loop token "while" is given
     if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "while") {
-        auto ifNode = std::make_shared<IfNode>();
+        auto whileNode = std::make_shared<WhileNode>();
         pos++;
         //skips '(' and parses the condition
         if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '(') {
@@ -346,9 +346,9 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
             if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
                 pos++;
                 auto bodyNode = parseLoopBody();
-                ifNode->condition = conditionNode;
-                ifNode->body = bodyNode;
-                return ifNode;
+                whileNode->condition = conditionNode;
+                whileNode->body = bodyNode;
+                return whileNode;
             }
         }
     }
