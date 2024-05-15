@@ -32,11 +32,12 @@ private:
     void kowalskiVariable(const std::shared_ptr<VariableNode>& node);
     void kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node);
     void kowalskiChar(const std::shared_ptr<CharNode>& node);
-    void kowalskiIf(const std::shared_ptr<IfStatementNode>& node);
+    void kowalskiIf(const std::shared_ptr<IfNode>& node);
     void kowalskiFloat(const std::shared_ptr<FloatNode>& node);
     void kowalskiString(const std::shared_ptr<StringNode>& node);
+    void kowalskiInt(const std::shared_ptr<IntNode>& node);
 
-    void kowalskiWhile(const std::shared_ptr<whileNode>& node);
+    void kowalskiWhile(const std::shared_ptr<WhileNode>& node);
     void kowalskiFor(const std::shared_ptr< ForLoopNode>& node);
     void kowalskiSwitch(const std::shared_ptr<SwitchNode>& node);
     void kowalskiOperator(const std::shared_ptr<OperatorNode>& node);

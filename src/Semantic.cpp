@@ -49,7 +49,7 @@ std::string SymbolTable::lookUpVariable(const std::string& name);
 
     void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node);
         {
-            Switch(nodeType->getName()){
+            Switch(nodeType->getType()){
                 case nodeType::functionNode:
                     kowalskiFunction(std::static_pointer_cast<FunctionNode>(node));
                     break;
@@ -89,6 +89,9 @@ std::string SymbolTable::lookUpVariable(const std::string& name);
                 case nodeType::mathNode:
                     kowalskiMath(std::static_pointer_cast<MathNode>(node));
                     break;
+                case nodeType::intNode:
+                    kowalskiInt(std::static_pointer_cast<IntNode>(node));
+                    break;
                 default:
                     throw std::runtime_error("unknown node type");
             }
@@ -114,6 +117,11 @@ void SemanticAnalyser::kowalskiChar(const std::shared_ptr<CharNode>& node){
     //that comment was wrong my bad I just read the error in the case above so use its case
     string name = node.identifier;
     declareVariable(const std::string& name,"char");
+}
+void SemanticAnalyser::kowalskiInt(const std::shared_ptr<IntNode>& node){
+
+    string name = node.identifier;
+    declareVariable(const std::string& name,"int");
 }
 void SemanticAnalyser::kowalskiIf(const std::shared_ptr<IfStatementNode>& node){
     kowalskiKondi(node.condition);

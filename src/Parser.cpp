@@ -153,23 +153,37 @@ std::shared_ptr<ASTNode> Parser::parseStruct() {
 
 std::shared_ptr<ASTNode> Parser::parseCondition() {
     if (lookAhead(TokenType::OPERATOR)){
-        pos--;
-        switch(tokens[pos].TokenType) {
+        auto conditionNode = std::make_shared<ConditionNode>();
+        switch(tokens[pos].type) {
             case TokenType::CONST:
-                auto _aNode = std::make_shared<intNode>();
+                conditionNode->aNode = std::make_shared<IntNode>();
                 break;
-            case TokenType:::
+            case TokenType::FLOAT_CONST:
+                conditionNode->aNode = std::make_shared<FloatNode>();
+                break;
+            case TokenType::STRING:
+                conditionNode->aNode = std::make_shared<StringNode>();
+                break;
         }
         pos++;
-        if (tokens[pos].value == "==" || tokens[pos].value == "!=" || tokens[pos].value == "<"
-        || tokens[pos].value == ">" || tokens[pos].value == "<=" || tokens[pos].value == ">="
-        || tokens[pos].value == "||" || tokesn[pos].value == "&&") {
-            auto conditionNode = std::make_shared<ConditionNode>();
-            conditionNode->condition = tokens[pos].value;
-            conditionNode->aNode = _aNode;
-            pos++
-            return conditionNode;
+        conditionNode->condition = tokens[pos].value;
+        pos++;
+        if(lookAhead(TokenType::OPERATOR)){
+            conditionNode->bNode = parseCondition();
+        } else {
+            switch(tokens[pos].type) {
+            case TokenType::CONST:
+                conditionNode->bNode = std::make_shared<IntNode>();
+                break;
+            case TokenType::FLOAT_CONST:
+                conditionNode->bNode = std::make_shared<FloatNode>();
+                break;
+            case TokenType::STRING:
+                conditionNode->bNode = std::make_shared<StringNode>();
+                break;
+            }
         }
+            return conditionNode;
     }
     return nullptr;
 };
@@ -215,7 +229,7 @@ std::shared_ptr<ASTNode> Parser::parseInt(){
     }
     return nullptr;
 };
-
+/*
 std::shared_ptr<ASTNode> Parser::parseComment(){
     if (lookAhead(TokenType::COMMENTS)){
         auto Commentnode = std::make_shared<CommentNode>();
@@ -223,7 +237,7 @@ std::shared_ptr<ASTNode> Parser::parseComment(){
         return Commentnode;
     };
     return nullptr;
-};
+}; */
 
 std::shared_ptr<ASTNode> Parser::parseString(){
     if (lookAhead(TokenType::STRING)){
