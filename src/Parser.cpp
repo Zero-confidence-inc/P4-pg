@@ -253,7 +253,7 @@ std::shared_ptr<ASTNode> Parser::parseForLoop() {
                 //skips the second ';' and parses the expression
                 if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
                     pos++;
-                    auto expressionNode = parseMathNode();
+                    auto expressionNode = parseCondition();
                     //skip ')' and parses the body of the loop, thereafter it assigns the, declaration, condition, expression and body.
                     if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
                         pos++;
@@ -289,9 +289,9 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
 
         while (lookAhead(TokenType::CONTROL) && tokens[pos].value == "case"){
             auto cNode = std::make_shared<caseNode>();
-            cNode->sucessCondition = parseMathNode();
+            cNode->sucessCondition = parseCondition();
             pos++;
-            cNode->Branch = parseMathNode();
+            cNode->Branch = parseCondition();
 
             swNode->caseBranch.push_back(cNode);
         }
@@ -353,22 +353,4 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
         }
     }
     return nullptr;
-};
-
-
-std::shared_ptr<ASTNode> Parser::parseMathNode() {
-    if (lookAhead(TokenType::OPERATOR)) {
-        auto mathExprNode = std::make_shared<MathNode>();
-        mathExprNode->operatorType = tokens[pos].value;
-        pos++; // Consume the operator
-
-        // Parse left operand
-        mathExprNode->leftOperand = parseExpression();
-
-        // Parse right operand
-        mathExprNode->rightOperand = parseExpression();
-
-        return mathExprNode;
-    }
-    return nullptr; // Not a mathematical expression
 };
