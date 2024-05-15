@@ -284,14 +284,6 @@ std::shared_ptr<ASTNode> Parser::parseOperator() {
     return nullptr;
 };
 
-//Switch
-std::shared_ptr<ASTNode> Parser::parseSwitchStatement() {
-    if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
-        return parseSwitch();
-    }
-    return nullptr;
-};
-
 std::shared_ptr<ASTNode> Parser::parseSwitch() {
     if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
         pos++;
