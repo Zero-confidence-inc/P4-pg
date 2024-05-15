@@ -98,6 +98,19 @@ struct WhileNode : ASTNode {
     std::vector<std::shared_ptr<ASTNode>> body;
 };
 
+
+struct randomNode : ASTNode {
+    std::shared_ptr<ASTNode> randomInt;
+    std::shared_ptr<ASTNode> randomFloat;
+    std::shared_ptr<ASTNode> randomBool;
+    std::vector<int> RandomIntRange;
+    std::vector<float> RandomFloatRange;
+};
+
+
+
+
+
 struct ArrayNode : ASTNode {
     std::string type;
     std::string identifier;
@@ -119,13 +132,17 @@ public:
     std::shared_ptr<ASTNode> parseOperator();
     std::shared_ptr<ASTNode> parseSwitch();
     std::shared_ptr<ASTNode> parseStruct();
-    std::shared_ptr<ASTNode> parseSwitchStatement();
     std::shared_ptr<ASTNode> parseExpression();
     std::shared_ptr<ASTNode> parseStatement();
     std::shared_ptr<ASTNode> parseArray();
     std::shared_ptr<ASTNode> parseIfStatement();
+  
     std::shared_ptr<ASTNode> parseWhileLoop();
+
+    std::shared_ptr<ASTNode> parseRandom();
+
     std::shared_ptr<ASTNode> parseReturn();
+
 
 
 private:
