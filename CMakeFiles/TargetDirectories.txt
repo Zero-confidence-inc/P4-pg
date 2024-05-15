@@ -1,2 +1,0 @@
-C:/Users/quicc/Desktop/Github Repo/P4/P4-pg/CMakeFiles/edit_cache.dir
-C:/Users/quicc/Desktop/Github Repo/P4/P4-pg/CMakeFiles/rebuild_cache.dir

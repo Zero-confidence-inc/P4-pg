@@ -28,6 +28,17 @@ bool ControlStatDFA::processChar(char c) {
                 currentState = State::case_1;
                 return true;
             }
+            else if (c == 'f') {
+                currentString += c;
+                currentState = State::function_1;
+                return true;
+            }
+            else if (c == 'd') {
+                currentString += c;
+                currentState = State::default_1;
+                return true;
+            }
+
             else return false;
 
 
@@ -131,6 +142,115 @@ bool ControlStatDFA::processChar(char c) {
                 return false;
             }
             else return false;
+
+        case State::default_1:
+            if (c == 'e') {
+                currentString += c;
+                currentState = State::default_2;
+                return true;
+            }
+            else return false;
+
+        case State::default_2:
+            if (c == 'f') {
+                currentString += c;
+                currentState = State::default_3;
+                return true;
+            }
+            else return false;
+
+        case State::default_3:
+            if (c == 'a') {
+                currentString += c;
+                currentState = State::default_4;
+                return true;
+            }
+            else return false;
+
+        case State::default_4:
+            if (c == 'u') {
+                currentString += c;
+                currentState = State::default_5;
+                return true;
+            }
+            else return false;
+
+        case State::default_5:
+            if (c == 'l') {
+                currentString += c;
+                currentState = State::default_6;
+                return true;
+            }
+            else return false;
+
+        case State::default_6:
+            if (c == 't') {
+                currentString += c;
+                currentToken = currentString;
+                currentState = State::default_7;
+                return false;
+            }
+            else return false;
+
+
+        case State::function_1:
+            if (c == 'u') {
+                currentString += c;
+                currentState = State::function_2;
+                return true;
+            }
+            else return false;
+
+        case State::function_2:
+            if (c == 'n') {
+                currentString += c;
+                currentState = State::function_3;
+                return true;
+            }
+            else return false;
+
+        case State::function_3:
+            if (c == 'c') {
+                currentString += c;
+                currentState = State::function_4;
+                return true;
+            }
+            else return false;
+
+        case State::function_4:
+            if (c == 't') {
+                currentString += c;
+                currentState = State::function_5;
+                return true;
+            }
+            else return false;
+
+        case State::function_5:
+            if (c == 'i') {
+                currentString += c;
+                currentState = State::function_6;
+                return true;
+            }
+            else return false;
+
+        case State::function_6:
+            if (c == 'o') {
+                currentString += c;
+                currentState = State::function_7;
+                return true;
+            }
+            else return false;
+
+        case State::function_7:
+            if (c == 'n') {
+                currentString += c;
+                currentToken = currentString;
+                currentState = State::function_8;
+                return false;
+            }
+            else return false;
+
+
 
         default:
             return false;
