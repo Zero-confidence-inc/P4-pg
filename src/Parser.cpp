@@ -45,7 +45,7 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
 
 bool Parser::lookAhead(TokenType expectedType) {
     return pos < tokens.size() && tokens[pos].type == expectedType;
-}
+};
 
 void Parser::match(TokenType expectedType) {
     if (pos < tokens.size() && tokens[pos].type == expectedType) {
@@ -54,7 +54,7 @@ void Parser::match(TokenType expectedType) {
         std::cerr << "Syntax error, expected type " << static_cast<int>(expectedType) << std::endl;
         exit(1);
     }
-}
+};
 
 void Parser::match(TokenType expectedType, const std::string& expectedValue) {
     if (pos < tokens.size() && tokens[pos].type == expectedType && tokens[pos].value == expectedValue) {
@@ -63,7 +63,7 @@ void Parser::match(TokenType expectedType, const std::string& expectedValue) {
         std::cerr << "Syntax error, expected " << expectedValue << " of type " << static_cast<int>(expectedType) << std::endl;
         exit(1);
     }
-}
+};
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
@@ -87,7 +87,7 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
         return {};
     }
     return contents;
-}
+};
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseStructBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
@@ -105,7 +105,7 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseStructBody() {
         return {};
     }
     return contents;
-}
+};
 
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
@@ -130,14 +130,14 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
         return {};
     }
     return contents;
-}
+};
 
 
 std::shared_ptr<ASTNode> Parser::parseStruct() {
     if (lookAhead(TokenType::TYPE)) {
         std::string type = tokens[pos++].value;
         std::string identifier = tokens[pos++].value;
-        if (lookAhead(TokenType::PUNCTUATION && tokens[pos].value == "struct")){
+        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "struct"){
             if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{") {
                 auto structNode = std::make_shared<StructNode>();
                 structNode->type = type;
@@ -146,11 +146,10 @@ std::shared_ptr<ASTNode> Parser::parseStruct() {
                 match(TokenType::PUNCTUATION, "{");
                 match(TokenType::PUNCTUATION, "}");
                 return structNode;
+            }
         }
     }
-
-
-}
+};
 
 std::shared_ptr<ASTNode> Parser::parseCondition() {
     if (lookAhead(TokenType::OPERATOR)){
@@ -160,17 +159,9 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
             conditionNode->condition = tokens[pos].value;
             return conditionNode;
         }
-        return nullptr;
     }
     return nullptr;
-}
-
-
-std::shared_ptr<ASTNode> Parser::parseMath() {
-    // Dummy implementation for now
-    return {};
-
-}
+};
 
 //Parses the char type
 std::shared_ptr<ASTNode> Parser::parseChar() {
@@ -188,18 +179,12 @@ std::shared_ptr<ASTNode> Parser::parseChar() {
                 //We only only accept this as a proper char if the following character is a ';', since that would mean the declaration has finished properly
                 if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
                     return charNode;
-                } else {
-                    return nullptr; //Missing ';'
                 }
-            } else {
-                return nullptr; //Missing or empty string
             }
-        } else {
-            return nullptr; //Missing operator '='
         }
     }
-    return nullptr; //Missing "char"
-}
+    return nullptr;
+};
 
 
 std::shared_ptr<ASTNode> Parser::parseFloat(){
@@ -207,6 +192,15 @@ std::shared_ptr<ASTNode> Parser::parseFloat(){
         auto FloatingNode = std::make_shared<FloatNode>();
         FloatingNode->Floating_Point = std::stof(tokens[pos].value);
         return FloatingNode;
+    }
+    return nullptr;
+};
+
+std::shared_ptr<ASTNode> Parser::parseInt(){
+    if (lookAhead(TokenType::CONST)){
+        auto intNode = std::make_shared<IntNode>();
+        intNode->integer = std::stoi(tokens[pos].value);
+        return intNode;
     }
     return nullptr;
 };
@@ -247,7 +241,7 @@ std::shared_ptr<ASTNode> Parser::parseForLoop() {
                 //skips the second ';' and parses the expression
                 if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
                     pos++;
-                    auto expressionNode = parseMath();
+                    auto expressionNode = parseMathNode();
                     //skip ')' and parses the body of the loop, thereafter it assigns the, declaration, condition, expression and body.
                     if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
                         pos++;
@@ -257,22 +251,13 @@ std::shared_ptr<ASTNode> Parser::parseForLoop() {
                         forLoopNode->expression = expressionNode;
                         forLoopNode->body = bodyNode;
                         return forLoopNode;
-                    } else {
-                        return nullptr; //Missing ')'
                     }
-                } else {
-                    return nullptr; //Missing ';'
                 }
-            } else {
-                return nullptr; //Missing ';'
             }
-        } else {
-            return nullptr; //Missing '('
         }
-    } else {
-        return nullptr; //Missing "for"
     }
-}
+    return nullptr;
+};
 
 //Operators 
 std::shared_ptr<ASTNode> Parser::parseOperator() {
@@ -282,7 +267,7 @@ std::shared_ptr<ASTNode> Parser::parseOperator() {
         return opeNode;
     }
     return nullptr;
-}
+};
 
 //Switch
 std::shared_ptr<ASTNode> Parser::parseSwitchStatement() {
@@ -290,7 +275,7 @@ std::shared_ptr<ASTNode> Parser::parseSwitchStatement() {
         return parseSwitch();
     }
     return nullptr;
-}
+};
 
 std::shared_ptr<ASTNode> Parser::parseSwitch() {
     if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
@@ -300,9 +285,9 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
 
         while (lookAhead(TokenType::CONTROL) && tokens[pos].value == "case"){
             auto cNode = std::make_shared<caseNode>();
-            cNode->sucessCondition = parseStatement();
+            cNode->sucessCondition = parseMathNode();
             pos++;
-            cNode->Branch = parseStatement();
+            cNode->Branch = parseMathNode();
 
             swNode->caseBranch.push_back(cNode);
         }
@@ -310,17 +295,12 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
         return swNode;
     }
     return nullptr;
-}
-
-std::shared_ptr<ASTNode> Parser::parseStatement(){
-    //placeholder for now
-    return nullptr;
-}
+};
 
 std::shared_ptr<ASTNode> Parser::parseArray(){
     //placeholder for now
     return nullptr;
-}
+};
 
 std::shared_ptr<ASTNode> Parser::parseIfStatement(){
     //Check to see if the loop token "if" is given
@@ -338,16 +318,11 @@ std::shared_ptr<ASTNode> Parser::parseIfStatement(){
                 ifNode->condition = conditionNode;
                 ifNode->body = bodyNode;
                 return ifNode;
-            } else {
-                return nullptr; //Missing ')'
             }
-        } else {
-            return nullptr; //Missing '('
         }
-    } else {
-        return nullptr; //Missing "if"
     }
-}
+    return nullptr;
+};
 
 std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
     //Check to see if the loop token "while" is given
@@ -365,17 +340,12 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
                 ifNode->condition = conditionNode;
                 ifNode->body = bodyNode;
                 return ifNode;
-            } else {
-                return nullptr; //Missing ')'
             }
-        } else {
-            return nullptr; //Missing '('
         }
-    } else {
-        return nullptr; //Missing "while"
     }
-}
-}
+    return nullptr;
+};
+
 
 std::shared_ptr<ASTNode> Parser::parseMathNode() {
     if (lookAhead(TokenType::OPERATOR)) {
@@ -392,4 +362,4 @@ std::shared_ptr<ASTNode> Parser::parseMathNode() {
         return mathExprNode;
     }
     return nullptr; // Not a mathematical expression
-}
+};
