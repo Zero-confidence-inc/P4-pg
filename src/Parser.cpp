@@ -186,7 +186,7 @@ std::shared_ptr<ASTNode> Parser::parseExpression() {
 }
 
 std::shared_ptr<ASTNode> Parser::parseTerm() {
-    if (lookAhead(TokenType::INT) || lookAhead(TokenType::FLOAT) || lookAhead(TokenType::IDENTIFIER)) {
+    if (lookAhead(TokenType::CONST) || lookAhead(TokenType::CONST_FLOAT)|| lookAhead(TokenType::IDENTIFIER)) {
         // Parse int, float, or identifier as a term
         return tokens[pos++].value;
     } else if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "(") {
@@ -195,9 +195,8 @@ std::shared_ptr<ASTNode> Parser::parseTerm() {
         auto expression = parseExpression();
         match(TokenType::PUNCTUATION, ")");
         return expression;
-    } else {
+    } else { //expect term
         
-        std::cerr << "Syntax error, expected term" << std::endl;
         return nullptr;
     }
 }
@@ -358,29 +357,29 @@ std::shared_ptr<ASTNode> Parser::parseArray() {
     auto type = tokens[pos++].value;
 
     if (!lookAhead(TokenType::IDENTIFIER)) {
-        std::cerr << "Syntax error, expected identifier after array type" << std::endl;
+        //Expects identifier
         return nullptr;
     }
 
     auto identifier = tokens[pos++].value;
 
     if (!lookAhead(TokenType::PUNCTUATION) || tokens[pos].value != "[") {
-        std::cerr << "Syntax error, expected '[' after array identifier" << std::endl;
+        //expects '['
         return nullptr;
     }
 
     pos++;
 
     // Parse array size
-    if (!lookAhead(TokenType::INT)) {
-        std::cerr << "Syntax error, expected array size" << std::endl;
+    if (!lookAhead(TokenType::CONST)){
+
         return nullptr;
     }
 
     auto arraySize = std::stoi(tokens[pos++].value);
 
     if (!lookAhead(TokenType::PUNCTUATION) || tokens[pos].value != "]") {
-        std::cerr << "Syntax error, expected ']' after array size" << std::endl;
+    //Expects ']'
         return nullptr;
     }
 
@@ -388,7 +387,7 @@ std::shared_ptr<ASTNode> Parser::parseArray() {
 
     // Ensure semicolon at the end
     if (!lookAhead(TokenType::PUNCTUATION) || tokens[pos].value != ";") {
-        std::cerr << "Syntax error, expected ';' after array declaration" << std::endl;
+
         return nullptr;
     }
 
