@@ -83,11 +83,26 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
             contents.push_back(ifStatement);
             contents.push_back(whileLoop);
         }
+        if (lookAhead(TokenType::JUMP) && tokens[pos].value == "return") {
+            auto returns = parseReturn();
+        }
     } else {
         return {};
     }
     return contents;
 };
+
+std::shared_ptr<ASTNode> Parser::parseReturn(){
+    if (lookAhead(TokenType::JUMP)){
+        auto returnNode = std::make_shared<ReturnNode>();
+        returnNode->returning = tokens[pos].value;
+        returnNode->identifier = tokens[pos].value;
+        return returnNode;
+    }
+    return nullptr;
+};
+
+
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseStructBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
@@ -134,19 +149,16 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
 
 
 std::shared_ptr<ASTNode> Parser::parseStruct() {
-    if (lookAhead(TokenType::TYPE)) {
-        std::string type = tokens[pos++].value;
-        std::string identifier = tokens[pos++].value;
-        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "struct"){
-            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{") {
-                auto structNode = std::make_shared<StructNode>();
-                structNode->type = type;
-                structNode->identifier = identifier;
-                structNode->body = parseStructBody();
-                match(TokenType::PUNCTUATION, "{");
-                match(TokenType::PUNCTUATION, "}");
-                return structNode;
-            }
+    if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "struct"){
+        pos++;
+        auto identify = tokens[pos].value;
+        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{") {
+            auto structNode = std::make_shared<StructNode>();
+            structNode->identifier = identify;
+            structNode->body = parseStructBody();
+            match(TokenType::PUNCTUATION, "{");
+            match(TokenType::PUNCTUATION, "}");
+            return structNode;
         }
     }
 };
@@ -269,14 +281,6 @@ std::shared_ptr<ASTNode> Parser::parseOperator() {
     return nullptr;
 };
 
-//Switch
-std::shared_ptr<ASTNode> Parser::parseSwitchStatement() {
-    if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
-        return parseSwitch();
-    }
-    return nullptr;
-};
-
 std::shared_ptr<ASTNode> Parser::parseSwitch() {
     if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
         pos++;
@@ -317,6 +321,11 @@ std::shared_ptr<ASTNode> Parser::parseIfStatement(){
                 auto bodyNode = parseLoopBody();
                 ifNode->condition = conditionNode;
                 ifNode->body = bodyNode;
+                if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "else") {
+                    pos++;
+                    auto elseBodyNode = parseLoopBody();
+                    ifNode->elseBody = elseBodyNode;
+                }
                 return ifNode;
             }
         }
