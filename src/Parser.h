@@ -51,12 +51,9 @@ struct VariableNode : DeclarationNode {
     // Additional properties can be added here
 };
 
-struct IfStatementNode : ASTNode {
-    std::shared_ptr<ASTNode> condition;  // Node representing the condition expression
-    std::shared_ptr<ASTNode> trueBranch;  // Node representing the statements to execute if the condition is true
-    std::shared_ptr<ASTNode> falseBranch;  // Node representing the statements to execute if the condition is false (optional)
-
-    IfStatementNode() : condition(nullptr), trueBranch(nullptr), falseBranch(nullptr) {}
+struct ReturnNode : ASTNode {
+    std::string returning;
+    std::string identifier;
 };
 
 struct FloatNode : ASTNode {
