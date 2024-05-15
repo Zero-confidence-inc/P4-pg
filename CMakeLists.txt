@@ -52,7 +52,7 @@ set(TEST_SOURCES
         src/Lexer.cpp
         src/LoopStatDFA.cpp
         src/ControlStatDFA.cpp
-        src/WhitespaceDFA.cpp
+        src/WhitespaceDFA.cpp 
 )
 add_executable(P4_pg_tests ${TEST_SOURCES})
 
