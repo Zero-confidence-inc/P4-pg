@@ -285,20 +285,15 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
 
         while (lookAhead(TokenType::CONTROL) && tokens[pos].value == "case"){
             auto cNode = std::make_shared<caseNode>();
-            cNode->sucessCondition = parseStatement();
+            cNode->sucessCondition = parseMathNode();
             pos++;
-            cNode->Branch = parseStatement();
+            cNode->Branch = parseMathNode();
 
             swNode->caseBranch.push_back(cNode);
         }
 
         return swNode;
     }
-    return nullptr;
-};
-
-std::shared_ptr<ASTNode> Parser::parseStatement(){
-    //placeholder for now
     return nullptr;
 };
 
