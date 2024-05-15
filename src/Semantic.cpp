@@ -143,6 +143,7 @@ void SemanticAnalyser::kowalskiOperator(const std::shared_ptr<OperatorNode>& nod
     // mental assault towards human
     //todo:: math node type will be added later, aj har det på sin pc
 }
+
 void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node){
     string condition = node.condition;
     declareVariable(const std::string& name, "condition");

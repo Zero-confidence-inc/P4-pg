@@ -87,6 +87,7 @@ struct VariableNode : DeclarationNode {
     IfStatementNode() : condition(nullptr), trueBranch(nullptr), falseBranch(nullptr) {}
 }; */
 
+
 struct FloatNode : DeclarationNode {
     float Floating_Point;
     nodeType getName() const override {return nodeType::floatNode}

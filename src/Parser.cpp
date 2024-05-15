@@ -1,6 +1,7 @@
 //
 // Created by Yuki on 29/04/2024.
 //
+
 #include "Parser.h"
 //todo:: when we get math we need names from idenetifer so we can search up typy wypys
 Parser::Parser(const std::vector<Token>& tokens) : tokens(tokens) {}
