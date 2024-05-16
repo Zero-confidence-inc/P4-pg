@@ -8,9 +8,9 @@ Parser::Parser(const std::vector<Token>& tokens) : tokens(tokens) {}
 void Parser::parseProgram() {
     std::vector<std::shared_ptr<ASTNode>> ast;
     while (pos < tokens.size()) {
-        auto declaration = parseDeclaration();
-        if (declaration != nullptr) {
-            ast.push_back(declaration);
+        auto declaration_pp = parseDeclaration();
+        if (declaration_pp != nullptr){
+            ast.push_back(declaration_pp);
         }
     }
 
@@ -46,6 +46,13 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
                 variableNode->variable = variables;
                 match(TokenType::PUNCTUATION, ";");
                 return variableNode;
+            }
+            else if (lookAhead(TokenType::TYPE) && tokens[pos].value == "struct"){
+                auto structNode = std::make_shared<StructNode>();
+                structNode->type = type;
+                structNode->identifier = identifier;
+                structNode->struct_main = parseStruct();
+                
             }
         }
 }

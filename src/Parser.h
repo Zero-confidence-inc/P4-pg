@@ -18,7 +18,6 @@ struct ASTNode {
 struct DeclarationNode : ASTNode {
     std::string type;
     std::string identifier;
-    std::string variable;
 };
 
 
@@ -40,6 +39,7 @@ struct IfNode : ASTNode {
 };
 // Node for Struct declarations
 struct StructNode : DeclarationNode {
+    std::shared_ptr<ASTNode> struct_main;
     std::string identifier;
     std::vector<std::shared_ptr<ASTNode>> body;
 };
@@ -50,6 +50,7 @@ struct FunctionNode : DeclarationNode {
 
 // Node for variable declarations
 struct VariableNode : DeclarationNode {
+    std::string variable;
 };
 
 struct ReturnNode : ASTNode {
