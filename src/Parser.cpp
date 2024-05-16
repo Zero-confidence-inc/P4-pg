@@ -61,7 +61,7 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
 
 bool Parser::lookAhead(TokenType expectedType) {
     return pos < tokens.size() && tokens[pos].type == expectedType;
-};
+}
 
 void Parser::match(TokenType expectedType) {
     if (pos < tokens.size() && tokens[pos].type == expectedType) {
@@ -70,7 +70,7 @@ void Parser::match(TokenType expectedType) {
         std::cerr << "Syntax error, expected type " << static_cast<int>(expectedType) << std::endl;
         exit(1);
     }
-};
+}
 
 void Parser::match(TokenType expectedType, const std::string& expectedValue) {
     if (pos < tokens.size() && tokens[pos].type == expectedType && tokens[pos].value == expectedValue) {
@@ -79,7 +79,7 @@ void Parser::match(TokenType expectedType, const std::string& expectedValue) {
         std::cerr << "Syntax error, expected " << expectedValue << " of type " << static_cast<int>(expectedType) << std::endl;
         exit(1);
     }
-};
+}
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
@@ -199,7 +199,7 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
 
 
 std::shared_ptr<ASTNode> Parser::parseStruct() {
-    if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "struct"){
+    if (lookAhead(TokenType::TYPE) && tokens[pos].value == "struct"){
         pos++;
         auto identify = tokens[pos].value;
         if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{") {
@@ -215,12 +215,37 @@ std::shared_ptr<ASTNode> Parser::parseStruct() {
 
 std::shared_ptr<ASTNode> Parser::parseCondition() {
     if (lookAhead(TokenType::OPERATOR)){
-        if (tokens[pos].value == "==" || tokens[pos].value == "!=" || tokens[pos].value == "<" 
-        || tokens[pos].value == ">" || tokens[pos].value == "<=" || tokens[pos].value == ">=") {
-            auto conditionNode = std::make_shared<ConditionNode>();
-            conditionNode->condition = tokens[pos].value;
-            return conditionNode;
+        auto conditionNode = std::make_shared<ConditionNode>();
+        switch(tokens[pos].type) {
+            case TokenType::CONST:
+                conditionNode->aNode = std::make_shared<IntNode>();
+                break;
+            case TokenType::FLOAT_CONST:
+                conditionNode->aNode = std::make_shared<FloatNode>();
+                break;
+            case TokenType::STRING:
+                conditionNode->aNode = std::make_shared<StringNode>();
+                break;
         }
+        pos++;
+        conditionNode->condition = tokens[pos].value;
+        pos++;
+        if(lookAhead(TokenType::OPERATOR)){
+            conditionNode->bNode = parseCondition();
+        } else {
+            switch(tokens[pos].type) {
+            case TokenType::CONST:
+                conditionNode->bNode = std::make_shared<IntNode>();
+                break;
+            case TokenType::FLOAT_CONST:
+                conditionNode->bNode = std::make_shared<FloatNode>();
+                break;
+            case TokenType::STRING:
+                conditionNode->bNode = std::make_shared<StringNode>();
+                break;
+            }
+        }
+            return conditionNode;
     }
     return nullptr;
 }
@@ -266,6 +291,15 @@ std::shared_ptr<ASTNode> Parser::parseInt(){
     }
     return nullptr;
 };
+/*
+std::shared_ptr<ASTNode> Parser::parseComment(){
+    if (lookAhead(TokenType::COMMENTS)){
+        auto Commentnode = std::make_shared<CommentNode>();
+        Commentnode->Comment=tokens[pos].value;
+        return Commentnode;
+    };
+    return nullptr;
+}; */
 
 std::shared_ptr<ASTNode> Parser::parseString(){
     if (lookAhead(TokenType::STRING)){
@@ -319,7 +353,7 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
         swNode->condition = parseCondition();
 
         while (lookAhead(TokenType::CONTROL) && tokens[pos].value == "case"){
-            auto cNode = std::make_shared<caseNode>();
+            auto cNode = std::make_shared<CaseNode>();
             cNode->sucessCondition = parseCondition();
             pos++;
             cNode->Branch.push_back(parseDeclaration());
@@ -343,9 +377,9 @@ std::shared_ptr<ASTNode> Parser::parseArray() {
                 pos++;
 
                 // Parse int, float, identifier, char, string, bool, function
-                if (lookAhead(TokenType::CONST) || (lookAhead(TokenType::FLOAT_CONST)) || (lookAhead(TokenType::IDENTIFIER)) || 
+                if (lookAhead(TokenType::CONST) || (lookAhead(TokenType::FLOAT_CONST)) || (lookAhead(TokenType::IDENTIFIER)) ||
                     (lookAhead(TokenType::TYPE)) || (lookAhead(TokenType::CONTROL)))  {
-                    
+
                     auto arraySize = std::stoi(tokens[pos].value);
 
                     if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "]") {
