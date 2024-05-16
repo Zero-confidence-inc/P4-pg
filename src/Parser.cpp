@@ -8,9 +8,9 @@ Parser::Parser(const std::vector<Token>& tokens) : tokens(tokens) {}
 void Parser::parseProgram() {
     std::vector<std::shared_ptr<ASTNode>> ast;
     while (pos < tokens.size()) {
-        auto declaration = parseDeclaration();
-        if (declaration != nullptr) {
-            ast.push_back(declaration);
+        auto declaration_pp = parseDeclaration();
+        if (declaration_pp != nullptr){
+            ast.push_back(declaration_pp);
         }
     }
 
@@ -18,34 +18,51 @@ void Parser::parseProgram() {
 }
 
 std::shared_ptr<ASTNode> Parser::parseDeclaration() {
-    if (lookAhead(TokenType::TYPE)) {
-        std::string type = tokens[pos++].value;
-        std::string identifier = tokens[pos++].value;
-
-        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{") {
-            auto functionNode = std::make_shared<FunctionNode>();
-            functionNode->type = type;
-            functionNode->identifier = identifier;
-            functionNode->body = parseFunctionBody();
-            match(TokenType::PUNCTUATION, "{");
-            match(TokenType::PUNCTUATION, "}");
-            return functionNode;
-
-        } else if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == ";") {
-        auto variableNode = std::make_shared<VariableNode>();
-        variableNode->type = type;
-        variableNode->identifier = identifier;
-        match(TokenType::PUNCTUATION, ";");
-        return variableNode;
-    }
-    }
+    if (lookAhead(TokenType::TYPE)){
+        if (tokens[pos].value=="int?" || tokens[pos].value=="float?" || tokens[pos].value=="bool?"){
+            auto randomNode = std::make_shared<RandomNode>();
+            randomNode->random = parseRandom();
+            std::string identifier = tokens[pos++].value;
+            randomNode->identifier = identifier;
+            return randomNode;
+        }
+        else{
+            std::string type = tokens[pos++].value;
+            std::string identifier = tokens[pos++].value;
+            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{"){
+                auto functionNode = std::make_shared<FunctionNode>();
+                functionNode->type = type;
+                functionNode->identifier = identifier;
+                functionNode->body = parseFunctionBody();
+                match(TokenType::PUNCTUATION, "{");
+                match(TokenType::PUNCTUATION, "}");
+                return functionNode;
+            }
+            else if (lookAhead(TokenType::OPERATOR) && tokens[pos].value == "="){
+                auto variableNode = std::make_shared<VariableNode>();
+                auto variables = tokens[++pos].value;
+                variableNode->type = type;
+                variableNode->identifier = identifier;
+                variableNode->variable = variables;
+                match(TokenType::PUNCTUATION, ";");
+                return variableNode;
+            }
+            else if (lookAhead(TokenType::TYPE) && tokens[pos].value == "struct"){
+                auto structNode = std::make_shared<StructNode>();
+                structNode->type = type;
+                structNode->identifier = identifier;
+                structNode->struct_main = parseStruct();
+                
+            }
+        }
+}
     return nullptr; // Return nullptr if no valid declaration is found
 };
 
 
 bool Parser::lookAhead(TokenType expectedType) {
     return pos < tokens.size() && tokens[pos].type == expectedType;
-};
+}
 
 void Parser::match(TokenType expectedType) {
     if (pos < tokens.size() && tokens[pos].type == expectedType) {
@@ -54,7 +71,7 @@ void Parser::match(TokenType expectedType) {
         std::cerr << "Syntax error, expected type " << static_cast<int>(expectedType) << std::endl;
         exit(1);
     }
-};
+}
 
 void Parser::match(TokenType expectedType, const std::string& expectedValue) {
     if (pos < tokens.size() && tokens[pos].type == expectedType && tokens[pos].value == expectedValue) {
@@ -63,7 +80,7 @@ void Parser::match(TokenType expectedType, const std::string& expectedValue) {
         std::cerr << "Syntax error, expected " << expectedValue << " of type " << static_cast<int>(expectedType) << std::endl;
         exit(1);
     }
-};
+}
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
@@ -83,11 +100,26 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
             contents.push_back(ifStatement);
             contents.push_back(whileLoop);
         }
+        if (lookAhead(TokenType::JUMP) && tokens[pos].value == "return") {
+            auto returns = parseReturn();
+        }
     } else {
         return {};
     }
     return contents;
 };
+
+std::shared_ptr<ASTNode> Parser::parseReturn(){
+    if (lookAhead(TokenType::JUMP)){
+        auto returnNode = std::make_shared<ReturnNode>();
+        returnNode->returning = tokens[pos].value;
+        returnNode->identifier = tokens[pos].value;
+        return returnNode;
+    }
+    return nullptr;
+};
+
+
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseStructBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
@@ -134,34 +166,56 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
 
 
 std::shared_ptr<ASTNode> Parser::parseStruct() {
-    if (lookAhead(TokenType::TYPE)) {
-        std::string type = tokens[pos++].value;
-        std::string identifier = tokens[pos++].value;
-        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "struct"){
-            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{") {
-                auto structNode = std::make_shared<StructNode>();
-                structNode->type = type;
-                structNode->identifier = identifier;
-                structNode->body = parseStructBody();
-                match(TokenType::PUNCTUATION, "{");
-                match(TokenType::PUNCTUATION, "}");
-                return structNode;
-            }
+    if (lookAhead(TokenType::TYPE) && tokens[pos].value == "struct"){
+        pos++;
+        auto identify = tokens[pos].value;
+        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{") {
+            auto structNode = std::make_shared<StructNode>();
+            structNode->identifier = identify;
+            structNode->body = parseStructBody();
+            match(TokenType::PUNCTUATION, "{");
+            match(TokenType::PUNCTUATION, "}");
+            return structNode;
         }
     }
 };
 
 std::shared_ptr<ASTNode> Parser::parseCondition() {
     if (lookAhead(TokenType::OPERATOR)){
-        if (tokens[pos].value == "==" || tokens[pos].value == "!=" || tokens[pos].value == "<" 
-        || tokens[pos].value == ">" || tokens[pos].value == "<=" || tokens[pos].value == ">=") {
-            auto conditionNode = std::make_shared<ConditionNode>();
-            conditionNode->condition = tokens[pos].value;
-            return conditionNode;
+        auto conditionNode = std::make_shared<ConditionNode>();
+        switch(tokens[pos].type) {
+            case TokenType::CONST:
+                conditionNode->aNode = std::make_shared<IntNode>();
+                break;
+            case TokenType::FLOAT_CONST:
+                conditionNode->aNode = std::make_shared<FloatNode>();
+                break;
+            case TokenType::STRING:
+                conditionNode->aNode = std::make_shared<StringNode>();
+                break;
         }
+        pos++;
+        conditionNode->condition = tokens[pos].value;
+        pos++;
+        if(lookAhead(TokenType::OPERATOR)){
+            conditionNode->bNode = parseCondition();
+        } else {
+            switch(tokens[pos].type) {
+            case TokenType::CONST:
+                conditionNode->bNode = std::make_shared<IntNode>();
+                break;
+            case TokenType::FLOAT_CONST:
+                conditionNode->bNode = std::make_shared<FloatNode>();
+                break;
+            case TokenType::STRING:
+                conditionNode->bNode = std::make_shared<StringNode>();
+                break;
+            }
+        }
+            return conditionNode;
     }
     return nullptr;
-};
+}
 
 //Parses the char type
 std::shared_ptr<ASTNode> Parser::parseChar() {
@@ -204,7 +258,7 @@ std::shared_ptr<ASTNode> Parser::parseInt(){
     }
     return nullptr;
 };
-
+/*
 std::shared_ptr<ASTNode> Parser::parseComment(){
     if (lookAhead(TokenType::COMMENTS)){
         auto Commentnode = std::make_shared<CommentNode>();
@@ -212,7 +266,7 @@ std::shared_ptr<ASTNode> Parser::parseComment(){
         return Commentnode;
     };
     return nullptr;
-};
+}; */
 
 std::shared_ptr<ASTNode> Parser::parseString(){
     if (lookAhead(TokenType::STRING)){
@@ -241,7 +295,7 @@ std::shared_ptr<ASTNode> Parser::parseForLoop() {
                 //skips the second ';' and parses the expression
                 if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ';') {
                     pos++;
-                    auto expressionNode = parseMathNode();
+                    auto expressionNode = parseCondition();
                     //skip ')' and parses the body of the loop, thereafter it assigns the, declaration, condition, expression and body.
                     if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
                         pos++;
@@ -259,35 +313,17 @@ std::shared_ptr<ASTNode> Parser::parseForLoop() {
     return nullptr;
 };
 
-//Operators 
-std::shared_ptr<ASTNode> Parser::parseOperator() {
-    if(lookAhead(TokenType::OPERATOR)){
-        auto opeNode = std::make_shared<OperatorNode>();
-        opeNode->operatorType = tokens[pos].value;
-        return opeNode;
-    }
-    return nullptr;
-};
-
-//Switch
-std::shared_ptr<ASTNode> Parser::parseSwitchStatement() {
-    if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
-        return parseSwitch();
-    }
-    return nullptr;
-};
-
 std::shared_ptr<ASTNode> Parser::parseSwitch() {
-    if(lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
+    if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
         pos++;
         auto swNode = std::make_shared<SwitchNode>();
         swNode->condition = parseCondition();
 
         while (lookAhead(TokenType::CONTROL) && tokens[pos].value == "case"){
-            auto cNode = std::make_shared<caseNode>();
-            cNode->sucessCondition = parseMathNode();
+            auto cNode = std::make_shared<CaseNode>();
+            cNode->sucessCondition = parseCondition();
             pos++;
-            cNode->Branch = parseMathNode();
+            cNode->Branch.push_back(parseDeclaration());
 
             swNode->caseBranch.push_back(cNode);
         }
@@ -297,10 +333,45 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
     return nullptr;
 };
 
-std::shared_ptr<ASTNode> Parser::parseArray(){
-    //placeholder for now
+std::shared_ptr<ASTNode> Parser::parseArray() {
+    if (lookAhead(TokenType::TYPE)) {
+        auto type = tokens[pos].value;
+
+        if (lookAhead(TokenType::IDENTIFIER)) {
+            auto identifier = tokens[pos].value;
+
+            if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "[") {
+                pos++;
+
+                // Parse int, float, identifier, char, string, bool, function
+                if (lookAhead(TokenType::CONST) || (lookAhead(TokenType::FLOAT_CONST)) || (lookAhead(TokenType::IDENTIFIER)) ||
+                    (lookAhead(TokenType::TYPE)) || (lookAhead(TokenType::CONTROL)))  {
+
+                    auto arraySize = std::stoi(tokens[pos].value);
+
+                    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "]") {
+                        pos++;
+
+                        // Ensure semicolon at the end
+                        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == ";") {
+                            pos++;
+
+                            auto arrayNode = std::make_shared<ArrayNode>();
+                            arrayNode->type = type;
+                            arrayNode->identifier = identifier;
+                            arrayNode->size = arraySize;
+
+                            return arrayNode;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     return nullptr;
 };
+
 
 std::shared_ptr<ASTNode> Parser::parseIfStatement(){
     //Check to see if the loop token "if" is given
@@ -317,6 +388,16 @@ std::shared_ptr<ASTNode> Parser::parseIfStatement(){
                 auto bodyNode = parseLoopBody();
                 ifNode->condition = conditionNode;
                 ifNode->body = bodyNode;
+                if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "else") {
+                    pos++;
+                    auto elseBodyNode = parseLoopBody();
+                    ifNode->elseBody = elseBodyNode;
+                }
+                if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "else" && tokens[++pos].value == "if") {
+                    pos++;
+                    auto elseIfBodyNode = parseLoopBody();
+                    ifNode->body = elseIfBodyNode;
+                }
                 return ifNode;
             }
         }
@@ -327,7 +408,7 @@ std::shared_ptr<ASTNode> Parser::parseIfStatement(){
 std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
     //Check to see if the loop token "while" is given
     if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "while") {
-        auto ifNode = std::make_shared<IfNode>();
+        auto whileNode = std::make_shared<WhileNode>();
         pos++;
         //skips '(' and parses the condition
         if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '(') {
@@ -337,29 +418,54 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
             if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
                 pos++;
                 auto bodyNode = parseLoopBody();
-                ifNode->condition = conditionNode;
-                ifNode->body = bodyNode;
-                return ifNode;
+                whileNode->condition = conditionNode;
+                whileNode->body = bodyNode;
+                return whileNode;
             }
         }
     }
     return nullptr;
 };
 
-
-std::shared_ptr<ASTNode> Parser::parseMathNode() {
-    if (lookAhead(TokenType::OPERATOR)) {
-        auto mathExprNode = std::make_shared<MathNode>();
-        mathExprNode->operatorType = tokens[pos].value;
-        pos++; // Consume the operator
-
-        // Parse left operand
-        mathExprNode->leftOperand = parseExpression();
-
-        // Parse right operand
-        mathExprNode->rightOperand = parseExpression();
-
-        return mathExprNode;
+std::shared_ptr<ASTNode> Parser::parseRandom(){
+    if (lookAhead(TokenType::TYPE) && tokens[pos].value=="int?"){ //Random Int
+        auto randomIntNode = std::make_shared<RandomNode>();
+        pos++;
+        if (lookAhead(TokenType::CONST)){
+            int RandomIntRangeLowBound = tokens[pos].value[0];
+            randomIntNode->RandomIntRange.push_back(RandomIntRangeLowBound);
+            pos++;
+            if (tokens[pos].value==".."){
+                pos++;
+                if (lookAhead(TokenType::CONST) && tokens[pos].value[0]>RandomIntRangeLowBound){
+                    int RandomIntRangeHighBound = tokens[pos].value[0];
+                    randomIntNode->RandomIntRange.push_back(RandomIntRangeHighBound);
+                    return randomIntNode;
+                }
+            }
+        }
     }
-    return nullptr; // Not a mathematical expression
+    else if(lookAhead(TokenType::TYPE) && tokens[pos].value=="float?"){ //Random Float
+        auto randomFloatNode = std::make_shared<RandomNode>();
+        pos++;
+        if (lookAhead(TokenType::CONST)){
+            float RandomFloatRangeLowBound = tokens[pos].value[0];
+            randomFloatNode->RandomFloatRange.push_back(RandomFloatRangeLowBound);
+            pos++;
+            if (tokens[pos].value==".."){
+                pos++;
+                if (lookAhead(TokenType::CONST) && tokens[pos].value[0]>RandomFloatRangeLowBound){
+                    float RandomFLoatRangeHighBound = tokens[pos].value[0];
+                    randomFloatNode->RandomFloatRange.push_back(RandomFLoatRangeHighBound);
+                    return randomFloatNode;
+                }
+            }
+        }
+    }
+    else if(lookAhead(TokenType::TYPE) && tokens[pos].value=="bool?"){//Random bool
+        auto randomBoolNode = std::make_shared<RandomNode>();
+        randomBoolNode->randomBool;
+        return randomBoolNode;
+    }
+    else return nullptr;
 };
