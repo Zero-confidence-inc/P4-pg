@@ -89,15 +89,6 @@ struct VariableNode : DeclarationNode {
     void accept(ASTNodeVisitor& visitor) override;
 };
 
-struct IfStatementNode : ASTNode {
-    std::shared_ptr<ASTNode> condition;  // Node representing the condition expression
-    std::shared_ptr<ASTNode> trueBranch;  // Node representing the statements to execute if the condition is true
-    std::shared_ptr<ASTNode> falseBranch;  // Node representing the statements to execute if the condition is false (optional)
-
-    IfStatementNode() : condition(nullptr), trueBranch(nullptr), falseBranch(nullptr) {}
-    void accept(ASTNodeVisitor& visitor) override;
-}
-
 struct ReturnNode : ASTNode {
     std::string returning;
     std::string identifier;
@@ -140,6 +131,7 @@ struct SwitchNode : ASTNode {
 };
 
 struct CaseNode : ASTNode {
+    std::shared_ptr<ASTNode> sucessCondition;
     std::vector<std::shared_ptr<ASTNode>> Branch;
     void accept(ASTNodeVisitor& visitor) override;
     public: nodeType getType() const override {return nodeType::caseNode;}
@@ -171,12 +163,6 @@ struct RandomNode : ASTNode {
     std::vector<float> RandomFloatRange;
 };
 
-
-
-
-
-    MathNode() : operatorType(""), leftOperand(nullptr), rightOperand(nullptr) {}
-    void accept(ASTNodeVisitor& visitor) override;
 struct ArrayNode : ASTNode {
     std::string type;
     std::string identifier;
