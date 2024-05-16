@@ -36,7 +36,6 @@ public:
 struct DeclarationNode : ASTNode {
     nodeType getType() const override {return nodeType::declarationNode;}
     std::string identifier;
-    std::string variable;
 };
 
 
@@ -62,6 +61,7 @@ struct IfNode : ASTNode {
 };
 // Node for Struct declarations
 struct StructNode : DeclarationNode {
+    std::shared_ptr<ASTNode> struct_main;
     std::string identifier;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override {return nodeType::structNode;}
@@ -75,6 +75,7 @@ struct FunctionNode : DeclarationNode {
 
 // Node for variable declarations
 struct VariableNode : DeclarationNode {
+    std::string variable;
     nodeType getType() const override {return nodeType::variableNode;}
     std::string type;
     // Additional properties can be added here
@@ -136,7 +137,9 @@ struct WhileNode : ASTNode {
 };
 
 
-struct randomNode : ASTNode {
+struct RandomNode : ASTNode {
+    std::shared_ptr<ASTNode> random;
+    std::string identifier;
     std::shared_ptr<ASTNode> randomInt;
     std::shared_ptr<ASTNode> randomFloat;
     std::shared_ptr<ASTNode> randomBool;
@@ -171,11 +174,8 @@ public:
     std::shared_ptr<ASTNode> parseStatement();
     std::shared_ptr<ASTNode> parseArray();
     std::shared_ptr<ASTNode> parseIfStatement();
-
     std::shared_ptr<ASTNode> parseWhileLoop();
-
     std::shared_ptr<ASTNode> parseRandom();
-
     std::shared_ptr<ASTNode> parseReturn();
 
 
