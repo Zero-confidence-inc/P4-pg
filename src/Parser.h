@@ -41,7 +41,7 @@ struct DeclarationNode : ASTNode {
 
 
 
-struct CharNode : DeclarationNode {
+struct CharNode : ASTNode {
     nodeType getType() const override {return nodeType::charNode;}
     std::string character;
 };
@@ -86,12 +86,12 @@ struct ReturnNode : ASTNode {
 };
 
 
-struct FloatNode : DeclarationNode {
+struct FloatNode : ASTNode {
     float Floating_Point;
     nodeType getType() const override {return nodeType::floatNode;}
 };
 
-struct IntNode : DeclarationNode {
+struct IntNode : ASTNode {
     int integer;
     nodeType getType() const override {return nodeType::intNode;}
 };
@@ -99,12 +99,12 @@ struct IntNode : DeclarationNode {
 
 
 
-struct StringNode : DeclarationNode {
+struct StringNode : ASTNode {
     std::string StringOfChars;
     nodeType getType() const override {return nodeType::stringNode;}
 };
 
-struct OperatorNode : DeclarationNode {
+struct OperatorNode : ASTNode {
     std::string operatorType;
     nodeType getType() const override {return nodeType::operatorNode;}
 };

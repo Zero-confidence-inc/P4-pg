@@ -112,12 +112,11 @@ void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode
 void SemanticAnalyser::kowalskiChar(const std::shared_ptr<CharNode>& node){   
     //no this is not declaring but just typing on raw, nice example thou in case
     //that comment was wrong my bad I just read the error in the case above so use its case
-    std::string name = node->identifier;
-    symbolTable.declareVariable(name,"char");
+    //okay 3rd comment about this lets redo
+    
 }
 void SemanticAnalyser::kowalskiInt(const std::shared_ptr<IntNode>& node){
-    std::string name = node->identifier;
-    symbolTable.declareVariable(name,"int");
+    
 }
 void SemanticAnalyser::kowalskiIf(const std::shared_ptr<IfNode>& node){
     if (node->condition->getType() != nodeType::conditionNode){
@@ -133,13 +132,10 @@ void SemanticAnalyser::kowalskiIf(const std::shared_ptr<IfNode>& node){
     }
 }
 void SemanticAnalyser::kowalskiFloat(const std::shared_ptr<FloatNode>& node){
-    std::string name = node->identifier;
-    //should do an if to look if it is a float or an int, but right now all numbers are numbers
-    symbolTable.declareVariable(name, "float");
+    
 }
 void SemanticAnalyser::kowalskiString(const std::shared_ptr<StringNode>& node){
-    std::string name = node->identifier;
-    symbolTable.declareVariable(name, "string");
+    
 }
 
 void SemanticAnalyser::kowalskiWhile(const std::shared_ptr<WhileNode>& node){
