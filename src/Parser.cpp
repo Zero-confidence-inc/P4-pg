@@ -27,7 +27,7 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
     if (lookAhead(TokenType::TYPE)){
         std::string type = tokens[++pos].value;
         std::string identifier = tokens[++pos].value;
-        if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value == "{"){
+        if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == "{"){
             auto functionNode = std::make_shared<FunctionNode>();
             functionNode->type = type;
             functionNode->identifier = identifier;
@@ -36,15 +36,15 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
             match(TokenType::PUNCTUATION, "}");
             return functionNode;
         }
-        else if (lookAhead(TokenType::OPERATOR) && tokens[pos].value == "="){
+        else if (lookAhead(TokenType::OPERATOR) && tokens[++pos].value == "="){
             auto valueNode = std::make_shared<ValueNode>();
             valueNode->type = type;
             valueNode->identifier = identifier;
-            valueNode->value = parseValues;
+            valueNode->value = parseValues();
             match(TokenType::PUNCTUATION, ";");
             return valueNode;
         }
-        else if (lookAhead(TokenType::TYPE) && tokens[pos].value == "struct"){
+        else if (lookAhead(TokenType::TYPE) && tokens[++pos].value == "struct"){
             auto structNode = std::make_shared<StructNode>();
             structNode->type = type;
             structNode->identifier = identifier;
@@ -303,12 +303,20 @@ std::shared_ptr<ASTNode> Parser::parseComment(){
 
 std::shared_ptr<ASTNode> Parser::parseString(){
     if (lookAhead(TokenType::STRING)){
-        auto Stringnode = std::make_shared<StringNode>();
-        Stringnode->StringOfChars=tokens[pos].value;
-        return Stringnode;
+        auto stringNode = std::make_shared<StringNode>();
+        stringNode->StringOfChars=tokens[pos].value;
+        return stringNode;
     }
     return nullptr;
 };
+
+std::shared_ptr<ASTNode> Parser::parseUsInt(){
+    if (lookAhead(TokenType::CONST)){
+        auto usIntNode = std::make_shared<UsIntNode>();
+        usIntNode->usinteger=std::stoi(tokens[pos].value);
+        return usIntNode;
+    }
+}
 
 
 //Parses a for loop

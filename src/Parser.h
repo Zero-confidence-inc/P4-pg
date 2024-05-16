@@ -23,7 +23,8 @@ enum nodeType{
     conditionNode,
     caseNode,
     switchNode,
-    intNode
+    intNode,
+    usIntNode
 };
 // Base class for all AST nodes
 struct ASTNode {
@@ -99,11 +100,9 @@ struct IntNode : ASTNode {
 
 struct UsIntNode : ASTNode {
     int usinteger;
+    nodeType getType() const override {return nodeType::usIntNode;}
 };
 
-struct BoolNode : ASTNode{
-    bool boolean;
-};
 
 struct StringNode : ASTNode {
     std::string StringOfChars;
@@ -148,6 +147,9 @@ struct RandomNode : DeclarationNode {
 };
 
 
+
+
+
 struct ArrayNode : ASTNode {
     std::string type;
     std::string identifier;
@@ -175,6 +177,7 @@ public:
     std::shared_ptr<ASTNode> parseRandom();
     std::shared_ptr<ASTNode> parseReturn();
     std::shared_ptr<ASTNode> parseValues();
+    std::shared_ptr<ASTNode> parseUsInt();
 
 
 private:
