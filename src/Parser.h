@@ -107,8 +107,13 @@ struct IntNode : ASTNode {
     void accept(ASTNodeVisitor& visitor) override;
 };
 
+struct UsIntNode : ASTNode {
+    int usinteger;
+};
 
-
+struct BoolNode : ASTNode{
+    bool boolean;
+};
 
 struct StringNode : ASTNode {
     std::string StringOfChars;
@@ -153,12 +158,7 @@ struct WhileNode : ASTNode {
 };
 
 
-struct RandomNode : ASTNode {
-    std::shared_ptr<ASTNode> random;
-    std::string identifier;
-    std::shared_ptr<ASTNode> randomInt;
-    std::shared_ptr<ASTNode> randomFloat;
-    std::shared_ptr<ASTNode> randomBool;
+struct RandomNode : DeclarationNode {
     std::vector<int> RandomIntRange;
     std::vector<float> RandomFloatRange;
 };
