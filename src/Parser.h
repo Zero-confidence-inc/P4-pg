@@ -49,8 +49,8 @@ struct FunctionNode : DeclarationNode {
 };
 
 // Node for variable declarations
-struct VariableNode : DeclarationNode {
-    std::string variable;
+struct ValueNode : DeclarationNode {
+    std::shared_ptr<ASTNode> value;
 };
 
 struct ReturnNode : ASTNode {
@@ -64,6 +64,14 @@ struct FloatNode : ASTNode {
 
 struct IntNode : ASTNode {
     int integer;
+};
+
+struct UsIntNode : ASTNode {
+    int usinteger;
+};
+
+struct BoolNode : ASTNode{
+    bool boolean;
 };
 
 struct StringNode : ASTNode {
@@ -92,18 +100,10 @@ struct WhileNode : ASTNode {
 };
 
 
-struct RandomNode : ASTNode {
-    std::shared_ptr<ASTNode> random;
-    std::string identifier;
-    std::shared_ptr<ASTNode> randomInt;
-    std::shared_ptr<ASTNode> randomFloat;
-    std::shared_ptr<ASTNode> randomBool;
+struct RandomNode : DeclarationNode {
     std::vector<int> RandomIntRange;
     std::vector<float> RandomFloatRange;
 };
-
-
-
 
 
 struct ArrayNode : ASTNode {
@@ -132,6 +132,7 @@ public:
     std::shared_ptr<ASTNode> parseWhileLoop();
     std::shared_ptr<ASTNode> parseRandom();
     std::shared_ptr<ASTNode> parseReturn();
+    std::shared_ptr<ASTNode> parseValues();
 
 
 
