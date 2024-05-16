@@ -189,6 +189,7 @@ public:
     std::shared_ptr<ASTNode> parseWhileLoop();
     std::shared_ptr<ASTNode> parseRandom();
     std::shared_ptr<ASTNode> parseReturn();
+    std::shared_ptr<ASTNode> parseValues();
 
 
 private:
