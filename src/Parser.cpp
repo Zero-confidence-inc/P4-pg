@@ -586,14 +586,12 @@ std::shared_ptr<ASTNode> Parser::parseRandom(){
                 int RandomIntRangeLowBound = tokens[pos].value[0];
                 randomNode->RandomIntRange.push_back(RandomIntRangeLowBound);
                 pos++;
-                if (tokens[pos].value==".."){
+                if (tokens[pos].value=="." && tokens[++pos].value=="."){
                     pos++;
                     if (lookAhead(TokenType::CONST) && tokens[pos].value[0]>RandomIntRangeLowBound){
                         int RandomIntRangeHighBound = tokens[pos].value[0];
                         randomNode->RandomIntRange.push_back(RandomIntRangeHighBound);
-                        pos--;
-                        pos--;
-                        pos--;
+                        pos-=3;
                         return randomNode;
                     }
                 }
@@ -607,7 +605,7 @@ std::shared_ptr<ASTNode> Parser::parseRandom(){
                 float RandomFloatRangeLowBound = tokens[pos].value[0];
                 randomNode->RandomFloatRange.push_back(RandomFloatRangeLowBound);
                 pos++;
-                if (tokens[pos].value==".."){
+                if (tokens[pos].value=="." && tokens[++pos].value=="."){
                     pos++;
                     if (lookAhead(TokenType::CONST) && tokens[pos].value[0]>RandomFloatRangeLowBound){
                         float RandomFLoatRangeHighBound = tokens[pos].value[0];
