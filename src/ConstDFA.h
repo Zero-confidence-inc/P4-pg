@@ -18,7 +18,16 @@ private:
         Start,
         Minus,
         IntegerPart,
-        DecimalPart
+        DecimalPart,
+        true_1,
+        true_2,
+        true_3,
+        true_4,
+        false_1,
+        false_2,
+        false_3,
+        false_4,
+        false_5
     };
     bool isFloatingPoint;
     State currentState;
