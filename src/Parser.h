@@ -228,6 +228,7 @@ private:
     std::vector<std::shared_ptr<ASTNode>> parseFunctionBody();  // Assume this function parses a function body
     std::vector<std::shared_ptr<ASTNode>> parseStructBody();
     std::vector<std::shared_ptr<ASTNode>> parseLoopBody();
+    std::vector<std::shared_ptr<ASTNode>> parseArrayContents();
 };
 
 #endif; // PARSER_H
