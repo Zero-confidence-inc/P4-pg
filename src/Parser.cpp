@@ -87,20 +87,18 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
         pos++;
         while (tokens[pos].value[0] != '}') {
             auto declaration = parseDeclaration();
-            auto forLoop = parseForLoop();
-            auto switchCase = parseSwitch();
-            auto array = parseArray();
-            auto ifStatement = parseIfStatement();
-            auto whileLoop = parseWhileLoop();
+            auto random = parseRandom();
+            auto jump = parseJump();
             contents.push_back(declaration);
-            contents.push_back(forLoop);
-            contents.push_back(switchCase);
-            contents.push_back(array);
-            contents.push_back(ifStatement);
-            contents.push_back(whileLoop);
-        }
-        if (lookAhead(TokenType::JUMP) && tokens[pos].value == "return") {
-            auto returns = parseReturn();
+            contents.push_back(random);
+            contents.push_back(jump);
+            if (lookAhead(TokenType::JUMP) && tokens[pos].value == "return") {
+                auto returns = parseReturn();
+            }
+            else {
+                pos++;
+            }
+        
         }
     } else {
         return {};
@@ -426,17 +424,17 @@ std::shared_ptr<ASTNode> Parser::parseJump(){
 std::shared_ptr<ASTNode> Parser::parseSwitch() {
     if (lookAhead(TokenType::CONTROL) && tokens[++pos].value == "switch"){
         auto swNode = std::make_shared<SwitchNode>();
-        if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == "("){
+        if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == '('){
             pos++;
             swNode->condition = parseCondition();
-            if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == ")"){
+            if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == ')'){
                 while (lookAhead(TokenType::CONTROL) && tokens[++pos].value == "case"){
                     auto cNode = std::make_shared<CaseNode>();
-                    if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == "("){
+                    if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == '('){
                         pos++;
                         cNode->sucessCondition = parseCondition();
-                        if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == ")"){
-                            if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == ":"){
+                        if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == ')'){
+                            if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == ':'){
                                 pos++;
                                 cNode->Branch.push_back(parseDeclaration());
                                 swNode->caseBranch.push_back(cNode);
