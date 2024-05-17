@@ -264,7 +264,7 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
                 conditionNode->bNode->identifier = tokens[pos].value;
             }
         }
-            return conditionNode;
+        return conditionNode;
     }
     return nullptr;
 }
@@ -307,6 +307,19 @@ std::shared_ptr<ASTNode> Parser::parseInt(){
         auto intNode = std::make_shared<IntNode>();
         intNode->integer = std::stoi(tokens[pos].value);
         return intNode;
+    }
+    return nullptr;
+};
+
+std::shared_ptr<ASTNode> Parser::parseBool(){
+    if (lookAhead(TokenType::BOOL)){
+        auto Boolnode = std::make_shared<BoolNode>();
+        if (tokens[pos].value == "true"){
+            Boolnode->boolean = true;
+        } else if (tokens[pos].value == "false"){
+            Boolnode->boolean = false;
+        }
+        return Boolnode;
     }
     return nullptr;
 };
@@ -395,12 +408,12 @@ std::shared_ptr<ASTNode> Parser::parseJump(){
 
 
 std::shared_ptr<ASTNode> Parser::parseSwitch() {
-    if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){
+    if (lookAhead(TokenType::CONTROL) && tokens[++pos].value == "switch"){
         pos++;
         auto swNode = std::make_shared<SwitchNode>();
         swNode->condition = parseCondition();
 
-        while (lookAhead(TokenType::CONTROL) && tokens[pos].value == "case"){
+        while (lookAhead(TokenType::CONTROL) && tokens[++pos].value == "case"){
             auto cNode = std::make_shared<CaseNode>();
             cNode->sucessCondition = parseCondition();
             pos++;
