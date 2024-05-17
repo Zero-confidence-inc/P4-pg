@@ -5,7 +5,7 @@ bool PunctuationDFA::processChar(char c) {
     switch (currentState){
         case State::Start:
             //more punctuation can be added here as needed
-            if (c == '{' || c == '}' || c == '(' || c == ')' || c == ';'|| c==',' || c=='[' || c==']' || c=='<' || c=='>' || c == '.') {
+            if (c == '{' || c == '}' || c == '(' || c == ')' || c == ';'|| c==',' || c=='[' || c==']' || c=='?' || c == '.' || c == ':') {
                 currentToken += c;
                 currentState = State::Punctuation_confirmed;
                 return false;

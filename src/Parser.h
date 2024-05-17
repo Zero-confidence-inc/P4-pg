@@ -25,7 +25,8 @@ enum nodeType{
     switchNode,
     intNode,
     usIntNode,
-    consoleNode
+    consoleNode,
+    boolNode
 };
 // Base class for all AST nodes
 struct ASTNode {
@@ -101,6 +102,10 @@ struct ValueNode : DeclarationNode {
     void accept(ASTNodeVisitor& visitor) override;
 };
 
+struct IdentifierNode : ASTNode {
+    std::string identifier;
+};
+
 struct ReturnNode : ASTNode {
     std::string returning;
     std::string identifier;
@@ -126,6 +131,7 @@ struct UsIntNode : ASTNode {
 
 struct BoolNode : ASTNode{
     bool boolean;
+    nodeType getType() const override {return nodeType::boolNode;}
 };
 
 struct StringNode : ASTNode {
@@ -170,6 +176,10 @@ struct WhileNode : ASTNode {
     nodeType getType() const override {return nodeType::whileNode;}
 };
 
+struct JumpNode : ASTNode {
+    std::string breaker;
+    std::string continuer;
+};
 
 struct RandomNode : DeclarationNode {
     std::vector<int> RandomIntRange;
@@ -181,12 +191,18 @@ struct ArrayNode : DeclarationNode {
     std::vector<std::shared_ptr<ASTNode>> body;
 };
 
+struct FunctionCallNode : IdentifierNode {
+    std::vector<std::shared_ptr<ASTNode>> arguments;
+};
+
+
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);
     void parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
     std::shared_ptr<ASTNode> parseChar();
+    std::shared_ptr<ASTNode> parseBool();
     std::shared_ptr<ASTNode> parseFloat();
     std::shared_ptr<ASTNode> parseInt();
     std::shared_ptr<ASTNode> parseString();
@@ -199,13 +215,14 @@ public:
     std::shared_ptr<ASTNode> parseArray();
     std::shared_ptr<ASTNode> parseIfStatement();
     std::shared_ptr<ASTNode> parseConsole();
-
+    std::shared_ptr<ASTNode> parseJump();
     std::shared_ptr<ASTNode> parseWhileLoop();
     std::shared_ptr<ASTNode> parseRandom();
     std::shared_ptr<ASTNode> parseReturn();
     std::shared_ptr<ASTNode> parseValues();
     std::shared_ptr<ASTNode> parseUsInt();
-
+    std::shared_ptr<ASTNode> parseIdentifier();
+    std::shared_ptr<ASTNode> parseFunctionCall();
 
 private:
     std::vector<Token> tokens;
@@ -219,4 +236,4 @@ private:
     std::vector<std::shared_ptr<ASTNode>> parseLoopBody();
 };
 
-#endif // PARSER_H
+#endif; // PARSER_H
