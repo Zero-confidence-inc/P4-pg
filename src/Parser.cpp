@@ -180,7 +180,7 @@ std::shared_ptr<ASTNode> Parser::parseFunctionCall(){
         while(tokens[pos].value[0] != ')'){
             auto argument = parseDeclaration();
             functionCallNode->arguments.push_back(argument);
-            pos+2;
+            pos=pos+2;
         }
     }
     else{
