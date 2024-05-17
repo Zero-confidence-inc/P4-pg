@@ -23,7 +23,8 @@ enum nodeType{
     conditionNode,
     caseNode,
     switchNode,
-    intNode
+    intNode,
+    consoleNode
 };
 // Base class for all AST nodes
 struct ASTNode {
@@ -36,10 +37,13 @@ public:
 struct DeclarationNode : ASTNode {
     nodeType getType() const override {return nodeType::declarationNode;}
     std::string identifier;
-    std::string variable;
+    std::string type;
 };
 
-
+struct ConsoleNode : ASTNode{
+    nodeType getType() const override {return nodeType::consoleNode;}
+    std::vector<std::shared_ptr<ASTNode>> message;
+};
 
 struct CharNode : ASTNode {
     nodeType getType() const override {return nodeType::charNode;}
@@ -62,21 +66,24 @@ struct IfNode : ASTNode {
 };
 // Node for Struct declarations
 struct StructNode : DeclarationNode {
-    std::string identifier;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override {return nodeType::structNode;}
 };
 // Node for function declarations
 struct FunctionNode : DeclarationNode {
     std::vector<std::shared_ptr<ASTNode>> body;
-    std::string type;
     nodeType getType() const override {return nodeType::functionNode;}
 };
 
 // Node for variable declarations
 struct VariableNode : DeclarationNode {
-    nodeType getType() const override {return nodeType::variableNode;}
-    std::string type;
+    std::string variable;
+    nodeType getType() const override {
+        if (type == "int") {return nodeType::intNode;}
+        else if (type == "char") {return nodeType::charNode;}
+        else if (type == "string") {return nodeType::stringNode;}
+        else if (type == "float") {return nodeType::floatNode;}
+    }
     // Additional properties can be added here
 };
 
@@ -135,11 +142,10 @@ struct WhileNode : ASTNode {
     nodeType getType() const override {return nodeType::whileNode;}
 };
 
-
-struct randomNode : ASTNode {
-    std::shared_ptr<ASTNode> randomInt;
-    std::shared_ptr<ASTNode> randomFloat;
-    std::shared_ptr<ASTNode> randomBool;
+struct randomNode : ASTNode { 
+    std::shared_ptr<ASTNode> randomInt; //delete
+    std::shared_ptr<ASTNode> randomFloat; //delete
+    std::shared_ptr<ASTNode> randomBool; //delete
     std::vector<int> RandomIntRange;
     std::vector<float> RandomFloatRange;
 };
@@ -171,6 +177,7 @@ public:
     std::shared_ptr<ASTNode> parseStatement();
     std::shared_ptr<ASTNode> parseArray();
     std::shared_ptr<ASTNode> parseIfStatement();
+    std::shared_ptr<ASTNode> parseConsole();
 
     std::shared_ptr<ASTNode> parseWhileLoop();
 

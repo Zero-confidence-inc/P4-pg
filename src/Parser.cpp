@@ -178,6 +178,9 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
             case TokenType::STRING:
                 conditionNode->aNode = std::make_shared<StringNode>();
                 break;
+            case TokenType::IDENTIFIER:
+                conditionNode->aNode = std::make_shared<VariableNode>();
+                conditionNode->aNode->identifier = tokens[pos].value;    
         }
         pos++;
         conditionNode->condition = tokens[pos].value;
@@ -195,6 +198,9 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
             case TokenType::STRING:
                 conditionNode->bNode = std::make_shared<StringNode>();
                 break;
+            case TokenType::IDENTIFIER:
+                conditionNode->bNode = std::make_shared<VariableNode>();
+                conditionNode->bNode->identifier = tokens[pos].value;    
             }
         }
             return conditionNode;
@@ -411,6 +417,28 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
     }
     return nullptr;
 };
+
+std::shared_ptr<ASTNode> Parser::parseConsole(){
+    if(lookAhead(TokenType::PUNCTUATION) && tokens[pos].getType() == TokenType::CONSOLE){
+        auto consoleNode = std::make_shared<ConsoleNode>();
+        pos++;
+        while(tokens[pos].value != ")"){
+            if (lookAhead(TokenType::CONST)){
+                consoleNode->message.push_back(parseInt());
+            } else if (lookAhead(TokenType::FLOAT_CONST)){
+                consoleNode->message.push_back(parseFloat());
+            } else if (lookAhead(TokenType::STRING)){
+                consoleNode->message.push_back(parseString());
+            } else if (lookAhead(TokenType::IDENTIFIER)){
+                consoleNode->message.push_back(parseIdentifier());                
+            }
+            pos++;
+        }
+        return consoleNode;
+    }
+    return nullptr;
+}
+
 
 std::shared_ptr<ASTNode> Parser::parseRandom(){
     if (lookAhead(TokenType::TYPE) && tokens[pos].value=="int?"){ //Random Int
