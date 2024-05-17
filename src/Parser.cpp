@@ -234,8 +234,9 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
                 conditionNode->aNode = std::make_shared<StringNode>();
                 break;
             case TokenType::IDENTIFIER:
-                conditionNode->aNode = std::make_shared<VariableNode>();
-                conditionNode->aNode->identifier = tokens[pos].value;
+                auto aNode = std::make_shared<ValueNode>();
+                aNode->identifier = tokens[pos].value;
+                conditionNode->aNode = aNode;
         }
         pos++;
         if(tokens[pos].type == TokenType::OPERATOR){
@@ -258,7 +259,8 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
                 conditionNode->bNode = std::make_shared<StringNode>();
                 break;
             case TokenType::IDENTIFIER:
-                conditionNode->bNode = std::make_shared<VariableNode>();
+                auto bNode = std::make_shared<ValueNode>();
+                bNode-identifier = tokens[pos].value;
                 conditionNode->bNode->identifier = tokens[pos].value;
             }
         }
@@ -370,6 +372,27 @@ std::shared_ptr<ASTNode> Parser::parseForLoop() {
     }
     return nullptr;
 };
+
+std::shared_ptr<ASTNode> Parser::parseJump(){
+    if (lookAhead(TokenType::JUMP) && tokens[++pos].value == "break"){
+        auto breakNode = std::make_shared<JumpNode>();
+        breakNode->breaker = tokens[pos].value;
+        breakNode->continuer = "null";
+        pos--;
+        return breakNode;
+    }
+    else if (lookAhead(TokenType::JUMP) && tokens[++pos].value == "continue"){
+        auto continueNode = std::make_shared<JumpNode>();
+        continueNode->continuer = tokens[pos].value;
+        continueNode->breaker = "null";
+        pos--;
+        return continueNode;
+    }
+    else{
+        return nullptr;
+    }
+}
+
 
 std::shared_ptr<ASTNode> Parser::parseSwitch() {
     if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "switch"){

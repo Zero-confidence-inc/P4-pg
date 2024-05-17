@@ -174,6 +174,10 @@ struct WhileNode : ASTNode {
     nodeType getType() const override {return nodeType::whileNode;}
 };
 
+struct JumpNode : ASTNode {
+    std::string breaker;
+    std::string continuer;
+};
 
 struct RandomNode : DeclarationNode {
     std::vector<int> RandomIntRange;
@@ -185,6 +189,11 @@ struct ArrayNode : ASTNode {
     std::string identifier;
     int size;
 };
+
+struct FunctionCallNode : IdentifierNode {
+
+};
+
 
 class Parser {
 public:
@@ -204,6 +213,7 @@ public:
     std::shared_ptr<ASTNode> parseArray();
     std::shared_ptr<ASTNode> parseIfStatement();
     std::shared_ptr<ASTNode> parseConsole();
+    std::shared_ptr<ASTNode> parseJump();
     std::shared_ptr<ASTNode> parseWhileLoop();
     std::shared_ptr<ASTNode> parseRandom();
     std::shared_ptr<ASTNode> parseReturn();
