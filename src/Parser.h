@@ -25,7 +25,8 @@ enum nodeType{
     switchNode,
     intNode,
     usIntNode,
-    consoleNode
+    consoleNode,
+    boolNode
 };
 // Base class for all AST nodes
 struct ASTNode {
@@ -130,6 +131,7 @@ struct UsIntNode : ASTNode {
 
 struct BoolNode : ASTNode{
     bool boolean;
+    nodeType getType() const override {return nodeType::boolNode;}
 };
 
 struct StringNode : ASTNode {
@@ -201,6 +203,7 @@ public:
     void parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
     std::shared_ptr<ASTNode> parseChar();
+    std::shared_ptr<ASTNode> parseBool();
     std::shared_ptr<ASTNode> parseFloat();
     std::shared_ptr<ASTNode> parseInt();
     std::shared_ptr<ASTNode> parseString();
@@ -233,4 +236,4 @@ private:
     std::vector<std::shared_ptr<ASTNode>> parseLoopBody();
 };
 
-#endif // PARSER_H
+#endif; // PARSER_H
