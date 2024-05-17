@@ -506,3 +506,72 @@ std::shared_ptr<ASTNode> Parser::parseRandom(){
     }
     else return nullptr;
 };
+
+
+void DeclarationNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void CharNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void ForLoopNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void IfNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void StructNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void FunctionNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void VariableNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void IfStatementNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void FloatNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void IntNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void CommentNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void StringNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void OperatorNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void SwitchNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void caseNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void ConditionNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
+
+void WhileNode::accept(ASTNodeVisitor& visitor) {
+    visitor.visit(*this);
+}
