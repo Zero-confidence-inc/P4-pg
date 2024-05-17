@@ -48,8 +48,23 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
             structNode->struct_main = parseStruct();
             return structNode;
         }
-        else if(lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == "["){
+        else if(lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == '['){
             auto arrayNode = std::make_shared<ArrayNode>();
+            arrayNode->type = type;
+            arrayNode->identifier = identifier;
+            if (lookAhead(TokenType::CONST)){
+                arrayNode->size = stoi(tokens[++pos].value);
+                match(TokenType::PUNCTUATION, "]");
+                if (lookAhead(TokenType::OPERATOR) && tokens[++pos].value[0] == '='){
+                    if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == '['){
+                        arrayNode->body = parseArrayContents();
+                        return arrayNode;
+                    }
+                }
+                else {
+                    return arrayNode;
+                }
+            }
         }
     }
     return nullptr; // Return nullptr if no valid declaration is found
