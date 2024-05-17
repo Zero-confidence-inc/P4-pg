@@ -484,11 +484,11 @@ std::shared_ptr<ASTNode> Parser::parseArray() {
                             return arrayNode;
                         }
 
-                        else if (tokens[pos].type = OPERATOR && tokens[pos].value = '=') {
-                            match(TokenType::PUNCTUATION, '[');
+                        else if (tokens[pos].type = OPERATOR && tokens[pos].value == '=') {
+                            match(TokenType::PUNCTUATION, "[");
                             arrayNode->body = parseArrayContents();
-                            match(TokenType::PUNCTUATION, ']');
-                            match(TokenTypy::PUNCTUATION, ';');
+                            match(TokenType::PUNCTUATION, "]");
+                            match(TokenType::PUNCTUATION, ";");
                         }
                     }
                 }
