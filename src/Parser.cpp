@@ -212,6 +212,14 @@ std::shared_ptr<ASTNode> Parser::parseStruct() {
     }
 };
 
+std::shared_ptr<ASTNode> Parser::parseIdentifier() {
+    std::string identifier = tokens[++pos].value;
+    if(lookAhead(TokenType::IDENTIFIER)) {
+        auto identifierNode = std::make_shared<IdentifierNode>();
+        identifierNode->identifier = identifier;
+    }
+}
+
 std::shared_ptr<ASTNode> Parser::parseCondition() {
     if (tokens[pos].type == TokenType::CONST || tokens[pos].type == TokenType::FLOAT_CONST || tokens[pos].type == TokenType::STRING){
         auto conditionNode = std::make_shared<ConditionNode>();

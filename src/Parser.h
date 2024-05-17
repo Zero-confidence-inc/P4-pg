@@ -101,6 +101,10 @@ struct ValueNode : DeclarationNode {
     void accept(ASTNodeVisitor& visitor) override;
 };
 
+struct IdentifierNode : ASTNode {
+    std::string identifier;
+};
+
 struct ReturnNode : ASTNode {
     std::string returning;
     std::string identifier;
@@ -215,7 +219,7 @@ public:
     std::shared_ptr<ASTNode> parseReturn();
     std::shared_ptr<ASTNode> parseValues();
     std::shared_ptr<ASTNode> parseUsInt();
-
+    std::shared_ptr<ASTNode> parseIdentifier();
 
 private:
     std::vector<Token> tokens;
