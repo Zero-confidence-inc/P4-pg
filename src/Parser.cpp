@@ -330,7 +330,7 @@ std::shared_ptr<ASTNode> Parser::parseInt(){
 std::shared_ptr<ASTNode> Parser::parseBool(){
     if (lookAhead(TokenType::BOOL)){
         auto Boolnode = std::make_shared<BoolNode>();
-        if (tokens[pos].value == "true"){
+        if (tokens[++pos].value == "true"){
             Boolnode->boolean = true;
         } else if (tokens[pos].value == "false"){
             Boolnode->boolean = false;
