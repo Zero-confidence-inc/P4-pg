@@ -138,7 +138,6 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseStructBody() {
     return contents;
 };
 
-
 std::shared_ptr<ASTNode> Parser::parseValues(){
     if (tokens[2-pos].value == "int"){
         auto valueInt = std::make_shared<IntNode>();
@@ -214,7 +213,7 @@ std::shared_ptr<ASTNode> Parser::parseStruct() {
 };
 
 std::shared_ptr<ASTNode> Parser::parseCondition() {
-    if (lookAhead(TokenType::OPERATOR)){
+    if (tokens[pos].type == TokenType::CONST || tokens[pos].type == TokenType::FLOAT_CONST || tokens[pos].type == TokenType::STRING){
         auto conditionNode = std::make_shared<ConditionNode>();
         switch(tokens[pos].type) {
             case TokenType::CONST:
@@ -228,8 +227,12 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
                 break;
         }
         pos++;
-        conditionNode->condition = tokens[pos].value;
-        pos++;
+        if(tokens[pos].type == TokenType::OPERATOR){
+            conditionNode->condition = tokens[pos].value;
+            pos++;
+        } else {
+            return conditionNode;
+        }
         if(lookAhead(TokenType::OPERATOR)){
             conditionNode->bNode = parseCondition();
         } else {
