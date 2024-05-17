@@ -176,10 +176,9 @@ struct RandomNode : DeclarationNode {
     std::vector<float> RandomFloatRange;
 };
 
-struct ArrayNode : ASTNode {
-    std::string type;
-    std::string identifier;
-    int size;
+struct ArrayNode : DeclarationNode {
+    std::string size;
+    std::vector<std::shared_ptr<ASTNode>> body;
 };
 
 class Parser {
