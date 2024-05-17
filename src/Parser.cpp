@@ -27,13 +27,10 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
     if (lookAhead(TokenType::TYPE)){
         std::string type = tokens[++pos].value;
         std::string identifier = tokens[++pos].value;
-        if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == "{"){
+        if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == "("){
             auto functionNode = std::make_shared<FunctionNode>();
-            functionNode->type = type;
-            functionNode->identifier = identifier;
-            functionNode->body = parseFunctionBody();
-            match(TokenType::PUNCTUATION, "{");
-            match(TokenType::PUNCTUATION, "}");
+            
+
             return functionNode;
         }
         else if (lookAhead(TokenType::OPERATOR) && tokens[++pos].value == "="){
@@ -187,6 +184,16 @@ std::shared_ptr<ASTNode> Parser::parseFunctionCall(){
         return nullptr;
     }
 }
+
+std::shared_ptr<ASTNode> Parser::parseFunctionArguments(){
+    auto functionNode = std::make_shared<FunctionNode>();
+    while(tokens[pos].value[0] != ')'){
+        auto argument = parseDeclaration();
+        functionNode->arguments.push_back(argument);
+        pos=pos+2;
+    }
+}
+
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
