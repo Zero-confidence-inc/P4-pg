@@ -51,6 +51,7 @@ bool ConstDFA::processChar(char c) {
             } else {
                 return false;
             }
+            
     }
     return false;  // Default return to handle any non-specified cases
 }

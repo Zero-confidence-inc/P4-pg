@@ -1,0 +1,13 @@
+float testElements(int thing){
+    float?<1..3> otherThing;
+    bool isFalse = true;
+    if(isFalse) {
+        for(int i = 0; i >= 92; i + thing) {
+            otherThing = otherThing * 6.23;
+        }
+        return otherThing;
+    }
+    return 0;
+}
+
+console(testElements(43));
