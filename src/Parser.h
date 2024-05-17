@@ -24,7 +24,8 @@ enum nodeType{
     caseNode,
     switchNode,
     intNode,
-    usIntNode
+    usIntNode,
+    consoleNode
 };
 // Base class for all AST nodes
 struct ASTNode {
@@ -39,9 +40,13 @@ struct DeclarationNode : ASTNode {
     nodeType getType() const override {return nodeType::declarationNode;}
     std::string identifier;
     void accept(ASTNodeVisitor& visitor) override;
+    std::string type;
 };
 
-
+struct ConsoleNode : ASTNode{
+    nodeType getType() const override {return nodeType::consoleNode;}
+    std::vector<std::shared_ptr<ASTNode>> message;
+};
 
 struct CharNode : ASTNode {
     nodeType getType() const override {return nodeType::charNode;}
@@ -76,7 +81,6 @@ struct StructNode : DeclarationNode {
 // Node for function declarations
 struct FunctionNode : DeclarationNode {
     std::vector<std::shared_ptr<ASTNode>> body;
-    std::string type;
     nodeType getType() const override {return nodeType::functionNode;}
     void accept(ASTNodeVisitor& visitor) override;
 };
@@ -86,6 +90,13 @@ struct ValueNode : DeclarationNode {
     std::shared_ptr<ASTNode> value;
     nodeType getType() const override {return nodeType::variableNode;}
     std::string type;
+    std::string variable;
+    nodeType getType() const override {
+        if (type == "int") {return nodeType::intNode;}
+        else if (type == "char") {return nodeType::charNode;}
+        else if (type == "string") {return nodeType::stringNode;}
+        else if (type == "float") {return nodeType::floatNode;}
+    }
     // Additional properties can be added here
     void accept(ASTNodeVisitor& visitor) override;
 };
@@ -188,6 +199,8 @@ public:
     std::shared_ptr<ASTNode> parseStatement();
     std::shared_ptr<ASTNode> parseArray();
     std::shared_ptr<ASTNode> parseIfStatement();
+    std::shared_ptr<ASTNode> parseConsole();
+
     std::shared_ptr<ASTNode> parseWhileLoop();
     std::shared_ptr<ASTNode> parseRandom();
     std::shared_ptr<ASTNode> parseReturn();
