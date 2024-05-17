@@ -195,6 +195,11 @@ struct FunctionCallNode : IdentifierNode {
     std::vector<std::shared_ptr<ASTNode>> arguments;
 };
 
+struct FunctionNode : DeclarationNode {
+    std::vector<std::shared_ptr<ASTNode>> arguments;
+    std::vector<std::shared_ptr<ASTNode>> body;
+};
+
 
 class Parser {
 public:
@@ -223,6 +228,7 @@ public:
     std::shared_ptr<ASTNode> parseUsInt();
     std::shared_ptr<ASTNode> parseIdentifier();
     std::shared_ptr<ASTNode> parseFunctionCall();
+    std::shared_ptr<ASTNode> parseFunctionArguments();
 
 private:
     std::vector<Token> tokens;
