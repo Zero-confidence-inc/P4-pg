@@ -79,12 +79,6 @@ struct StructNode : DeclarationNode {
     nodeType getType() const override {return nodeType::structNode;}
     void accept(ASTNodeVisitor& visitor) override;
 };
-// Node for function declarations
-struct FunctionNode : DeclarationNode {
-    std::vector<std::shared_ptr<ASTNode>> body;
-    nodeType getType() const override {return nodeType::functionNode;}
-    void accept(ASTNodeVisitor& visitor) override;
-};
 
 // Node for variable declarations
 struct ValueNode : DeclarationNode {
@@ -137,12 +131,6 @@ struct BoolNode : ASTNode{
 struct StringNode : ASTNode {
     std::string StringOfChars;
     nodeType getType() const override {return nodeType::stringNode;}
-    void accept(ASTNodeVisitor& visitor) override;
-};
-
-struct OperatorNode : ASTNode {
-    std::string operatorType;
-    nodeType getType() const override {return nodeType::operatorNode;}
     void accept(ASTNodeVisitor& visitor) override;
 };
 
