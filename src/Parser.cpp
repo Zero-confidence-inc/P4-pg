@@ -172,6 +172,22 @@ std::shared_ptr<ASTNode> Parser::parseValues(){
     else return nullptr;
 }
 
+std::shared_ptr<ASTNode> Parser::parseFunctionCall(){
+    if (lookAhead(TokenType::IDENTIFIER) && tokens[++pos].value[0] == '('){
+        std::string identifier = tokens[pos].value;
+        auto functionCallNode = std::make_shared<FunctionCallNode>();
+        functionCallNode->identifier = identifier;
+        while(tokens[pos].value[0] != ')'){
+            auto argument = parseDeclaration();
+            functionCallNode->arguments.push_back(argument);
+            pos+2;
+        }
+    }
+    else{
+        return nullptr;
+    }
+}
+
 std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
     if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '{') {
@@ -551,40 +567,44 @@ std::shared_ptr<ASTNode> Parser::parseRandom(){
     randomNode->type = type;
     randomNode->identifier = identifier;
     if (lookAhead(TokenType::TYPE) && tokens[pos].value=="int?"){ //Random Int
-        auto randomIntNode = std::make_shared<randomNode>();
+        auto randomIntNode = std::make_shared<RandomNode>();
         pos++;
-        if (lookAhead(TokenType::CONST)){
-            int RandomIntRangeLowBound = tokens[pos].value[0];
-            randomNode->RandomIntRange.push_back(RandomIntRangeLowBound);
-            pos++;
-            if (tokens[pos].value==".."){
+        if (tokens[++pos].value[0]=='?'){
+            if (lookAhead(TokenType::CONST)){
+                int RandomIntRangeLowBound = tokens[pos].value[0];
+                randomNode->RandomIntRange.push_back(RandomIntRangeLowBound);
                 pos++;
-                if (lookAhead(TokenType::CONST) && tokens[pos].value[0]>RandomIntRangeLowBound){
-                    int RandomIntRangeHighBound = tokens[pos].value[0];
-                    randomNode->RandomIntRange.push_back(RandomIntRangeHighBound);
-                    pos--;
-                    pos--;
-                    pos--;
-                    return randomNode;
+                if (tokens[pos].value==".."){
+                    pos++;
+                    if (lookAhead(TokenType::CONST) && tokens[pos].value[0]>RandomIntRangeLowBound){
+                        int RandomIntRangeHighBound = tokens[pos].value[0];
+                        randomNode->RandomIntRange.push_back(RandomIntRangeHighBound);
+                        pos--;
+                        pos--;
+                        pos--;
+                        return randomNode;
+                    }
                 }
             }
         }
     }
     else if(lookAhead(TokenType::TYPE) && tokens[pos].value=="float?"){ //Random Float
         pos++;
-        if (lookAhead(TokenType::CONST)){
-            float RandomFloatRangeLowBound = tokens[pos].value[0];
-            randomNode->RandomFloatRange.push_back(RandomFloatRangeLowBound);
-            pos++;
-            if (tokens[pos].value==".."){
+        if (tokens[++pos].value[0]=='?'){
+            if (lookAhead(TokenType::CONST)){    
+                float RandomFloatRangeLowBound = tokens[pos].value[0];
+                randomNode->RandomFloatRange.push_back(RandomFloatRangeLowBound);
                 pos++;
-                if (lookAhead(TokenType::CONST) && tokens[pos].value[0]>RandomFloatRangeLowBound){
-                    float RandomFLoatRangeHighBound = tokens[pos].value[0];
-                    randomNode->RandomFloatRange.push_back(RandomFLoatRangeHighBound);
-                    pos--;
-                    pos--;
-                    pos--;
-                    return randomNode;
+                if (tokens[pos].value==".."){
+                    pos++;
+                    if (lookAhead(TokenType::CONST) && tokens[pos].value[0]>RandomFloatRangeLowBound){
+                        float RandomFLoatRangeHighBound = tokens[pos].value[0];
+                        randomNode->RandomFloatRange.push_back(RandomFLoatRangeHighBound);
+                        pos--;
+                        pos--;
+                        pos--;
+                        return randomNode;
+                    }
                 }
             }
         }

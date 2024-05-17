@@ -192,8 +192,8 @@ struct ArrayNode : ASTNode {
     int size;
 };
 
-struct FunctionCallNode : ASTNode {
-
+struct FunctionCallNode : IdentifierNode {
+    std::vector<std::shared_ptr<ASTNode>> arguments;
 };
 
 
@@ -223,6 +223,7 @@ public:
     std::shared_ptr<ASTNode> parseValues();
     std::shared_ptr<ASTNode> parseUsInt();
     std::shared_ptr<ASTNode> parseIdentifier();
+    std::shared_ptr<ASTNode> parseFunctionCall();
 
 private:
     std::vector<Token> tokens;
