@@ -186,7 +186,7 @@ struct ArrayNode : ASTNode {
     int size;
 };
 
-struct FunctionCallNode : IdentifierNode {
+struct FunctionCallNode : ASTNode {
 
 };
 
