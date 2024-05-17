@@ -489,6 +489,8 @@ std::shared_ptr<ASTNode> Parser::parseArray() {
                             arrayNode->body = parseArrayContents();
                             match(TokenType::PUNCTUATION, "]");
                             match(TokenType::PUNCTUATION, ";");
+                            match(TokenType::PUNCTUATION, "]");
+                            match(TokenType::PUNCTUATION, ";");
                         }
                     }
                 }
