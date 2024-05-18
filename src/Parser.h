@@ -15,6 +15,7 @@ enum nodeType{
     ifNode,
     structNode,
     functionNode,
+    functionCallNode,
     variableNode,
     floatNode,
     stringNode,
