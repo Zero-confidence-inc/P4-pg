@@ -83,7 +83,6 @@ struct StructNode : DeclarationNode {
 // Node for variable declarations
 struct ValueNode : DeclarationNode {
     std::shared_ptr<ASTNode> value;
-    nodeType getType() const override {return nodeType::variableNode;}
     std::string type;
     std::string variable;
     nodeType getType() const override {
@@ -91,6 +90,7 @@ struct ValueNode : DeclarationNode {
         else if (type == "char") {return nodeType::charNode;}
         else if (type == "string") {return nodeType::stringNode;}
         else if (type == "float") {return nodeType::floatNode;}
+        else if (type == "bool") {return nodeType::boolNode;}
     }
     // Additional properties can be added here
     void accept(ASTNodeVisitor& visitor) override;
