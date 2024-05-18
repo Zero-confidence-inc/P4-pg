@@ -21,13 +21,21 @@ void SymbolTable::exitScope(){
         throw std::runtime_error("exiting nothing????");
     }
 }
-void FunctionTable::declareFunction(const std::string& name,std::vector<const std::string>& arguments){
+void FunctionTable::declareFunction(const std::string& name,std::vector<std::string>& arguments){
     if(!functionMap.empty()){
-        
+        functionMap.back()[name] = arguments;
     }
     else{
         throw std::runtime_error("No function could be declared");
     }
+}
+std::vector<std::string> FunctionTable::lookUpFunction(const std::string& functionName){
+    for(auto it=functionMap.rbegin();it != functionMap.rend();++it){
+        if(it->find(functionName)!=it->end()){
+            return it->at(functionName);
+        }
+    }
+    throw std::runtime_error("no function has the name: " + functionName);
 }
 
 
@@ -72,6 +80,9 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
             break;
         case nodeType::functionCallNode:
             kowalskiFunctionCall(std::static_pointer_cast<FunctionCallNode>(node));
+            break;
+        case nodeType::randomNode:
+            kowalskiRandom(std::static_pointer_cast<RandomNode>(node));
             break;
         case nodeType::declarationNode:
             kowalskiDeclaration(std::static_pointer_cast<DeclarationNode>(node));
@@ -164,11 +175,43 @@ void SemanticAnalyser::kowalskiFunction(const std::shared_ptr<FunctionNode>& nod
 }
 void SemanticAnalyser::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode> &node){
     std::string name = node->identifier;
-    std::shared_ptr<ASTNode> currentArgument;
-    std::shared_ptr<ASTNode> expectedArgument;
+    std::vector<std::string> currentArgument;
+    std::vector<std::string> exprectedArgument;
     for (int i = 0; i < node->arguments.size();i++){
         currentArgument = node->arguments[i];
-        getType2(node->arguments[i]);
+        switch (getType2(node->arguments[i])){
+            case intNode:
+            currentArgument.push_back("int");
+            break;
+        case floatNode:
+            currentArgument.push_back("float");
+            break;
+        case usIntNode:
+            currentArgument.push_back("usint");
+            break;
+        case stringNode:
+            currentArgument.push_back("string");
+            break;
+        case charNode:
+            currentArgument.push_back("char");
+            break;
+        case boolNode:
+            currentArgument.push_back("bool");
+            break;
+        default:
+            break;
+        }
+    }
+    exprectedArgument = functionTable.lookUpFunction(node->identifier);
+    if(exprectedArgument.size() == currentArgument.size()){
+        for (int i = 0; i < node->arguments.size();i++){
+            if (exprectedArgument[i]!=currentArgument[i]){
+                throw std::runtime_error("Arguments do not match");
+            }
+        }
+    }
+    else{
+        throw std::runtime_error("too many/too few arguemnts for function called");
     }
 }
 void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node){
@@ -176,7 +219,14 @@ void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode
     std::string type = node->type;
     symbolTable.declareVariable(name,type);
 }
-void SemanticAnalyser::kowalskiChar(const std::shared_ptr<CharNode>& node){   
+void SemanticAnalyser::kowalskiRandom(const std::shared_ptr<RandomNode>& node){
+    std::string name = node->identifier;
+    std::string type = node->type;
+    symbolTable.declareVariable(name,type);
+}
+
+
+void SemanticAnalyser::kowalskiChar(const std::shared_ptr<CharNode>& node){
     //no this is not declaring but just typing on raw, nice example thou in case
     //that comment was wrong my bad I just read the error in the case above so use its case
     //okay 3rd comment about this lets redo
