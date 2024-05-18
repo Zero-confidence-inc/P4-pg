@@ -293,20 +293,15 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
 }
 
 void SemanticAnalyser::kowalskiConsole(const std::shared_ptr<ConsoleNode>& node) {
-    if (node->message->getType() != nodeType::consoleNode){
-    }else {
         for (int i = 0; i < node->message.size(); i++){
             analyseNode(node->message[i]);
         }
-    }
 }
 
 void SemanticAnalyser::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
     if(node->struct_main->getType() != nodeType::structNode) {
         throw std::runtime_error("Not a struct");
     } else {
-        kowalskiDeclaration(node->struct_main);
-        kowalskiIdentifier(node->identifier);
         for (int i = 0; i < node->body.size(); i++){
             analyseNode(node->body[i]);
         }
@@ -314,23 +309,19 @@ void SemanticAnalyser::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
 }
 
 void SemanticAnalyser::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
-    if(node->size->getType() != nodeType::arrayNode){
-        throw std::runtime_error("Not an array");
-    } else {
-        std::string size = node->size;
-        for (int i = 0; i < node->body.size(); i++){
-            analyseNode(node->body[i]);
+    std::string size = node->size;
+    if(isalpha(size[1])){
+        std::string type = symbolTable.lookUpVariable(size);
+        if (type != "int") {
+            throw std::runtime_error("The array size is not an integer");
         }
+    }
+    for (int i = 0; i < node->body.size(); i++){
+        analyseNode(node->body[i]);
     }
 }
 
 void SemanticAnalyser::kowalskiReturn(const std::shared_ptr<ReturnNode>& node) {
-    if(node->returning->getType() != nodeType::returnNode) {
-        throw std::runtime_error("Not a return");
-    } else {
-        std::string returning = node->returning;
-        kowalskiIdentifier(node->identifier);
-    }
 }
 
 nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
