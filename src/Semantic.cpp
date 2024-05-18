@@ -229,5 +229,15 @@ void SemanticAnalyser::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
         std::string size = node->size;
         for (int i = 0; i < node->body.size(); i++){
             analyseNode(node->body[i]);
+        }
+    }
+}
+
+void SemanticAnalyser::kowalskiReturn(const std::shared_ptr<ReturnNode>& node) {
+    if(node->returning->getType() != nodeType::returnNode) {
+        throw std::runtime_error("Not a return");
+    } else {
+        std::string returning = node->returning;
+        kowalskiIdentifier(node->identifier);
     }
 }
