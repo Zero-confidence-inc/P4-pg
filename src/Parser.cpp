@@ -132,19 +132,12 @@ std::shared_ptr<ASTNode> Parser::parseReturn(){
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseStructBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
-    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == '{') {
-        pos++;
-        while (tokens[pos].value[0] != '}') {
+            
+        while (tokens[++pos].value[0] != '}') {
             auto declaration = parseDeclaration();
-            auto array = parseArray();
-            auto string = parseString();
-            contents.push_back(declaration);
-            contents.push_back(array);
-            contents.push_back(string);
+            contents.push_back(declaration); 
         }
-    } else {
-        return {};
-    }
+   
     return contents;
 };
 
