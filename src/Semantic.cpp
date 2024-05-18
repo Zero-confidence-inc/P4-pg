@@ -352,7 +352,7 @@ nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
         else if (type == "string") {return nodeType::stringNode;}
         else if (type == "float") {return nodeType::floatNode;}
         else if (type == "bool") {return nodeType::boolNode;}
-        else exit(1)
+        else exit(1);
         }
         
         return node->getType();
