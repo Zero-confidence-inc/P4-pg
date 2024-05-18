@@ -235,4 +235,4 @@ private:
     std::vector<std::shared_ptr<ASTNode>> parseArrayContents();
 };
 
-#endif; // PARSER_H
+#endif // PARSER_H
