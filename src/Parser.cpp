@@ -135,10 +135,10 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
 };
 
 std::shared_ptr<ASTNode> Parser::parseReturn(){
-    if (lookAhead(TokenType::JUMP)){
+    if (lookAhead(TokenType::JUMP) && tokens[++pos].value == "return"){
         auto returnNode = std::make_shared<ReturnNode>();
         returnNode->returning = tokens[pos].value;
-        returnNode->identifier = tokens[pos].value;
+        returnNode->identifier = tokens[++pos].value;
         return returnNode;
     }
     return nullptr;
