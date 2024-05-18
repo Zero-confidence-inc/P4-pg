@@ -40,6 +40,8 @@ private:
     void kowalskiFor(const std::shared_ptr< ForLoopNode>& node);
     void kowalskiSwitch(const std::shared_ptr<SwitchNode>& node);
     void kowalskiKondi(const std::shared_ptr<ConditionNode>& node);
+    void kowalskiConsole(const std::shared_ptr<ConsoleNode>& node);
+    void kowalskiStruct(const std::shared_ptr<StructNode>& node);
 };
 
 

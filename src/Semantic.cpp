@@ -200,3 +200,24 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
             break;
     }
 }
+
+void SemanticAnalyser::kowalskiConsole(const std::shared_ptr<ConsoleNode>& node) {
+    if (node->message->getType() != nodeType::consoleNode){
+    }else {
+        for (int i = 0; i < node->message.size(); i++){
+            analyseNode(node->message[i]);
+        }
+    }
+}
+
+void SemanticAnalyser::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
+    if(node->struct_main->getType() != nodeType::structNode) {
+        throw std::runtime_error("Not a struct");
+    } else {
+        kowalskiDeclaration(node->struct_main);
+        kowalskiIdentifier(node->identifier);
+        for (int i = 0; i < node->body.size(); i++){
+            analyseNode(node->body[i]);
+        }
+    }
+}
