@@ -231,12 +231,14 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
 nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
         if (node->getType() == nodeType::identifierNode)
         {
-        std::string type = symbolTable.lookUpVariable(node->identifer);
+        auto idNode = std::static_pointer_cast<identifierNode>(node);
+        std::string type = symbolTable.lookUpVariable(idNode->identifer);
         if (type == "int") {return nodeType::intNode;}
         else if (type == "char") {return nodeType::charNode;}
         else if (type == "string") {return nodeType::stringNode;}
         else if (type == "float") {return nodeType::floatNode;}
-        else if (type == "bool") {return nodeType::boolNode;} 
+        else if (type == "bool") {return nodeType::boolNode;}
+        else exit(1)
         }
         
         return node->getType();
