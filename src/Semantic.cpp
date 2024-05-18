@@ -81,6 +81,9 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
         case nodeType::functionCallNode:
             kowalskiFunctionCall(std::static_pointer_cast<FunctionCallNode>(node));
             break;
+        case nodeType::randomNode:
+            kowalskiRandom(std::static_pointer_cast<RandomNode>(node));
+            break;
         case nodeType::declarationNode:
             kowalskiDeclaration(std::static_pointer_cast<DeclarationNode>(node));
             break;
@@ -216,6 +219,13 @@ void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode
     std::string type = node->type;
     symbolTable.declareVariable(name,type);
 }
+void SemanticAnalyser::kowalskiRandom(const std::shared_ptr<RandomNode>& node){
+    std::string name = node->identifier;
+    std::string type = node->type;
+    symbolTable.declareVariable(name,type);
+}
+
+
 void SemanticAnalyser::kowalskiChar(const std::shared_ptr<CharNode>& node){   
     //no this is not declaring but just typing on raw, nice example thou in case
     //that comment was wrong my bad I just read the error in the case above so use its case
@@ -342,7 +352,7 @@ nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
         else if (type == "string") {return nodeType::stringNode;}
         else if (type == "float") {return nodeType::floatNode;}
         else if (type == "bool") {return nodeType::boolNode;}
-        else exit(1)
+        else exit(1);
         }
         
         return node->getType();
