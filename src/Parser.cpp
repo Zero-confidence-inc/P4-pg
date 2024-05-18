@@ -135,10 +135,10 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
 };
 
 std::shared_ptr<ASTNode> Parser::parseReturn(){
-    if (lookAhead(TokenType::JUMP)){
+    if (lookAhead(TokenType::JUMP) && tokens[++pos].value == "return"){
         auto returnNode = std::make_shared<ReturnNode>();
         returnNode->returning = tokens[pos].value;
-        returnNode->identifier = tokens[pos].value;
+        returnNode->identifier = tokens[++pos].value;
         return returnNode;
     }
     return nullptr;
@@ -281,7 +281,7 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
         pos++;
         auto conditionNode = std::make_shared<ConditionNode>();
         if(tokens[pos].type == TokenType::IDENTIFIER){
-            auto bNode = std::make_shared<ValueNode>();
+            auto bNode = std::make_shared<IdentifierNode>();
             bNode->identifier = tokens[pos].value;
             conditionNode->bNode = bNode;
         } else if(tokens[pos].type == TokenType::CONST){
@@ -306,7 +306,7 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
         || lookAhead(TokenType::IDENTIFIER) || lookAhead(TokenType::BOOL)){
                 pos++;
                 if(tokens[pos].type == TokenType::IDENTIFIER){
-                    auto bNode = std::make_shared<ValueNode>();
+                    auto bNode = std::make_shared<IdentifierNode>();
                     bNode->identifier = tokens[pos].value;
                     conditionNode->bNode = bNode;
                 } else if(tokens[pos].type == TokenType::CONST){

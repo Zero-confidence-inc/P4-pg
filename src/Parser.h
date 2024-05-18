@@ -28,6 +28,8 @@ enum nodeType{
     usIntNode,
     consoleNode,
     boolNode,
+    arrayNode,
+    returnNode,
     identifierNode,
     randomNode
 };
@@ -176,6 +178,7 @@ struct JumpNode : ASTNode {
 struct RandomNode : DeclarationNode {
     std::vector<int> RandomIntRange;
     std::vector<float> RandomFloatRange;
+     nodeType getType() const override {return nodeType::randomNode;}
 };
 
 struct ArrayNode : DeclarationNode {
@@ -235,4 +238,4 @@ private:
     std::vector<std::shared_ptr<ASTNode>> parseArrayContents();
 };
 
-#endif; // PARSER_H
+#endif // PARSER_H
