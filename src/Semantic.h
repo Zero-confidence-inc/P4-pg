@@ -54,7 +54,6 @@ private:
     void kowalskiStruct(const std::shared_ptr<StructNode>& node);
     void kowalskiArray(const std::shared_ptr<ArrayNode>& node);
     void kowalskiReturn(const std::shared_ptr<ReturnNode>& node);
-    
     void kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode>& node);
 };
 
