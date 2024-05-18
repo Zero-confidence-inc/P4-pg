@@ -31,7 +31,7 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
         std::string identifier = tokens[++pos].value;
         if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == "("){
             auto functionNode = std::make_shared<FunctionNode>();
-            
+
 
             return functionNode;
         }
@@ -53,7 +53,7 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
         else if(lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == '['){
         auto arrayNode = std::make_shared<ArrayNode>();
         arrayNode->type = type;
-        arrayNode->identifier = identifier;           
+        arrayNode->identifier = identifier;
             if (lookAhead(TokenType::CONST) || (lookAhead(TokenType::IDENTIFIER))){
 
                 auto arraySize = tokens[++pos].value;
@@ -126,7 +126,7 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
             else {
                 pos++;
             }
-        
+
         }
     } else {
         return {};
@@ -148,12 +148,12 @@ std::shared_ptr<ASTNode> Parser::parseReturn(){
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseStructBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
-            
+
         while (tokens[++pos].value[0] != '}') {
             auto declaration = parseDeclaration();
-            contents.push_back(declaration); 
+            contents.push_back(declaration);
         }
-   
+
     return contents;
 };
 
@@ -203,7 +203,7 @@ std::shared_ptr<ASTNode> Parser::parseFunctionCall(){
             pos++;
         }
         return functionCallNode;
-        
+
     }
     else{
         return nullptr;
@@ -429,9 +429,9 @@ std::shared_ptr<ASTNode> Parser::parseForLoop() {
                     if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
                         pos++;
                         auto bodyNode = parseLoopBody();
-                        forLoopNode->declaration = declarationNode;
-                        forLoopNode->condition = conditionNode;
-                        forLoopNode->expression = expressionNode;
+                        forLoopNode->declaration = std::dynamic_pointer_cast<DeclarationNode>(declarationNode);
+                        forLoopNode->condition = std::dynamic_pointer_cast<ConditionNode>(conditionNode);
+                        forLoopNode->expression = std::dynamic_pointer_cast<ConditionNode>(expressionNode);
                         forLoopNode->body = bodyNode;
                         return forLoopNode;
                     }
@@ -468,7 +468,7 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
         auto swNode = std::make_shared<SwitchNode>();
         if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == '('){
             pos++;
-            swNode->condition = parseCondition();
+            swNode->condition = std::dynamic_pointer_cast<ConditionNode>(parseCondition());
             if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == ')'){
                 while (lookAhead(TokenType::CONTROL) && tokens[++pos].value == "case"){
                     auto cNode = std::make_shared<CaseNode>();
@@ -502,7 +502,7 @@ std::shared_ptr<ASTNode> Parser::parseArray() {
         if (lookAhead(TokenType::IDENTIFIER)) {
             auto identifier = tokens[++pos].value;
 
-            
+
         }
     }
     return nullptr;
@@ -574,7 +574,7 @@ std::shared_ptr<ASTNode> Parser::parseIfStatement(){
             if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
                 pos++;
                 auto bodyNode = parseLoopBody();
-                ifNode->condition = conditionNode;
+                ifNode->condition = std::dynamic_pointer_cast<ConditionNode>(conditionNode);
                 ifNode->body = bodyNode;
                 if (lookAhead(TokenType::CONTROL) && tokens[pos].value == "else") {
                     pos++;
@@ -606,7 +606,7 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop(){
             if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].value[0] == ')') {
                 pos++;
                 auto bodyNode = parseLoopBody();
-                whileNode->condition = conditionNode;
+                whileNode->condition = std::dynamic_pointer_cast<ConditionNode>(conditionNode);
                 whileNode->body = bodyNode;
                 return whileNode;
             }
@@ -667,7 +667,7 @@ std::shared_ptr<ASTNode> Parser::parseRandom(){
     else if(lookAhead(TokenType::TYPE) && tokens[pos].value=="float?"){ //Random Float
         pos++;
         if (tokens[++pos].value[0]=='?'){
-            if (lookAhead(TokenType::CONST)){    
+            if (lookAhead(TokenType::CONST)){
                 float RandomFloatRangeLowBound = tokens[pos].value[0];
                 randomNode->RandomFloatRange.push_back(RandomFloatRangeLowBound);
                 pos++;
@@ -692,70 +692,26 @@ std::shared_ptr<ASTNode> Parser::parseRandom(){
 };
 
 
-void DeclarationNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void CharNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void ForLoopNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void IfNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void StructNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void FunctionNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void VariableNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void IfStatementNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void FloatNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void IntNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void CommentNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void StringNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void OperatorNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void SwitchNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void caseNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void ConditionNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
-
-void WhileNode::accept(ASTNodeVisitor& visitor) {
-    visitor.visit(*this);
-}
+void DeclarationNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void CharNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void ForLoopNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void IfNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void StructNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void FunctionNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void ValueNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void FloatNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void IntNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void StringNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void SwitchNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void CaseNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void ConditionNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void WhileNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void ConsoleNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void ReturnNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void RandomNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void ArrayNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void IdentifierNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void FunctionCallNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void BoolNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void UsIntNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
+void JumpNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }

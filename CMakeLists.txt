@@ -1,35 +1,16 @@
-set(CMAKE_CXX_COMPILER "C:/TDM-GCC-64/bin/g++.exe")
-set(CMAKE_C_COMPILER "C:/TDM-GCC-64/bin/gcc.exe")
-
 cmake_minimum_required(VERSION 3.28)
 project(P4_pg)
 
-set(CMAKE_C_COMPILER GCC)
-set(CMAKE_CXX_COMPILE GCC)
 set(CMAKE_CXX_STANDARD 14)
-enable_language(CXX)
 
-# Since all source and header files are in 'src', we only need to include this directory
+# Include the src directory for all targets
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 # Include Google Test
 add_subdirectory(googletest)
 
-include(FetchContent)
-FetchContent_Declare(
-    GoogleTest
-    URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-    )
-
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-
-# Include directories for Google Test
-include_directories(googletest/googletest/include)
-
-# Define your main application executable
+# Define a library for your source files
 set(SOURCES
-        src/main.cpp
         src/ConstDFA.cpp
         src/IdentifierDFA.cpp
         src/TypeDFA.cpp
@@ -42,38 +23,33 @@ set(SOURCES
         src/LoopStatDFA.cpp
         src/JumpStatDFA.cpp
         src/Parser.cpp
-        src/Parser.h
-        src/Lexer.h
         src/CommentsDFA.cpp
-        src/CommentsDFA.h
 )
-add_executable(P4_pg ${SOURCES})
+
+add_library(P4_pg_lib ${SOURCES})
+
+# Define your main application executable
+add_executable(P4_pg src/main.cpp)
+target_link_libraries(P4_pg P4_pg_lib)
 
 # Define your test executable
 set(TEST_SOURCES
-    Test/OperatorDFAtests.cpp
-        src/OperatorDFA.cpp
-    Test/TypeDFAtests.cpp
-        src/TypeDFA.cpp
-    Test/IdentifierDFAtest.cpp
-        src/IdentifierDFA.cpp
-    Test/StringDFAtest.cpp
-        src/StringDFA.cpp
-    Test/ConstDFAtest.cpp
-        src/ConstDFA.cpp
-    Test/PunctuationDFAtest.cpp
-        src/PunctuationDFA.cpp
-    Test/Lexer_integration_test.cpp
-        src/Lexer.cpp
-        src/LoopStatDFA.cpp
-        src/ControlStatDFA.cpp
-        src/WhitespaceDFA.cpp
-    Test/ParserTests.cpp
-        src/Parser.cpp
-        src/Parser.h
-        
+        Test/OperatorDFAtests.cpp
+        Test/TypeDFAtests.cpp
+        Test/IdentifierDFAtest.cpp
+        Test/StringDFAtest.cpp
+        Test/ConstDFAtest.cpp
+        Test/PunctuationDFAtest.cpp
+        Test/Lexer_integration_test.cpp
 )
+
 add_executable(P4_pg_tests ${TEST_SOURCES})
 
-# Linking Google Test to the test executable
-target_link_libraries(P4_pg_tests gtest gtest_main pthread)
+# Linking Google Test and your library to the test executable
+target_link_libraries(P4_pg_tests P4_pg_lib gtest gtest_main pthread)
+
+# Enable testing
+enable_testing()
+
+# Add tests
+add_test(NAME P4_pg_tests COMMAND P4_pg_tests)
