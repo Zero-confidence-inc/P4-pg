@@ -197,7 +197,7 @@ std::shared_ptr<ASTNode> Parser::parseFunctionCall(){
         auto functionCallNode = std::make_shared<FunctionCallNode>();
         functionCallNode->identifier = identifier;
         while(tokens[pos].value[0] != ')'){
-            auto argument = parseDeclaration();
+            auto argument = parseIdentifier();
             functionCallNode->arguments.push_back(argument);
             match(TokenType::PUNCTUATION, ",");
             pos++;
