@@ -176,6 +176,7 @@ struct JumpNode : ASTNode {
 struct RandomNode : DeclarationNode {
     std::vector<int> RandomIntRange;
     std::vector<float> RandomFloatRange;
+     nodeType getType() const override {return nodeType::randomNode;}
 };
 
 struct ArrayNode : DeclarationNode {
