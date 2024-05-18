@@ -33,7 +33,7 @@ private:
 
 class SemanticAnalyser{
 public:
-    void kowalski(const std::shared_ptr<ASTNode>& root);
+    void kowalski(const std::vector<std::shared_ptr<ASTNode>>& root);
 private:
     SymbolTable symbolTable;
     FunctionTable functionTable;

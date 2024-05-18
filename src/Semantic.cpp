@@ -50,16 +50,16 @@ std::string SymbolTable::lookUpVariable(const std::string& name){
         }
     throw std::runtime_error("variable '" + name + "' NOT declared in this scope :c");
 }
-void SemanticAnalyser::kowalski(const std::shared_ptr<ASTNode>& root){
+void SemanticAnalyser::kowalski(const std::vector<std::shared_ptr<ASTNode>>& root){
     symbolTable.enterScope();
     try {
     
     
-    for (int i = 0; i < root->body.size(); i++){
-            analyseNode(root->body[i]);
+    for (int i = 0; i < root.size(); i++){
+            analyseNode(root[i]);
         }}
-    catch(std::string watchoutski){
-        printf("watchoutski");
+    catch(std::runtime_error watchoutski){
+        printf(watchoutski);
     }
     //magic??
     symbolTable.exitScope();
@@ -168,7 +168,7 @@ void SemanticAnalyser::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNo
     std::shared_ptr<ASTNode> expectedArgument;
     for (int i = 0; i < node->arguments.size();i++){
         currentArgument = node->arguments[i];
-        getType2(node->arguments[i])
+        getType2(node->arguments[i]);
     }
 }
 void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node){
@@ -293,16 +293,15 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
 }
 
 nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
-        if (node->getType() == nodeType::identifierNode)
-        {
-        auto idNode = std::static_pointer_cast<identifierNode>(node);
-        std::string type = symbolTable.lookUpVariable(idNode->identifer);
-        if (type == "int") {return nodeType::intNode;}
-        else if (type == "char") {return nodeType::charNode;}
-        else if (type == "string") {return nodeType::stringNode;}
-        else if (type == "float") {return nodeType::floatNode;}
-        else if (type == "bool") {return nodeType::boolNode;}
-        else exit(1)
+        if (node->getType() == nodeType::identifierNode){
+            auto idNode = std::static_pointer_cast<identifierNode>(node);
+            std::string type = symbolTable.lookUpVariable(idNode->identifer);
+            if (type == "int") {return nodeType::intNode;}
+            else if (type == "char") {return nodeType::charNode;}
+            else if (type == "string") {return nodeType::stringNode;}
+            else if (type == "float") {return nodeType::floatNode;}
+            else if (type == "bool") {return nodeType::boolNode;}
+            else exit(1);
         }
         
         return node->getType();
