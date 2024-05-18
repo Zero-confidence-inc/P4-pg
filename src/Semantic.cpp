@@ -21,13 +21,21 @@ void SymbolTable::exitScope(){
         throw std::runtime_error("exiting nothing????");
     }
 }
-void FunctionTable::declareFunction(const std::string& name,std::vector<const std::string>& arguments){
+void FunctionTable::declareFunction(const std::string& name,std::vector<std::string>& arguments){
     if(!functionMap.empty()){
-        
+        functionMap.back()[name] = arguments;
     }
     else{
         throw std::runtime_error("No function could be declared");
     }
+}
+std::vector<std::string> FunctionTable::lookUpFunction(const std::string& functionName){
+    for(auto it=functionMap.rbegin();it != functionMap.rend();++it){
+        if(it->find(functionName)!=it->end()){
+            return it->at(functionName);
+        }
+    }
+    throw std::runtime_error("no function has the name: " + functionName);
 }
 
 
@@ -164,11 +172,43 @@ void SemanticAnalyser::kowalskiFunction(const std::shared_ptr<FunctionNode>& nod
 }
 void SemanticAnalyser::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode> &node){
     std::string name = node->identifier;
-    std::shared_ptr<ASTNode> currentArgument;
-    std::shared_ptr<ASTNode> expectedArgument;
+    std::vector<std::string> currentArgument;
+    std::vector<std::string> exprectedArgument;
     for (int i = 0; i < node->arguments.size();i++){
         currentArgument = node->arguments[i];
-        getType2(node->arguments[i])
+        switch (getType2(node->arguments[i])){
+            case intNode:
+            currentArgument.push_back("int");
+            break;
+        case floatNode:
+            currentArgument.push_back("float");
+            break;
+        case usIntNode:
+            currentArgument.push_back("usint");
+            break;
+        case stringNode:
+            currentArgument.push_back("string");
+            break;
+        case charNode:
+            currentArgument.push_back("char");
+            break;
+        case boolNode:
+            currentArgument.push_back("bool");
+            break;
+        default:
+            break;
+        }
+    }
+    exprectedArgument = functionTable.lookUpFunction(node->identifier);
+    if(exprectedArgument.size() == currentArgument.size()){
+        for (int i = 0; i < node->arguments.size();i++){
+            if (exprectedArgument[i]!=currentArgument[i]){
+                throw std::runtime_error("Arguments do not match");
+            }
+        }
+    }
+    else{
+        throw std::runtime_error("too many/too few arguemnts for function called");
     }
 }
 void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node){
