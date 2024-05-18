@@ -53,9 +53,6 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
         case nodeType::functionNode:
             kowalskiFunction(std::static_pointer_cast<FunctionNode>(node));
             break;
-        case nodeType::variableNode:
-            kowalskiVariable(std::static_pointer_cast<VariableNode>(node));
-            break;
         case nodeType::declarationNode:
             kowalskiDeclaration(std::static_pointer_cast<DeclarationNode>(node));
             break;
@@ -80,15 +77,14 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
         case nodeType::switchNode:
             kowalskiSwitch(std::static_pointer_cast<SwitchNode>(node));
             break;
-        case nodeType::operatorNode:
-            kowalskiOperator(std::static_pointer_cast<OperatorNode>(node));
-            break;
         case nodeType::conditionNode:
             kowalskiKondi(std::static_pointer_cast<ConditionNode>(node));
             break;
         case nodeType::intNode:
             kowalskiInt(std::static_pointer_cast<IntNode>(node));
             break;
+        case nodeType::boolNode:
+            kowalskiBool(std::static_pointer_cast<BoolNode>(node));    
             //todo:: make a bool, enum in node type, ASTtype-> getType()
         default:
             throw std::runtime_error("unknown node type");
@@ -101,14 +97,11 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
 void SemanticAnalyser::kowalskiFunction(const std::shared_ptr<FunctionNode>& node){
 
 }
-void SemanticAnalyser::kowalskiVariable(const std::shared_ptr<VariableNode>& node){
-    // this one declares varaiable
+
+void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node){
     std::string name = node->identifier;
     std::string type = node->type;
     symbolTable.declareVariable(name,type);
-}
-void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node){
-    throw std::runtime_error("not fully declared variable, if i read the code correctly cuz this node is never made");
 }
 void SemanticAnalyser::kowalskiChar(const std::shared_ptr<CharNode>& node){   
     //no this is not declaring but just typing on raw, nice example thou in case
@@ -171,12 +164,7 @@ void SemanticAnalyser::kowalskiSwitch(const std::shared_ptr<SwitchNode>& node){
         }
     }
 }
-void SemanticAnalyser::kowalskiOperator(const std::shared_ptr<OperatorNode>& node){
-    //code case just in case to avoid an error of an unknown node type
-    //you did math YAY!
-    // mental assault towards human
-    //todo:: math node type will be added later, aj har det på sin pc
-}
+
 
 void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node){
     std::string condition = node->condition;
