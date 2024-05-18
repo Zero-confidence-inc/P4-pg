@@ -1,13 +1,13 @@
-#ifndef CONST_DFA_H
-#define CONST_DFA_H
+#ifndef BOOL_DFA_H
+#define BOOL_DFA_H
 
 #include <string>
 #include "Token.h"
 #include "DFA.h"
 
-class ConstDFA : public DFA {
+class BOOLDFA : public DFA {
 public:
-    ConstDFA();  // Constructor
+    BOOLDFA();  // Constructor
     bool processChar(char c) override;  // Process the next character
     Token finalizeToken() override;  // Finalize and return the current token
     bool hasToken() const override;  // Check if there is a current token
@@ -16,23 +16,20 @@ public:
 private:
     enum class State {
         Start,
-        Minus,
-        IntegerPart,
-        DecimalPart,
-        true_1,
-        true_2,
-        true_3,
-        true_4,
-        false_1,
-        false_2,
-        false_3,
-        false_4,
-        false_5
+        T,
+        TR,
+        TRU,
+        TRUE,
+        F,
+        FA,
+        FAL,
+        FALS,
+        FALSE,
+        
     };
-    bool isFloatingPoint;
     State currentState;
     std::string currentToken;
     std::string currentString;
 };
 
-#endif // CONST_DFA_H
+#endif // BOOL_DFA_H

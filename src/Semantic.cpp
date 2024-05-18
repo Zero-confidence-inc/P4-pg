@@ -89,6 +89,7 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
         case nodeType::intNode:
             kowalskiInt(std::static_pointer_cast<IntNode>(node));
             break;
+            //todo:: make a bool, enum in node type, ASTtype-> getType()
         default:
             throw std::runtime_error("unknown node type");
     }
@@ -198,6 +199,7 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
             if(aSide != nodeType::stringNode && (aSide != nodeType::charNode && node->aNode->StringOfChars.length() == 1))
                 throw std::runtime_error("Strings only accept string comparaisons and chars if the string is a single letter string.");
             break;
+        
         case nodeType::conditionNode:
             if(aSide != nodeType::stringNode && aSide != nodeType::charNode && aSide != nodeType::intNode && aSide!= nodeType::floatNode){
                 throw std::runtime_error("Illegal condition");
