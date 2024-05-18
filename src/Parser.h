@@ -26,7 +26,8 @@ enum nodeType{
     intNode,
     usIntNode,
     consoleNode,
-    boolNode
+    boolNode,
+    identifierNode
 };
 // Base class for all AST nodes
 struct ASTNode {
@@ -98,6 +99,7 @@ struct ValueNode : DeclarationNode {
 
 struct IdentifierNode : ASTNode {
     std::string identifier;
+    nodeType getType() const override {return nodeType::identifierNode;}
 };
 
 struct ReturnNode : ASTNode {

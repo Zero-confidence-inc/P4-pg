@@ -1,10 +1,12 @@
 //
 // Created by nicol on 09-05-2024.
 //
-#include "Semantic.h"
 #include "Parser.h"
+#include "Semantic.h"
 #include <iostream>
 #include <string>
+
+
 
 void SymbolTable::enterScope(){
 scopes.push_back({});
@@ -40,7 +42,12 @@ std::string SymbolTable::lookUpVariable(const std::string& name){
 }
 void SemanticAnalyser::kowalski(const std::shared_ptr<ASTNode>& root){
     symbolTable.enterScope();
-    try {analyseNode(root);}
+    try {
+    
+    
+    for (int i = 0; i < root->body.size(); i++){
+            analyseNode(root->body[i]);
+        }}
     catch(std::string watchoutski){
         printf("watchoutski");
     }
@@ -77,6 +84,9 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
         case nodeType::switchNode:
             kowalskiSwitch(std::static_pointer_cast<SwitchNode>(node));
             break;
+        case nodeType::caseNode:
+            kowalskiCase(std::static_pointer_cast<CaseNode>(node));
+            break;
         case nodeType::conditionNode:
             kowalskiKondi(std::static_pointer_cast<ConditionNode>(node));
             break;
@@ -85,7 +95,6 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
             break;
         case nodeType::boolNode:
             kowalskiBool(std::static_pointer_cast<BoolNode>(node));    
-            //todo:: make a bool, enum in node type, ASTtype-> getType()
         default:
             throw std::runtime_error("unknown node type");
     }
@@ -117,12 +126,16 @@ void SemanticAnalyser::kowalskiIf(const std::shared_ptr<IfNode>& node){
         throw std::runtime_error("Not a condition");
     }else {
         kowalskiKondi(node->condition);
+        symbolTable.enterScope();
         for (int i = 0; i < node->body.size(); i++){
-            analyseNode(node->body);
+            analyseNode(node->body[i]);
         }
+        symbolTable.exitScope();
+        symbolTable.enterScope();
         for (int i = 0; i < node->elseBody.size(); i++){
-            analyseNode(node->elseBody);
+            analyseNode(node->elseBody[i]);
         }
+        symbolTable.exitScope();
     }
 }
 void SemanticAnalyser::kowalskiFloat(const std::shared_ptr<FloatNode>& node){
@@ -136,33 +149,47 @@ void SemanticAnalyser::kowalskiWhile(const std::shared_ptr<WhileNode>& node){
     if (node->condition->getType() != nodeType::whileNode){
         throw std::runtime_error("Not a condition");
     }else {
+        symbolTable.enterScope();
         kowalskiKondi(node->condition);
         for (int i = 0; i < node->body.size(); i++){
-            analyseNode(node->body);
+            analyseNode(node->body[i]);
         }
+        symbolTable.exitScope();
     }
 }
 void SemanticAnalyser::kowalskiFor(const std::shared_ptr<ForLoopNode>& node){
     if (node->condition->getType() != nodeType::conditionNode){
         throw std::runtime_error("Not a condition");
     }else {
+        symbolTable.enterScope();
         kowalskiDeclaration(node->declaration);
         kowalskiKondi(node->condition);
         kowalskiKondi(node->expression);
         for (int i = 0; i < node->body.size(); i++){
-            analyseNode(node->body);
+            
+            analyseNode(node->body[i]);
         }
+        symbolTable.exitScope();
     }
 }
 void SemanticAnalyser::kowalskiSwitch(const std::shared_ptr<SwitchNode>& node){
     if (node->condition->getType() != nodeType::switchNode){
         throw std::runtime_error("Not a condition");
     }else {
+        
         kowalskiKondi(node->condition);
         for (int i = 0; i < node->caseBranch.size(); i++){
-            analyseNode(node->caseBranch);
+            analyseNode(node->caseBranch[i]);
         }
     }
+}
+void SemanticAnalyser::kowalskiCase(const std::shared_ptr<CaseNode>& node)
+{
+    symbolTable.enterScope();
+for (int i = 0; i < node->Branch.size(); i++){
+            analyseNode(node->Branch[i]);
+        }
+    symbolTable.exitScope();
 }
 
 
@@ -199,4 +226,18 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
             throw std::runtime_error("Illegel condition");
             break;
     }
+}
+
+nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
+        if (node->getType() == nodeType::identifierNode)
+        {
+        std::string type = symbolTable.lookUpVariable(node->identifer);
+        if (type == "int") {return nodeType::intNode;}
+        else if (type == "char") {return nodeType::charNode;}
+        else if (type == "string") {return nodeType::stringNode;}
+        else if (type == "float") {return nodeType::floatNode;}
+        else if (type == "bool") {return nodeType::boolNode;} 
+        }
+        
+        return node->getType();
 }
