@@ -58,6 +58,7 @@ private:
     void kowalskiReturn(const std::shared_ptr<ReturnNode>& node);
     nodeType getType2(const std::shared_ptr<ASTNode>& node);
     void kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode>& node);
+    void kowalskiRandom(const std::shared_ptr<RandomNode>& node);
 };
 
 

@@ -30,7 +30,8 @@ enum nodeType{
     boolNode,
     arrayNode,
     returnNode,
-    identifierNode
+    identifierNode,
+    randomNode
 };
 // Base class for all AST nodes
 struct ASTNode {
