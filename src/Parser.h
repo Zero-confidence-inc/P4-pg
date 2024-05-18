@@ -28,6 +28,8 @@ enum nodeType{
     usIntNode,
     consoleNode,
     boolNode,
+    arrayNode,
+    returnNode,
     identifierNode,
     randomNode
 };

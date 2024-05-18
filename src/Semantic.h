@@ -52,6 +52,10 @@ private:
     void kowalskiSwitch(const std::shared_ptr<SwitchNode>& node);
     void kowalskiCase(const std::shared_ptr<CaseNode>& node);
     void kowalskiKondi(const std::shared_ptr<ConditionNode>& node);
+    void kowalskiConsole(const std::shared_ptr<ConsoleNode>& node);
+    void kowalskiStruct(const std::shared_ptr<StructNode>& node);
+    void kowalskiArray(const std::shared_ptr<ArrayNode>& node);
+    void kowalskiReturn(const std::shared_ptr<ReturnNode>& node);
     nodeType getType2(const std::shared_ptr<ASTNode>& node);
     void kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode>& node);
     void kowalskiRandom(const std::shared_ptr<RandomNode>& node);

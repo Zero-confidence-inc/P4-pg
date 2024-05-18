@@ -342,6 +342,38 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
     }
 }
 
+void SemanticAnalyser::kowalskiConsole(const std::shared_ptr<ConsoleNode>& node) {
+        for (int i = 0; i < node->message.size(); i++){
+            analyseNode(node->message[i]);
+        }
+}
+
+void SemanticAnalyser::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
+    if(node->struct_main->getType() != nodeType::structNode) {
+        throw std::runtime_error("Not a struct");
+    } else {
+        for (int i = 0; i < node->body.size(); i++){
+            analyseNode(node->body[i]);
+        }
+    }
+}
+
+void SemanticAnalyser::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
+    std::string size = node->size;
+    if(isalpha(size[1])){
+        std::string type = symbolTable.lookUpVariable(size);
+        if (type != "int") {
+            throw std::runtime_error("The array size is not an integer");
+        }
+    }
+    for (int i = 0; i < node->body.size(); i++){
+        analyseNode(node->body[i]);
+    }
+}
+
+void SemanticAnalyser::kowalskiReturn(const std::shared_ptr<ReturnNode>& node) {
+}
+
 nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
         if (node->getType() == nodeType::identifierNode){
             auto idNode = std::static_pointer_cast<identifierNode>(node);
