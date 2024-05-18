@@ -57,16 +57,16 @@ struct CharNode : ASTNode {
 };
 
 struct ForLoopNode : ASTNode {
-    std::shared_ptr<ASTNode> declaration;
-    std::shared_ptr<ASTNode> condition;
-    std::shared_ptr<ASTNode> expression;
+    std::shared_ptr<DeclarationNode> declaration;
+    std::shared_ptr<ConditionNode> condition;
+    std::shared_ptr<ConditionNode> expression;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override {return nodeType::forLoopNode;}
     void accept(ASTNodeVisitor& visitor) override;
 };
 
 struct IfNode : ASTNode {
-    std::shared_ptr<ASTNode> condition;
+    std::shared_ptr<ConditionNode> condition;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override {return nodeType::ifNode;}
     std::vector<std::shared_ptr<ASTNode>> elseBody;
@@ -137,7 +137,7 @@ struct StringNode : ASTNode {
 };
 
 struct SwitchNode : ASTNode {
-    std::shared_ptr<ASTNode> condition;
+    std::shared_ptr<ConditionNode> condition;
     std::vector<std::shared_ptr<CaseNode>> caseBranch;
     nodeType getType() const override {return nodeType::switchNode;}
     SwitchNode() : condition(nullptr), caseBranch() {}
@@ -160,7 +160,7 @@ struct ConditionNode : ASTNode {
 };
 
 struct WhileNode : ASTNode {
-    std::shared_ptr<ASTNode> condition;
+    std::shared_ptr<ConditionNode> condition;
     std::vector<std::shared_ptr<ASTNode>> body;
     void accept(ASTNodeVisitor& visitor) override;
     nodeType getType() const override {return nodeType::whileNode;}
