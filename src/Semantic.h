@@ -39,6 +39,7 @@ private:
     FunctionTable functionTable;
     void analyseNode(const std::shared_ptr<ASTNode>& node);
     void kowalskiFunction(const std::shared_ptr<FunctionNode>& node);
+    void kowalskiIdentifier(const std::shared_ptr<IdentifierNode>& node);
     void kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node);
     void kowalskiChar(const std::shared_ptr<CharNode>& node);
     void kowalskiIf(const std::shared_ptr<IfNode>& node);
@@ -49,11 +50,13 @@ private:
     void kowalskiWhile(const std::shared_ptr<WhileNode>& node);
     void kowalskiFor(const std::shared_ptr< ForLoopNode>& node);
     void kowalskiSwitch(const std::shared_ptr<SwitchNode>& node);
+    void kowalskiCase(const std::shared_ptr<CaseNode>& node);
     void kowalskiKondi(const std::shared_ptr<ConditionNode>& node);
     void kowalskiConsole(const std::shared_ptr<ConsoleNode>& node);
     void kowalskiStruct(const std::shared_ptr<StructNode>& node);
     void kowalskiArray(const std::shared_ptr<ArrayNode>& node);
     void kowalskiReturn(const std::shared_ptr<ReturnNode>& node);
+    nodeType getType2(const std::shared_ptr<ASTNode>& node);
     void kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode>& node);
 };
 
