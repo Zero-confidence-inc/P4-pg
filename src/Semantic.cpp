@@ -56,7 +56,7 @@ void SemanticAnalyser::kowalski(const std::shared_ptr<ASTNode>& root){
 }
 
 void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
-    switch(node->getType()){
+    switch(getType2(node)){
         case nodeType::functionNode:
             kowalskiFunction(std::static_pointer_cast<FunctionNode>(node));
             break;
@@ -122,7 +122,7 @@ void SemanticAnalyser::kowalskiInt(const std::shared_ptr<IntNode>& node){
     
 }
 void SemanticAnalyser::kowalskiIf(const std::shared_ptr<IfNode>& node){
-    if (node->condition->getType() != nodeType::conditionNode){
+    if (getType2(node->condition) != nodeType::conditionNode){
         throw std::runtime_error("Not a condition");
     }else {
         kowalskiKondi(node->condition);
@@ -195,9 +195,9 @@ for (int i = 0; i < node->Branch.size(); i++){
 
 void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node){
     std::string condition = node->condition;
-    nodeType aSide = node->aNode->getType();
+    nodeType aSide = getType2(node->aNode);
     //todo:: if statement to check if both sides allow || and &&
-    switch(node->bNode->getType()){
+    switch(getType2(node->bNode)){
         case nodeType::floatNode:
             if(aSide != nodeType::floatNode && aSide != nodeType::intNode)
                 throw std::runtime_error("Floats only accept integer and float comparaisons.");
