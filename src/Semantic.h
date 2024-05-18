@@ -22,11 +22,21 @@ private:
     std::vector<std::map<std::string,std::string>> scopes;
 
 };
+
+class FunctionTable{
+public:
+    void declareFunction(const std::string& name,std::vector<std::string>& arguments);
+    std::vector<std::string> lookUpFunction(const std::string& functionName);
+private:
+    std::vector<std::map<std::string,std::vector<std::string>>> functionMap;
+};
+
 class SemanticAnalyser{
 public:
     void kowalski(const std::shared_ptr<ASTNode>& root);
 private:
     SymbolTable symbolTable;
+    FunctionTable functionTable;
     void analyseNode(const std::shared_ptr<ASTNode>& node);
     void kowalskiFunction(const std::shared_ptr<FunctionNode>& node);
     void kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node);
@@ -40,6 +50,7 @@ private:
     void kowalskiFor(const std::shared_ptr< ForLoopNode>& node);
     void kowalskiSwitch(const std::shared_ptr<SwitchNode>& node);
     void kowalskiKondi(const std::shared_ptr<ConditionNode>& node);
+    void kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode>& node);
 };
 
 
