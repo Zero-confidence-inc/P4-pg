@@ -221,3 +221,13 @@ void SemanticAnalyser::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
         }
     }
 }
+
+void SemanticAnalyser::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
+    if(node->size->getType() != nodeType::arrayNode){
+        throw std::runtime_error("Not an array");
+    } else {
+        std::string size = node->size;
+        for (int i = 0; i < node->body.size(); i++){
+            analyseNode(node->body[i]);
+    }
+}

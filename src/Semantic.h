@@ -42,6 +42,8 @@ private:
     void kowalskiKondi(const std::shared_ptr<ConditionNode>& node);
     void kowalskiConsole(const std::shared_ptr<ConsoleNode>& node);
     void kowalskiStruct(const std::shared_ptr<StructNode>& node);
+    void kowalskiArray(const std::shared_ptr<ArrayNode>& node);
+    
 };
 
 
