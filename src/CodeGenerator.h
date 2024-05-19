@@ -75,7 +75,11 @@ private:
     std::string generateValueCode(ValueNode& node);
     std::string generateFunctionCallCode(FunctionCallNode& node);
     std::string generateConditionCode(ConditionNode& node);
+    std::string generateCharCode(CharNode& node);
+    std::string generateStringCode(StringNode& node);
+    std::string generateIdentifierCode(IdentifierNode& node);
+    std::string generateRandomCode(RandomNode& node);
     // Add other helper methods as needed...
 };
 
-#endif // CODEGENERATOR_h
+#endif // CODEGENERATOR_H
