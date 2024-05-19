@@ -141,7 +141,7 @@ std::string CodeGenerator::generateRandomCode(RandomNode& node) {
         randomCodeOutput += "=";
         if (node.RandomFloatRange.size()>0){
             randomCodeOutput += "randomFloat;";
-            randomCodeOutput += "";
+            randomCodeOutput += "randomFloat = (float range =" + std::to_string(node.RandomFloatRange[1]) + "-" + std::to_string(node.RandomFloatRange[0]) + "+ 1; float num = rand() % range +" + std::to_string(node.RandomFloatRange[0]) + ";)";
         }
         else{
             randomCodeOutput += "randomFloat;";
