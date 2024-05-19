@@ -72,6 +72,9 @@ private:
     std::string generateBoolCode(BoolNode& node);
     std::string generateConsoleCode(ConsoleNode& node);
     std::string generateDeclartionCode(DeclarationNode& node);
+    std::string generateValueCode(ValueNode& node);
+    std::string generateFunctionCallCode(FunctionCallNode& node);
+    std::string generateConditionCode(ConditionNode& node);
     // Add other helper methods as needed...
 };
 

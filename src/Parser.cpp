@@ -287,13 +287,13 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
             bNode->identifier = tokens[pos].value;
             conditionNode->bNode = bNode;
         } else if (tokens[pos].type == TokenType::CONST) {
-            conditionNode->bNode = std::make_shared<IntNode>();
+            conditionNode->bNode = parseInt();
         } else if (tokens[pos].type == TokenType::FLOAT_CONST) {
-            conditionNode->bNode = std::make_shared<FloatNode>();
+            conditionNode->bNode = parseFloat();
         } else if (tokens[pos].type == TokenType::STRING) {
-            conditionNode->bNode = std::make_shared<StringNode>();
+            conditionNode->bNode = parseString();
         } else if (tokens[pos].type == TokenType::BOOL) {
-            conditionNode->bNode = std::make_shared<BoolNode>();
+            conditionNode->bNode = parseBool();
         }
         pos++;
         if (tokens[pos].type == TokenType::OPERATOR) {
@@ -312,13 +312,13 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
                 bNode->identifier = tokens[pos].value;
                 conditionNode->bNode = bNode;
             } else if (tokens[pos].type == TokenType::CONST) {
-                conditionNode->bNode = std::make_shared<IntNode>();
+                conditionNode->bNode = parseInt();
             } else if (tokens[pos].type == TokenType::FLOAT_CONST) {
-                conditionNode->bNode = std::make_shared<FloatNode>();
+                conditionNode->bNode = parseFloat()
             } else if (tokens[pos].type == TokenType::STRING) {
-                conditionNode->bNode = std::make_shared<StringNode>();
+                conditionNode->bNode = parseString();
             } else if (tokens[pos].type == TokenType::BOOL) {
-                conditionNode->bNode = std::make_shared<BoolNode>();
+                conditionNode->bNode = parseBool();
             }
         }
         return conditionNode;
