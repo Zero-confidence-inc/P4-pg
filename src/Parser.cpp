@@ -3,6 +3,7 @@
 //
 #include "Parser.h"
 #include <iostream>
+#include <string>
 
 Parser::Parser(const std::vector<Token>& tokens) : tokens(tokens) {}
 
@@ -652,7 +653,8 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop() {
 
 std::shared_ptr<ASTNode> Parser::parseConsole() {
     std::cout << "Entering parseConsole at position " << pos << " with token: " << tokens[pos+1].value << std::endl;
-    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos].getType() == TokenType::CONSOLE) {
+    if (lookAhead(TokenType::CONSOLE)) {
+        pos++;
         auto consoleNode = std::make_shared<ConsoleNode>();
         pos++;
         while (tokens[pos].value != ")") {
@@ -677,30 +679,38 @@ std::shared_ptr<ASTNode> Parser::parseConsole() {
 std::shared_ptr<ASTNode> Parser::parseRandom() {
     std::cout << "Entering parseRandom at position " << pos << " with token: " << tokens[pos+1].value << std::endl;
     auto randomNode = std::make_shared<RandomNode>();
-    std::string type = tokens[++pos].value;
-    std::string identifier = tokens[++pos].value;
+    std::string type = tokens[pos+1].value;
+    std::string identifier = tokens[pos+2].value;
     randomNode->type = type;
     randomNode->identifier = identifier;
-    if (lookAhead(TokenType::TYPE) && tokens[pos].value == "int?") { // Random Int
+
+    if (lookAhead(TokenType::TYPE) && tokens[pos+1].value == "int?") { // Random Int
+        pos +=2;
         auto randomIntNode = std::make_shared<RandomNode>();
-        pos++;
+
+        std::cout << "pos = " << pos << std::endl;
         if (tokens[++pos].value[0] == '?') {
+            std::cout << " before const pos = " << pos << std::endl;
             if (lookAhead(TokenType::CONST)) {
-                int RandomIntRangeLowBound = tokens[pos].value[0];
+                std::cout << "after const seen pos = " << pos << std::endl;
+                int RandomIntRangeLowBound = tokens[++pos].value[0];
+                std::cout << "pos = " << pos << std::endl;
                 randomNode->RandomIntRange.push_back(RandomIntRangeLowBound);
-                pos++;
-                if (tokens[pos].value == "." && tokens[++pos].value == ".") {
-                    pos++;
-                    if (lookAhead(TokenType::CONST) && tokens[pos].value[0] > RandomIntRangeLowBound) {
+                std::cout << "survived pos = " << pos << std::endl;
+                if (tokens[pos+1].value == "." && tokens[pos+2].value == ".") {
+                    std::cout << ".. recognicred pos = " << pos << std::endl;
+                    std::cout << "pos = " << randomIntNode << std::endl;
+                    if (lookAhead(TokenType::CONST) && tokens[++pos].value[0] > RandomIntRangeLowBound) {
+                        std::cout << "pos = " << pos << std::endl;
                         int RandomIntRangeHighBound = tokens[pos].value[0];
                         randomNode->RandomIntRange.push_back(RandomIntRangeHighBound);
-                        pos -= 3;
+                        std::cout << "pos = " << pos << std::endl;
                         return randomNode;
                     }
                 }
             }
         }
-    } else if (lookAhead(TokenType::TYPE) && tokens[pos].value == "float?") { // Random Float
+    } else if (lookAhead(TokenType::TYPE) && tokens[pos+1].value == "float?") { // Random Float
         pos++;
         if (tokens[++pos].value[0] == '?') {
             if (lookAhead(TokenType::CONST)) {
@@ -720,7 +730,7 @@ std::shared_ptr<ASTNode> Parser::parseRandom() {
                 }
             }
         }
-    } else if (lookAhead(TokenType::TYPE) && tokens[pos].value == "bool?") { // Random bool
+    } else if (lookAhead(TokenType::TYPE) && tokens[pos+1].value == "bool?") { // Random bool
         return randomNode;
     }
     std::cout << "parseRandom returning nullptr" << std::endl;

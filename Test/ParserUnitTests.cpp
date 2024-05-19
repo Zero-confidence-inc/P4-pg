@@ -259,12 +259,14 @@ TEST(ParserTest, ParseRandom) {
     std::vector<Token> tokens = {
             createToken(TokenType::START, "START"),
             createToken(TokenType::TYPE, "int?"),
-            createToken(TokenType::IDENTIFIER, "r"),
-            createToken(TokenType::OPERATOR, "="),
+            createToken(TokenType::IDENTIFIER, "abc"),
+            createToken(TokenType::PUNCTUATION, "?"),
             createToken(TokenType::CONST, "1"),
             createToken(TokenType::PUNCTUATION, "."),
             createToken(TokenType::PUNCTUATION, "."),
-            createToken(TokenType::CONST, "10")
+            createToken(TokenType::CONST, "10"),
+            createToken(TokenType::PUNCTUATION, "?")
+
     };
     Parser parser(tokens);
     auto node = parser.parseRandom();
