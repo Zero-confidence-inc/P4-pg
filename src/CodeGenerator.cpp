@@ -91,7 +91,17 @@ void CodeGenerator::visit(RandomNode& node) {
 }
 
 void CodeGenerator::visit(ArrayNode& node) {
+    for (size_t i = 0; i < node.body.size(); ++i) {
+        auto value = node.body[i];
+        if (value) {
+            node.identifier += node.body[i];
+        }
+        if (i < node.body.size() - 1) {
+            node.identifier += ", ";
+        }
+    }
 
+    node.identifier += "};";
 
 return std::to_string node.type + " " + node.identifier + "[" + node.size + "] = {";
 
