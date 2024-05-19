@@ -18,7 +18,7 @@ bool CommentsDFA::processChar(char c) {
             if(c == '/'){
                 currentString += c;
                 currentToken = currentString;
-                currentState = State::SingleLineCalled;
+                currentState = State::SingleLineContent;
                 return false;
             }
             else if (c=='*'){
@@ -27,6 +27,17 @@ bool CommentsDFA::processChar(char c) {
                 return true;
             }
             else return false;
+
+        case State::SingleLineContent:
+            if(c == '\n' || c == '\t') {
+                currentString += c;
+                currentToken = currentString;
+                currentState = State::SingleLineContent;
+                return false;
+            }else {
+                currentString += c;
+                return true;
+            }
 
         case State::MultiLineContent:
             if(isalnum(c)|| c == ' '|| c == '\n' || c == '\t'){
@@ -47,9 +58,14 @@ bool CommentsDFA::processChar(char c) {
                 currentState = State::MultiLineEnd2;
                 return false;
             }
+            else return false;
+
         default: return false;
     }
+
+
 }
+
 
     Token CommentsDFA::finalizeToken() {
         Token token(TokenType::COMMENTS, currentToken);

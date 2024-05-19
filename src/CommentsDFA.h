@@ -21,7 +21,8 @@ private:
     enum class State{
         Start,
         CommentStarted,
-        SingleLineCalled,
+        SingleLineContent,
+        SingleLineEnd,
         MultiLineContent,
         MultiLineEnd1,
         MultiLineEnd2

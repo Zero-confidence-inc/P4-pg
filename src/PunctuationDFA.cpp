@@ -13,8 +13,6 @@ bool PunctuationDFA::processChar(char c) {
             }
             else return false;
         default: return false;
-
-
     }
 }
 

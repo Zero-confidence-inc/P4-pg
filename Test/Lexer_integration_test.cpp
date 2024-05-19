@@ -9,7 +9,7 @@
 // Test basic tokenization
 TEST(LexerTest, BasicTokenization) {
 Lexer lexer;
-std::string input = "+++"; // weird feature single character identifiers are now illegal and will be ignored
+std::string input = "int? abc = 5;"; // weird feature single character identifiers are now illegal and will be ignored
 std::cout << "Input: " << input << std::endl;
 
 
@@ -33,7 +33,7 @@ EXPECT_EQ(tokens[4].type, TokenType::PUNCTUATION);
 // Test handling of mixed token types
 TEST(LexerTest, MixedTokenTypes) {
 Lexer lexer;
-std::string input = "func(123, 'text');";
+std::string input = "func(123, 'text324');";
 auto tokens = lexer.tokenize(input);
 ASSERT_EQ(tokens.size(), 7);
 EXPECT_EQ(tokens[0].type, TokenType::IDENTIFIER);
@@ -47,11 +47,23 @@ EXPECT_EQ(tokens[6].type, TokenType::PUNCTUATION);
 
 // Test error handling
 TEST(LexerTest, ErrorHandling) {
-Lexer lexer;
-std::string input = "x = $;";
-auto tokens = lexer.tokenize(input);
-ASSERT_TRUE(lexer.hasError());
-EXPECT_EQ(lexer.getErrorMessage(), "Error: Unrecognized token starting at position 4");
+    Lexer lexer;
+    std::string input = "x+¤";
+    std::cout << "Testing input: " << input << std::endl;
+
+    auto tokens = lexer.tokenize(input);
+
+    std::cout << "Lexer tokens:" << std::endl;
+    for (const auto& token : tokens) {
+        std::cout << "Token Type: " << static_cast<int>(token.type)
+                  << ", Token Value: '" << token.value << "'" << std::endl;
+    }
+
+    std::cout << "Lexer error state: " << lexer.hasError() << std::endl;
+    std::cout << "Lexer error message: " << lexer.getErrorMessage() << std::endl;
+
+    ASSERT_TRUE(lexer.hasError());
+    EXPECT_EQ(lexer.getErrorMessage(), "Error: Unrecognized character/symbol starting at position 2");
 }
 
 // Test end of input handling
