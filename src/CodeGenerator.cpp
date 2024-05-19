@@ -8,7 +8,7 @@ void CodeGenerator::visit(FunctionNode& node) {
    
 }
 
-void CodeGenerator::visit(VariableNode& node) {
+void CodeGenerator::visit(ValueNode& node) {
     
 }
 
@@ -20,7 +20,7 @@ void CodeGenerator::visit(CharNode& node) {
    
 }
 
-void CodeGenerator::visit(IfStatementNode& node) {
+void CodeGenerator::visit(IfNode& node) {
     
 }
 
@@ -44,22 +44,63 @@ void CodeGenerator::visit(SwitchNode& node) {
     
 }
 
-void CodeGenerator::visit(OperatorNode& node) {
-    
-}
-
 void CodeGenerator::visit(ConditionNode& node) {
     
 }
 
-void CodeGenerator::visit(MathNode& node) {
+void CodeGenerator::visit(ConsoleNode& node) {
     
 }
+
+void CodeGenerator::visit(CaseNode& node) {
+
+}
+
+void CodeGenerator::visit(IdentifierNode& node) {
+
+}
+
+void CodeGenerator::visit(ReturnNode& node) {
+
+}
+
+void CodeGenerator::visit(IntNode& node) {
+
+}
+
+void CodeGenerator::visit(UsIntNode & node) {
+
+}
+
+void CodeGenerator::visit(BoolNode& node) {
+
+}
+
+void CodeGenerator::visit(JumpNode& node) {
+
+}
+
+void CodeGenerator::visit(RandomNode& node) {
+
+}
+
+void CodeGenerator::visit(ArrayNode& node) {
+
+}
+
+void CodeGenerator::visit(FunctionNode& node) {
+
+}
+
+void CodeGenerator::visit(FunctionCallNode& node) {
+    
+}
+
 
 void CodeGenerator::generateFunctionCode(FunctionNode& node) {
     
 }
 
-void CodeGenerator::generateVariableCode(VariableNode& node) {
+void CodeGenerator::generateValueCode(ValueNode& node) {
     
 }
