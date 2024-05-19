@@ -41,6 +41,7 @@ set(TEST_SOURCES
         Test/ConstDFAtest.cpp
         Test/PunctuationDFAtest.cpp
         Test/Lexer_integration_test.cpp
+        Test/ParserUnitTests.cpp
 )
 
 add_executable(P4_pg_tests ${TEST_SOURCES})

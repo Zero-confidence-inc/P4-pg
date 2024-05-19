@@ -9,6 +9,7 @@ Lexer::Lexer() : errorOccurred(false), errorMessage("") {
 
 std::vector<Token> Lexer::tokenize(const std::string& input) {
     std::vector<Token> tokens;
+    tokens.push_back({TokenType::START, "START"});
     size_t tokenStartIndex = 0;
 
     while (tokenStartIndex < input.size()) {

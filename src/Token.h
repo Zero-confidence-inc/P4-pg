@@ -19,7 +19,8 @@ enum class TokenType {
     JUMP,
     COMMENTS,
     CONSOLE,
-    BOOL
+    BOOL,
+    START
 };
 
 struct Token {
