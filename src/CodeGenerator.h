@@ -66,6 +66,10 @@ private:
     // Helper methods for code generation
     void generateFunctionCode(FunctionNode& node);
     void generateValueCode(ValueNode& node);
+    std::string generateCharCode(CharNode& node);
+    std::string generateStringCode(StringNode& node);
+    std::string generateIdentifierCode(IdentifierNode& node);
+    std::string generateRandomCode(RandomNode& node);
     // Add other helper methods as needed...
 };
 
