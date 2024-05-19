@@ -107,7 +107,7 @@ std::string CodeGenerator::generateValueCode(ValueNode& node) {
 }
 
 std::string CodeGenerator::generateIntCode(IntNode& node){
-     return std::to_string(node.integer);
+    return std::to_string(node.integer);
 }
 std::string CodeGenerator::generateUSCode(UsIntNode& node){
     return std::to_string(node.usinteger);
@@ -121,8 +121,7 @@ std::string CodeGenerator::generateBoolCode(BoolNode& node){
 std::string CodeGenerator::generateDeclartionCode(DeclarationNode& node){
     return node.type + " " + node.identifier + ";";
 }
-std::string CodeGenerator::generateConsoleCode(ConsoleNode& node)
-{
+std::string CodeGenerator::generateConsoleCode(ConsoleNode& node){
     std::string CodeInString = "std::cout <<" ;
     for(int i=0;i<node.message.size();i++){ 
             CodeInString += node.message[i]->getValue();
@@ -144,9 +143,9 @@ std::string CodeGenerator::generateFunctionCallCode(FunctionCallNode& Node){
 }
 std::string CodeGenerator::generateConditionCode(ConditionNode& node){
     std::string leString = node.aNode->getValue() + node.condition;
+    if (node.condition==""){return leString;}
     if (node.bNode->getType() == nodeType::conditionNode){
         return leString += generateConditionCode(node.bNode);
     }
     return leString+node.bNode->getValue();
-
 }

@@ -304,9 +304,7 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
         pos++;
         auto conditionNode = std::make_shared<ConditionNode>();
         if (tokens[pos].type == TokenType::IDENTIFIER) {
-            auto bNode = std::make_shared<IdentifierNode>();
-            bNode->identifier = tokens[pos].value;
-            conditionNode->bNode = bNode;
+            conditionNode->bNode = parseIdentifier();
         } else if (tokens[pos].type == TokenType::CONST) {
             conditionNode->bNode = parseInt();
         } else if (tokens[pos].type == TokenType::FLOAT_CONST) {
@@ -329,9 +327,7 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
                    || lookAhead(TokenType::IDENTIFIER) || lookAhead(TokenType::BOOL)) {
             pos++;
             if (tokens[pos].type == TokenType::IDENTIFIER) {
-                auto bNode = std::make_shared<IdentifierNode>();
-                bNode->identifier = tokens[pos].value;
-                conditionNode->bNode = bNode;
+                conditionNode->bNode = parseIdentifier();
             } else if (tokens[pos].type == TokenType::CONST) {
                 conditionNode->bNode = parseInt();
             } else if (tokens[pos].type == TokenType::FLOAT_CONST) {
