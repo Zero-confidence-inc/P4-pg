@@ -178,7 +178,6 @@ void SemanticAnalyser::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNo
     std::vector<std::string> currentArgument;
     std::vector<std::string> exprectedArgument;
     for (int i = 0; i < node->arguments.size();i++){
-        currentArgument = node->arguments[i];
         switch (getType2(node->arguments[i])){
             case intNode:
             currentArgument.push_back("int");

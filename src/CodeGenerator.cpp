@@ -1,4 +1,5 @@
 #include "CodeGenerator.h"
+#include <string>
 
 void CodeGenerator::generateCode(const std::shared_ptr<ASTNode>& root) {
     root->accept(*this);
@@ -8,7 +9,7 @@ void CodeGenerator::visit(FunctionNode& node) {
    
 }
 
-void CodeGenerator::visit(VariableNode& node) {
+void CodeGenerator::visit(ValueNode& node) {
     
 }
 
@@ -20,7 +21,7 @@ void CodeGenerator::visit(CharNode& node) {
    
 }
 
-void CodeGenerator::visit(IfStatementNode& node) {
+void CodeGenerator::visit(IfNode& node) {
     
 }
 
@@ -44,22 +45,91 @@ void CodeGenerator::visit(SwitchNode& node) {
     
 }
 
-void CodeGenerator::visit(OperatorNode& node) {
-    
-}
-
 void CodeGenerator::visit(ConditionNode& node) {
     
 }
 
-void CodeGenerator::visit(MathNode& node) {
+void CodeGenerator::visit(ConsoleNode& node) {
     
 }
 
-void CodeGenerator::generateFunctionCode(FunctionNode& node) {
+void CodeGenerator::visit(CaseNode& node) {
+
+}
+
+void CodeGenerator::visit(IdentifierNode& node) {
+
+}
+
+void CodeGenerator::visit(ReturnNode& node) {
+
+}
+
+void CodeGenerator::visit(IntNode& node) {
+
+}
+
+void CodeGenerator::visit(UsIntNode & node) {
+
+}
+
+void CodeGenerator::visit(BoolNode& node) {
+
+}
+
+void CodeGenerator::visit(JumpNode& node) {
+
+}
+
+void CodeGenerator::visit(RandomNode& node) {
+
+}
+
+void CodeGenerator::visit(ArrayNode& node) {
+
+}
+
+void CodeGenerator::visit(FunctionNode& node) {
+
+}
+
+void CodeGenerator::visit(FunctionCallNode& node) {
     
 }
 
-void CodeGenerator::generateVariableCode(VariableNode& node) {
+
+std::string CodeGenerator::generateFunctionCode(FunctionNode& node) {
     
+}
+
+std::string CodeGenerator::generateValueCode(ValueNode& node) {
+    
+}
+
+std::string CodeGenerator::generateIntCode(IntNode& node){
+     return std::to_string(node.integer);
+}
+std::string CodeGenerator::generateUSCode(UsIntNode& node){
+    return std::to_string(node.usinteger);
+}
+std::string CodeGenerator::generateFloatCode(FloatNode& node){
+    return std::to_string(node.Floating_Point);
+}
+std::string CodeGenerator::generateBoolCode(BoolNode& node){
+    return std::to_string(node.boolean);
+}
+std::string CodeGenerator::generateDeclartionCode(DeclarationNode& node){
+    return node.type + " " + node.identifier + ";";
+
+}
+std::string CodeGenerator::generateConsoleCode(ConsoleNode& node)
+{
+    std::string CodeInString = "std::cout <<" ;
+    for(int i=0;i<node.message.size();i++)
+    { 
+        if (node.message[i].getType() == nodeType::intNode ){
+        CodeInString += generateIntCode(node.message[i]);}
+    }
+    CodeInString += "<< std::endl;";
+    return CodeInString;
 }
