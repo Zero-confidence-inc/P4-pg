@@ -336,7 +336,7 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
             kowalskiKondi(node->bNode);
             break;
         default:
-            throw std::runtime_error("Illegel condition");
+            throw std::runtime_error("Illegal condition");
             break;
     }
 }

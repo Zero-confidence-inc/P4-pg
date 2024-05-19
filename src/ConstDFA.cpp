@@ -23,7 +23,7 @@ bool ConstDFA::processChar(char c) {
             if (isdigit(c)) {
                 currentString += c;
                 currentToken = currentString;
-                currentState = State::IntegerPart;
+                currentState =State::IntegerPart;
                 return true;
             } else {
                 return false;
