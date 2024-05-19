@@ -1,3 +1,6 @@
+//
+// Created by Yuki on 29/04/2024.
+//
 #ifndef PARSER_H
 #define PARSER_H
 
@@ -14,7 +17,7 @@ enum nodeType {
     structNode,
     functionNode,
     functionCallNode,
-    variableNode,
+    valueNode,
     floatNode,
     stringNode,
     operatorNode,
@@ -29,7 +32,8 @@ enum nodeType {
     arrayNode,
     returnNode,
     identifierNode,
-    randomNode
+    randomNode,
+    jumpNode
 };
 
 // Base class for all AST nodes
@@ -104,14 +108,7 @@ struct StructNode : DeclarationNode {
 // Node for variable declarations
 struct ValueNode : DeclarationNode {
     std::shared_ptr<ASTNode> value;
-    nodeType getType() const override {
-        if (type == "int") return nodeType::intNode;
-        else if (type == "char") return nodeType::charNode;
-        else if (type == "string") return nodeType::stringNode;
-        else if (type == "float") return nodeType::floatNode;
-        else if (type == "bool") return nodeType::boolNode;
-        else return nodeType::declarationNode;
-    }
+    nodeType getType() const override { return nodeType::valueNode; }
     void accept(ASTNodeVisitor& visitor) override;
 };
 
@@ -182,7 +179,7 @@ struct WhileNode : ASTNode {
 struct JumpNode : ASTNode {
     std::string breaker;
     std::string continuer;
-    nodeType getType() const override { return nodeType::declarationNode; }
+    nodeType getType() const override { return nodeType::jumpNode; }
     void accept(ASTNodeVisitor& visitor) override;
 };
 

@@ -24,6 +24,7 @@ set(SOURCES
         src/JumpStatDFA.cpp
         src/Parser.cpp
         src/CommentsDFA.cpp
+        src/Parser.h
 )
 
 add_library(P4_pg_lib ${SOURCES})
@@ -47,7 +48,7 @@ set(TEST_SOURCES
 add_executable(P4_pg_tests ${TEST_SOURCES})
 
 # Linking Google Test and your library to the test executable
-target_link_libraries(P4_pg_tests P4_pg_lib gtest gtest_main pthread)
+target_link_libraries(P4_pg_tests P4_pg_lib gtest gtest_main)
 
 # Enable testing
 enable_testing()
