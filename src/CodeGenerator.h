@@ -64,9 +64,15 @@ public:
 
 private:
     // Helper methods for code generation
-    void generateFunctionCode(FunctionNode& node);
-    void generateValueCode(ValueNode& node);
+    std::string generateFunctionCode(FunctionNode& node);
+    std::string generateValueCode(ValueNode& node);
+    std::string generateIntCode(IntNode& node);
+    std::string generateUSCode(UsIntNode& node);
+    std::string generateFloatCode(FloatNode& node);
+    std::string generateBoolCode(BoolNode& node);
+    std::string generateConsoleCode(ConsoleNode& node);
+    std::string generateDeclartionCode(DeclarationNode& node);
     // Add other helper methods as needed...
 };
 
-#endif // CODEGENERATOR_H
+#endif // CODEGENERATOR_h

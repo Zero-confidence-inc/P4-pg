@@ -1,4 +1,5 @@
 #include "CodeGenerator.h"
+#include <string>
 
 void CodeGenerator::generateCode(const std::shared_ptr<ASTNode>& root) {
     root->accept(*this);
@@ -97,10 +98,38 @@ void CodeGenerator::visit(FunctionCallNode& node) {
 }
 
 
-void CodeGenerator::generateFunctionCode(FunctionNode& node) {
+std::string CodeGenerator::generateFunctionCode(FunctionNode& node) {
     
 }
 
-void CodeGenerator::generateValueCode(ValueNode& node) {
+std::string CodeGenerator::generateValueCode(ValueNode& node) {
     
+}
+
+std::string CodeGenerator::generateIntCode(IntNode& node){
+     return std::to_string(node.integer);
+}
+std::string CodeGenerator::generateUSCode(UsIntNode& node){
+    return std::to_string(node.usinteger);
+}
+std::string CodeGenerator::generateFloatCode(FloatNode& node){
+    return std::to_string(node.Floating_Point);
+}
+std::string CodeGenerator::generateBoolCode(BoolNode& node){
+    return std::to_string(node.boolean);
+}
+std::string CodeGenerator::generateDeclartionCode(DeclarationNode& node){
+    return node.type + " " + node.identifier + ";";
+
+}
+std::string CodeGenerator::generateConsoleCode(ConsoleNode& node)
+{
+    std::string CodeInString = "std::cout <<" ;
+    for(int i=0;i<node.message.size();i++)
+    { 
+        if (node.message[i].getType() == nodeType::intNode ){
+        CodeInString += generateIntCode(node.message[i]);}
+    }
+    CodeInString += "<< std::endl;";
+    return CodeInString;
 }
