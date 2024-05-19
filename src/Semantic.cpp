@@ -159,18 +159,15 @@ void SemanticAnalyser::kowalskiFunction(const std::shared_ptr<FunctionNode>& nod
         };
     }
     functionTable.declareFunction(name,functionArgumentsString);
+    symbolTable.enterScope();
     // checks args
     for (int i = 0; i < node->arguments.size();i++){
-        analyseNode(node->arguments);
+        analyseNode(node->arguments[i]);
     }
-    symbolTable.enterScope();
-    //declara args in scope
-    for (int i = 0; i < node->arguments.size();i++){
-        kowalskiDeclaration(node->arguments[i]);
-    }
+    
     //function body
     for (int i = 0; i <node->body.size();i++){
-        analyseNode(node->body);
+        analyseNode(node->body[i]);
     }
 }
 void SemanticAnalyser::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode> &node){

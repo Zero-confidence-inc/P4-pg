@@ -141,13 +141,15 @@ std::string CodeGenerator::generateFunctionCallCode(FunctionCallNode& Node){
     }
     return leString +");";
 }
-std::string CodeGenerator::generateConditionCode(ConditionNode& node){
-    std::string leString = node.aNode->getValue() + node.condition;
-    if (node.condition==""){return leString;}
-    if (node.bNode->getType() == nodeType::conditionNode){
-        return leString += generateConditionCode(node.bNode);
+std::string CodeGenerator::generateConditionCode(std::shared_ptr<ConditionNode>& node){
+    std::string leString = node->aNode->getValue() + node->condition;
+    if (node->condition==""){return leString;}
+    if (node->bNode->getType() == nodeType::conditionNode){
+
+        return leString += generateConditionCode(node->bNode);
+
     }
-    return leString+node.bNode->getValue();
+    return leString+node->bNode->getValue();
 }
 
 std::string CodeGenerator::generateCharCode(CharNode& node) {
