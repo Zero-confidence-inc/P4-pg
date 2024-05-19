@@ -371,6 +371,7 @@ void SemanticAnalyser::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
 }
 
 void SemanticAnalyser::kowalskiReturn(const std::shared_ptr<ReturnNode>& node) {
+    
 }
 
 nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){

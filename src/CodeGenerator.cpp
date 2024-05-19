@@ -1,4 +1,5 @@
 #include "CodeGenerator.h"
+#include "string"
 
 void CodeGenerator::generateCode(const std::shared_ptr<ASTNode>& root) {
     root->accept(*this);
@@ -62,6 +63,8 @@ void CodeGenerator::visit(IdentifierNode& node) {
 
 void CodeGenerator::visit(ReturnNode& node) {
 
+        return node.returning + " " + node.identifier;
+    
 }
 
 void CodeGenerator::visit(IntNode& node) {
@@ -73,13 +76,16 @@ void CodeGenerator::visit(UsIntNode & node) {
 }
 
 void CodeGenerator::visit(BoolNode& node) {
-
+return std::to_string(node.breaker)
 }
 
 void CodeGenerator::visit(JumpNode& node) {
-
+    if (node.continuer.empty()) {
+        return std::to_string(node.continuer);
+    } else if (node.breaker.empty()) {
+        return std::to_string(node.breaker);
+    }
 }
-
 void CodeGenerator::visit(RandomNode& node) {
 
 }
@@ -95,7 +101,6 @@ void CodeGenerator::visit(FunctionNode& node) {
 void CodeGenerator::visit(FunctionCallNode& node) {
     
 }
-
 
 void CodeGenerator::generateFunctionCode(FunctionNode& node) {
     
