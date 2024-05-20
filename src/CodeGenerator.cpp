@@ -218,6 +218,9 @@ std::string CodeGenerator::generateValueCode(std::shared_ptr<ValueNode>& node){
     if (node->type == "string"){
         leString = "std::" + node->type + " " + node->identifier + "=";
     }
+    else if (node->type == "usint"){
+        leString = "int "  + node->identifier + "=";
+    }
     else{
         leString = node->type + " " + node->identifier + "=";
     }

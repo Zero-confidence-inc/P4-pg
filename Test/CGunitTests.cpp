@@ -99,9 +99,9 @@ TEST(CGTEST,ValueUsIntTest){
     VTN_basicValueUsInt->type = "usint";
     VTN_basicValueUsInt->identifier = "x";
     auto UTN_basicValue = std::make_shared<UsIntNode>();
-    UTN_basicValue->usinteger = -12;
+    UTN_basicValue->usinteger = 12;
     VTN_basicValueUsInt->value = UTN_basicValue;
     CodeGenerator codeGenerator;
     std::string UTresault = codeGenerator.generateValueCode(VTN_basicValueUsInt);
-    EXPECT_EQ(UTresault,"int x=12");
+    EXPECT_EQ(UTresault,"int x=12;");
 }
