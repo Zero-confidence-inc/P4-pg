@@ -206,11 +206,9 @@ std::shared_ptr<ASTNode> Parser::parseFunctionCall() {
         std::string identifier = tokens[++pos].value;
         auto functionCallNode = std::make_shared<FunctionCallNode>();
         functionCallNode->identifier = identifier;
-        while (tokens[pos].value[0] != ')') {
+        while (tokens[++pos].value == "," || tokens[++pos].value == "(") {
             auto argument = parseIdentifier();
             functionCallNode->arguments.push_back(argument);
-            match(TokenType::PUNCTUATION, ",");
-            pos++;
         }
         return functionCallNode;
     } else {
@@ -740,27 +738,3 @@ std::shared_ptr<ASTNode> Parser::parseRandom() {
     std::cout << "parseRandom returning nullptr" << std::endl;
     return nullptr;
 }
-
-void DeclarationNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void CharNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void ForLoopNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void IfNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void StructNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void FunctionNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void ValueNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void FloatNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void IntNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void StringNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void SwitchNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void CaseNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void ConditionNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void WhileNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void ConsoleNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void ReturnNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void RandomNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void ArrayNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void IdentifierNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void FunctionCallNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void BoolNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void UsIntNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }
-void JumpNode::accept(ASTNodeVisitor& visitor) { visitor.visit(*this); }

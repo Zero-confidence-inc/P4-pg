@@ -51,6 +51,13 @@ bool ConstDFA::processChar(char c) {
             } else {
                 return false;
             }
+
+
+
+        case State::false_1: {
+
+        }
+
             
     }
     return false;  // Default return to handle any non-specified cases

@@ -2,100 +2,9 @@
 #include <string>
 
 void CodeGenerator::generateCode(const std::shared_ptr<ASTNode>& root) {
-    root->accept(*this);
-}
-
-void CodeGenerator::visit(FunctionNode& node) {
-
-}
-
-void CodeGenerator::visit(ValueNode& node) {
-
-}
-
-void CodeGenerator::visit(DeclarationNode& node) {
     
 }
 
-void CodeGenerator::visit(CharNode& node) {
-
-}
-
-void CodeGenerator::visit(IfNode& node) {
-    
-}
-
-void CodeGenerator::visit(FloatNode& node) {
-    
-}
-
-void CodeGenerator::visit(StringNode& node) {
-    
-}
-
-void CodeGenerator::visit(WhileNode& node) {
-    
-}
-
-void CodeGenerator::visit(ForLoopNode& node) {
-    
-}
-
-void CodeGenerator::visit(SwitchNode& node) {
-    
-}
-
-void CodeGenerator::visit(ConditionNode& node) {
-    
-}
-
-void CodeGenerator::visit(ConsoleNode& node) {
-    
-}
-
-void CodeGenerator::visit(CaseNode& node) {
-
-}
-
-void CodeGenerator::visit(IdentifierNode& node) {
-
-}
-
-void CodeGenerator::visit(ReturnNode& node) {
-
-}
-
-void CodeGenerator::visit(IntNode& node) {
-
-}
-
-void CodeGenerator::visit(UsIntNode & node) {
-
-}
-
-void CodeGenerator::visit(BoolNode& node) {
-
-}
-
-void CodeGenerator::visit(JumpNode& node) {
-
-}
-
-void CodeGenerator::visit(RandomNode& node) {
-
-}
-
-void CodeGenerator::visit(ArrayNode& node) {
-
-}
-
-void CodeGenerator::visit(FunctionNode& node) {
-
-}
-
-void CodeGenerator::visit(FunctionCallNode& node) {
-
-}
 
 std::string CodeGenerator::generateIfCode(std::shared_ptr<IfNode>& node) {
     std::string ifCodeOutput;
@@ -226,21 +135,21 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
 } 
 
 
-std::string CodeGenerator::generateFunctionCode(FunctionNode& node) {
-    std:: string functionCodeOutput;
-    functionCodeOutput += node.type;
-    functionCodeOutput += node.identifier;
-    functionCodeOutput += "(";
-    for (int i = 0; i < node.arguments.size(); i++)
-    {
-        auto functionArugment = std::dynamic_pointer_cast<DeclarationNode>(node.arguments[i]);
-        functionCodeOutput += std::to_string(functionArugment);
-    }
-
-}
-
 std::string CodeGenerator::generateFunctionCode(std::shared_ptr<FunctionNode>& node) {
-
+    std:: string functionCodeOutput;
+    functionCodeOutput += node->type;
+    functionCodeOutput += node->identifier;
+    functionCodeOutput += "(";
+    for (int i = 0; i < node->arguments.size(); i++)
+    {
+        if (i>0 ){functionCodeOutput += ",";}
+        auto functionArugment = std::dynamic_pointer_cast<DeclarationNode>(node->arguments[i]);
+        functionCodeOutput += generateDeclartionCode(functionArugment);
+    }
+    functionCodeOutput += "){";
+    functionCodeOutput += generateBodyCode(node->body);
+    functionCodeOutput += "};";
+    return functionCodeOutput;
 }
 
 std::string CodeGenerator::generateIntCode(std::shared_ptr<IntNode>& node){
@@ -422,39 +331,41 @@ std::string CodeGenerator::generateRandomCode(RandomNode& node) {
     std::string randomCodeOutput;
     std::string randomID = node.identifier;
 
-    if (node.type == "int?"){
-            randomCodeOutput += "int";
-            randomCodeOutput += randomID;
-            randomCodeOutput += "=";
-        if (node.RandomIntRange.size()>0){
-                randomCodeOutput += "rand()%(" + std::to_string(node.RandomIntRange[1]) + "-" + std::to_string(node.RandomIntRange[0]) + "+ 1) + " + std::to_string(node.RandomIntRange[0]) + ";";
-                return randomCodeOutput;
-        }
-        else{
+    if (node.type == "int?") {
+        randomCodeOutput += "int";
+        randomCodeOutput += randomID;
+        randomCodeOutput += "=";
+        if (node.RandomIntRange.size() > 0) {
+            randomCodeOutput +=
+                    "rand()%(" + std::to_string(node.RandomIntRange[1]) + "-" + std::to_string(node.RandomIntRange[0]) +
+                    "+ 1) + " + std::to_string(node.RandomIntRange[0]) + ";";
+            return randomCodeOutput;
+        } else {
             randomCodeOutput += "rand();";
             return randomCodeOutput;
         }
-    }
-    else if (node.type == "float?"){
+    } else if (node.type == "float?") {
         randomCodeOutput += "float";
         randomCodeOutput += randomID;
         randomCodeOutput += "=";
-        if (node.RandomFloatRange.size()>0){
+        if (node.RandomFloatRange.size() > 0) {
             randomCodeOutput += "randomFloat;";
-            randomCodeOutput += "randomFloat = (float range =" + std::to_string(node.RandomFloatRange[1]) + "-" + std::to_string(node.RandomFloatRange[0]) + "+ 1; float num = rand() % range +" + std::to_string(node.RandomFloatRange[0]) + ";)";
-        }
-        else{
+            randomCodeOutput += "randomFloat = (float range =" + std::to_string(node.RandomFloatRange[1]) + "-" +
+                                std::to_string(node.RandomFloatRange[0]) + "+ 1; float num = rand() % range +" +
+                                std::to_string(node.RandomFloatRange[0]) + ";)";
+        } else {
             randomCodeOutput += "randomFloat;";
             randomCodeOutput += "randomFloat = (float)rand();";
             return randomCodeOutput;
         }
-    }
-    else if (node.type == "bool?"){
+    } else if (node.type == "bool?") {
         randomCodeOutput += "bool";
         randomCodeOutput += randomID;
         randomCodeOutput += "=";
-        randomCodeOutput += "int randomBool = rand(); if (randomBool%2==0){" + randomID + "= true); else {" + randomID + "= false);";
+        randomCodeOutput += "int randomBool = rand(); if (randomBool%2==0){" + randomID + "= true); else {" + randomID +
+                            "= false);";
         return randomCodeOutput;
     }
+    return nullptr;
 }
 
