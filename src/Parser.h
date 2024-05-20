@@ -153,6 +153,11 @@ struct StringNode : ASTNode {
 
 };
 
+struct DefaultNode : ASTNode {
+    std::vector<std::shared_ptr<ASTNode>> Branch;
+    nodeType getType() const override { return nodeType::defaultNode; }
+};
+
 struct SwitchNode : ASTNode {
     std::shared_ptr<ConditionNode> condition;
     std::vector<std::shared_ptr<CaseNode>> caseBranch;
@@ -162,10 +167,7 @@ struct SwitchNode : ASTNode {
 
 };
 
-struct DefaultNode : ASTNode {
-    std::vector<std::shared_ptr<ASTNode>> Branch;
-    nodeType getType() const override { return nodeType::defaultNode; }
-};
+
 
 struct WhileNode : ASTNode {
     std::shared_ptr<ConditionNode> condition;
