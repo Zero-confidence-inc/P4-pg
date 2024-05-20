@@ -140,7 +140,50 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
     }
     return completeBodyCodeOutput;
 } 
-
+std::string CodeGenerator::generateArrayCode(std::shared_ptr<ArrayNode>& node){
+ std::string leString;
+    if (node->type == "string"){
+        leString = "std::" + node->type + " " + node->identifier + "["+node->size+"]";
+    }
+    else{
+        leString = node->type + " " + node->identifier + "["+node->size+"]";
+    }   
+    for (int i = 0;i<node->body.size();i++)
+        {
+            if(i==0){
+                leString += "= [";
+            }else{
+                leString += ",";
+            }
+            if (node->body[i]->getType() == nodeType::identifierNode){
+                auto newNode = std::dynamic_pointer_cast<IdentifierNode>(node->body[i]);
+                leString += generateIdentifierCode(newNode);
+            }else if (node->body[i]->getType() == nodeType::functionCallNode){
+                auto newNode = std::dynamic_pointer_cast<FunctionCallNode>(node->body[i]);
+                leString += generateFunctionCallCode(newNode);
+            }else if (node->body[i]->getType() == nodeType::intNode){
+                auto convertedNode = std::dynamic_pointer_cast<IntNode>(node->body[i]);
+                leString += generateIntCode(convertedNode);
+            }else if (node->body[i]->getType() == nodeType::charNode){
+                auto convertedNode = std::dynamic_pointer_cast<CharNode>(node->body[i]);
+                leString += generateCharCode(convertedNode);
+            }else if (node->body[i]->getType() == nodeType::stringNode){
+                auto convertedNode = std::dynamic_pointer_cast<StringNode>(node->body[i]);
+                leString += generateStringCode(convertedNode);
+            }else if (node->body[i]->getType() == nodeType::floatNode){
+                auto convertedNode = std::dynamic_pointer_cast<FloatNode>(node->body[i]);
+                leString += generateFloatCode(convertedNode);
+            }else if (node->body[i]->getType() == nodeType::usIntNode){
+                auto convertedNode = std::dynamic_pointer_cast<UsIntNode>(node->body[i]);
+                leString += generateUSCode(convertedNode);
+            }else if (node->body[i]->getType() == nodeType::boolNode){
+                auto convertedNode = std::dynamic_pointer_cast<BoolNode>(node->body[i]);
+                leString += generateBoolCode(convertedNode);    
+            }
+            leString+="]";
+        }
+    return leString +";";
+}
 
 std::string CodeGenerator::generateFunctionCode(std::shared_ptr<FunctionNode>& node) {
     std:: string functionCodeOutput;
@@ -185,28 +228,30 @@ std::string CodeGenerator::generateDeclartionCode(std::shared_ptr<DeclarationNod
 std::string CodeGenerator::generateConsoleCode(std::shared_ptr<ConsoleNode>& node){
     std::string CodeInString = "std::cout <<" ;
     for(int i=0;i<node->message.size();i++){
-
-    if (node->message[i]->getType() == nodeType::intNode){
-        auto convertedNode = std::dynamic_pointer_cast<IntNode>(node->message[i]);
-        CodeInString += generateIntCode(convertedNode);
-    }else if (node->message[i]->getType() == nodeType::charNode){
-        auto convertedNode = std::dynamic_pointer_cast<CharNode>(node->message[i]);
-        CodeInString += generateCharCode(convertedNode);
-    }else if (node->message[i]->getType() == nodeType::stringNode){
-        auto convertedNode = std::dynamic_pointer_cast<StringNode>(node->message[i]);
-        CodeInString += generateStringCode(convertedNode);
-    }else if (node->message[i]->getType() == nodeType::floatNode){
-        auto convertedNode = std::dynamic_pointer_cast<FloatNode>(node->message[i]);
-        CodeInString += generateFloatCode(convertedNode);
-    }else if (node->message[i]->getType() == nodeType::identifierNode){
-        auto convertedNode = std::dynamic_pointer_cast<IdentifierNode>(node->message[i]);
-        CodeInString += generateIdentifierCode(convertedNode);
-    }else if (node->message[i]->getType() == nodeType::usIntNode){
-        auto convertedNode = std::dynamic_pointer_cast<UsIntNode>(node->message[i]);
-        CodeInString += generateUSCode(convertedNode);
-    }else if (node->message[i]->getType() == nodeType::boolNode){
-        auto convertedNode = std::dynamic_pointer_cast<BoolNode>(node->message[i]);
-        CodeInString += generateBoolCode(convertedNode);
+    
+        if (i>0){CodeInString +="+";}
+    
+        if (node->message[i]->getType() == nodeType::intNode){
+            auto convertedNode = std::dynamic_pointer_cast<IntNode>(node->message[i]);
+            CodeInString += generateIntCode(convertedNode);
+        }else if (node->message[i]->getType() == nodeType::charNode){
+            auto convertedNode = std::dynamic_pointer_cast<CharNode>(node->message[i]);
+            CodeInString += generateCharCode(convertedNode);
+        }else if (node->message[i]->getType() == nodeType::stringNode){
+            auto convertedNode = std::dynamic_pointer_cast<StringNode>(node->message[i]);
+            CodeInString += generateStringCode(convertedNode);
+        }else if (node->message[i]->getType() == nodeType::floatNode){
+            auto convertedNode = std::dynamic_pointer_cast<FloatNode>(node->message[i]);
+            CodeInString += generateFloatCode(convertedNode);
+        }else if (node->message[i]->getType() == nodeType::identifierNode){
+            auto convertedNode = std::dynamic_pointer_cast<IdentifierNode>(node->message[i]);
+            CodeInString += generateIdentifierCode(convertedNode);
+        }else if (node->message[i]->getType() == nodeType::usIntNode){
+            auto convertedNode = std::dynamic_pointer_cast<UsIntNode>(node->message[i]);
+            CodeInString += generateUSCode(convertedNode);
+        }else if (node->message[i]->getType() == nodeType::boolNode){
+            auto convertedNode = std::dynamic_pointer_cast<BoolNode>(node->message[i]);
+            CodeInString += generateBoolCode(convertedNode);
     }
     }
     
