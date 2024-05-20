@@ -146,7 +146,7 @@ std::string CodeGenerator::generateSwitchCode(std::shared_ptr<SwitchNode>& node)
     leString += ")";
     leString += "{";
     for (int i = 0;i < node->caseBranch.size();i++){
-        if(node->caseBranch[i]->){
+        if(node->caseBranch[i]){
 
         } else {
             leString += "case ";
@@ -224,7 +224,7 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
     }
     return completeBodyCodeOutput;
 } */
-}
+
 
 std::string CodeGenerator::generateFunctionCode(FunctionNode& node) {
     std:: string functionCodeOutput;
