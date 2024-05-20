@@ -171,7 +171,7 @@ void SemanticAnalyser::kowalskiFunction(const std::shared_ptr<FunctionNode>& nod
 void SemanticAnalyser::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode> &node){
     std::string name = node->identifier;
     std::vector<std::string> currentArgument;
-    std::vector<std::string> exprectedArgument;
+    std::vector<std::string> expectedArgument;
     for (int i = 0; i < node->arguments.size();i++){
         switch (getType2(node->arguments[i])){
             case intNode:
@@ -196,10 +196,10 @@ void SemanticAnalyser::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNo
             break;  
         }
     }
-    exprectedArgument = functionTable.lookUpFunction(node->identifier);
-    if(exprectedArgument.size() == currentArgument.size()){
+    expectedArgument = functionTable.lookUpFunction(node->identifier);
+    if(expectedArgument.size() == currentArgument.size()){
         for (int i = 0; i < node->arguments.size();i++){
-            if (exprectedArgument[i]!=currentArgument[i]){
+            if (expectedArgument[i]!=currentArgument[i]){
                 throw std::runtime_error("Arguments do not match");
             }
         }
