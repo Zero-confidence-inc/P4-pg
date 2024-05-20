@@ -1,8 +1,11 @@
 #include "CodeGenerator.h"
 #include <string>
 
-void CodeGenerator::generateCode(const std::shared_ptr<ASTNode>& root) {
-    
+CodeGenerator::CodeGenerator() {}
+
+std::string CodeGenerator::generateCode(std::vector<std::shared_ptr<ASTNode>>& root) {
+   std::string code = generateBodyCode(root);
+    return code;
 }
 
 
@@ -92,7 +95,7 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
     for (int i = 0; i<body.size(); i++){
         if (body[i]->getType()==nodeType::arrayNode){
             auto convertedArrayNode = std::dynamic_pointer_cast<ArrayNode>(body[i]);
-            generateArrayCode(convertedArrayNode);
+            //generateArrayCode(convertedArrayNode);
         }
         else if(body[i]->getType()==nodeType::conditionNode){
             auto convertedConditionNode = std::dynamic_pointer_cast<ConditionNode>(body[i]);
@@ -135,7 +138,7 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
         }
         else if(body[i]->getType()==nodeType::jumpNode){
             auto convertedJumpNode = std::dynamic_pointer_cast<JumpNode>(body[i]);
-            generateJumpNode(convertedJumpNode);
+           // generateJumpNode(convertedJumpNode);
         }
     }
     return completeBodyCodeOutput;

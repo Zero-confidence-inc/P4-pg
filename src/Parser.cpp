@@ -7,7 +7,7 @@
 
 Parser::Parser(const std::vector<Token>& tokens) : tokens(tokens) {}
 
-void Parser::parseProgram() {
+std::vector<std::shared_ptr<ASTNode>> Parser::parseProgram() {
     std::vector<std::shared_ptr<ASTNode>> ast;
     while (pos < tokens.size()) {
         std::cout << "Entering parseProgram at position " << pos << " with token: " << tokens[pos+1].value << std::endl;
@@ -26,6 +26,7 @@ void Parser::parseProgram() {
         }
     }
     // 'ast' now contains the entire program's AST
+    return ast;
 }
 
 std::shared_ptr<ASTNode> Parser::parseDeclaration() {

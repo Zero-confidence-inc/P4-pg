@@ -204,7 +204,7 @@ struct FunctionNode : DeclarationNode {
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);
-    void parseProgram();
+    std::vector<std::shared_ptr<ASTNode>> parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
     std::shared_ptr<ASTNode> parseChar();
     std::shared_ptr<ASTNode> parseBool();
