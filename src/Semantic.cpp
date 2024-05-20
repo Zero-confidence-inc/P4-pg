@@ -285,10 +285,12 @@ void SemanticAnalyser::kowalskiSwitch(const std::shared_ptr<SwitchNode>& node){
     if (node->condition->getType() != nodeType::conditionNode){
         throw std::runtime_error("Not a condition");
     }else {
-        
         kowalskiKondi(node->condition);
         for (int i = 0; i < node->caseBranch.size(); i++){
             analyseNode(node->caseBranch[i]);
+        }
+        if (node->deNode != nullptr){
+            analyseNode(node->deNode);
         }
     }
 }

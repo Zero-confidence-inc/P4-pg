@@ -490,17 +490,17 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
     std::cout << "Entering parseSwitch at position " << pos << " with token: " << tokens[pos+1].value << std::endl;
     if (lookAhead(TokenType::CONTROL) && tokens[++pos].value == "switch") {
         auto swNode = std::make_shared<SwitchNode>();
-        if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == '(') {
+        if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == "(") {
             pos++;
             swNode->condition = std::dynamic_pointer_cast<ConditionNode>(parseCondition());
-            if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == ')') {
+            if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == ")") {
                 while (lookAhead(TokenType::CONTROL) && tokens[++pos].value == "case") {
                     auto cNode = std::make_shared<CaseNode>();
-                    if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == '(') {
+                    if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == "(") {
                         pos++;
                         cNode->sucessCondition = parseCondition();
-                        if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == ')') {
-                            if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value[0] == ':') {
+                        if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == ")") {
+                            if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == ":") {
                                 pos++;
                                 cNode->Branch.push_back(parseDeclaration());
                                 swNode->caseBranch.push_back(cNode);
@@ -510,6 +510,18 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
                         } else {
                             return nullptr;
                         }
+                    } else {
+                        return nullptr;
+                    }
+                }
+                if (lookAhead(TokenType::CONTROL) && tokens[++pos].value == "default"){
+                    auto dNode = std::make_shared<DefaultNode>();
+                    if(lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == ":"){
+                        pos++;
+                        dNode->Branch.push_back(parseDeclaration());
+                        swNode->deNode = dNode;
+                    } else{
+                        return nullptr;
                     }
                 }
                 return swNode;

@@ -140,13 +140,20 @@ TEST(ParserTest, ParseSwitch) {
             createToken(TokenType::PUNCTUATION, ")"),
             createToken(TokenType::PUNCTUATION, "{"),
             createToken(TokenType::CONTROL, "case"),
+            createToken(TokenType::PUNCTUATION, "("),
             createToken(TokenType::CONST, "1"),
+            createToken(TokenType::PUNCTUATION, ")"),
             createToken(TokenType::PUNCTUATION, ":"),
             createToken(TokenType::TYPE, "int"),
             createToken(TokenType::IDENTIFIER, "y"),
             createToken(TokenType::OPERATOR, "="),
             createToken(TokenType::CONST, "2"),
             createToken(TokenType::PUNCTUATION, ";"),
+            createToken(TokenType::CONTROL, "default"),
+            createToken(TokenType::PUNCTUATION, ":"),
+            createToken(TokenType::IDENTIFIER, "k"),
+            createToken(TokenType::OPERATOR, "="),
+            createToken(TokenType::CONST, "3"),
             createToken(TokenType::PUNCTUATION, "}")
     };
     Parser parser(tokens);
