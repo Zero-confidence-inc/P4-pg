@@ -224,7 +224,7 @@ std::string CodeGenerator::generateValueCode(std::shared_ptr<ValueNode>& node){
     }
 
 
-    return leString;
+    return leString + ";";
 
 }
 std::string CodeGenerator::generateFunctionCallCode(std::shared_ptr<FunctionCallNode>& Node){

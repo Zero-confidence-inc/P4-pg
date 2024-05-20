@@ -16,7 +16,6 @@ public:
     std::string generateBoolCode(std::shared_ptr<BoolNode>& node);
     std::string generateConsoleCode(std::shared_ptr<ConsoleNode>& node);
     std::string generateDeclartionCode(std::shared_ptr<DeclarationNode>& node);
-    std::string generateValueCode(std::shared_ptr<ValueNode>& node);
     std::string generateFunctionCallCode(std::shared_ptr<FunctionCallNode>& node);
     std::string generateConditionCode(std::shared_ptr<ConditionNode>& node);
     std::string generateCharCode(std::shared_ptr<CharNode>& node);
