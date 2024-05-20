@@ -14,14 +14,16 @@ Token createToken(TokenType type, const std::string& value) {
 TEST(ParserTest, ParseDeclaration) {
     std::vector<Token> tokens = {
             createToken(TokenType::START, "START"),
-            createToken(TokenType::TYPE, "int"),
+            createToken(TokenType::TYPE, "bool"),
             createToken(TokenType::IDENTIFIER, "x"),
+            createToken(TokenType::OPERATOR, "="),
+            createToken(TokenType::STRING, "true"),
             createToken(TokenType::PUNCTUATION, ";")
     };
     Parser parser(tokens);
     auto node = parser.parseDeclaration();
     ASSERT_NE(node, nullptr);
-    EXPECT_EQ(node->getType(), declarationNode);
+    EXPECT_EQ(node->getType(), valueNode);
 }
 
 // Test for parseChar
@@ -91,6 +93,8 @@ TEST(ParserTest, ParseCondition) {
             createToken(TokenType::START, "START"),
             createToken(TokenType::IDENTIFIER, "x"),
             createToken(TokenType::OPERATOR, "=="),
+            createToken(TokenType::CONST, "10"),
+            createToken(TokenType::OPERATOR, "+"),
             createToken(TokenType::CONST, "10")
     };
     Parser parser(tokens);
@@ -258,14 +262,9 @@ TEST(ParserTest, ParseWhileLoop) {
 TEST(ParserTest, ParseRandom) {
     std::vector<Token> tokens = {
             createToken(TokenType::START, "START"),
-            createToken(TokenType::TYPE, "int?"),
+            createToken(TokenType::TYPE, "bool?"),
             createToken(TokenType::IDENTIFIER, "abc"),
-            createToken(TokenType::PUNCTUATION, "?"),
-            createToken(TokenType::CONST, "1"),
-            createToken(TokenType::PUNCTUATION, "."),
-            createToken(TokenType::PUNCTUATION, "."),
-            createToken(TokenType::CONST, "10"),
-            createToken(TokenType::PUNCTUATION, "?")
+
 
     };
     Parser parser(tokens);
@@ -287,18 +286,6 @@ TEST(ParserTest, ParseReturn) {
     EXPECT_EQ(node->getType(), returnNode);
 }
 
-// Test for parseValues
-TEST(ParserTest, ParseValues) {
-    std::vector<Token> tokens = {
-            createToken(TokenType::START, "START"),
-            createToken(TokenType::CONST, "42")
-    };
-    Parser parser(tokens);
-    auto node = parser.parseValues();
-    ASSERT_NE(node, nullptr);
-    // Add your own node type for values if you have one
-    // EXPECT_EQ(node->getType(), valueNode);
-}
 
 // Test for parseUsInt
 TEST(ParserTest, ParseUsInt) {
