@@ -6,8 +6,6 @@
 #include <iostream>
 #include <string>
 
-
-
 void SymbolTable::enterScope(){
 scopes.push_back({});
 }
