@@ -193,7 +193,7 @@ void SemanticAnalyser::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNo
             currentArgument.push_back("bool");
             break;
         default:
-            break;
+            break;  
         }
     }
     exprectedArgument = functionTable.lookUpFunction(node->identifier);

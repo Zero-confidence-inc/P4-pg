@@ -92,43 +92,50 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
     for (int i = 0; i<body.size(); i++){
         if (body[i]->getType()==nodeType::arrayNode){
             auto convertedArrayNode = std::dynamic_pointer_cast<ArrayNode>(body[i]);
-            bodyArrayCode;// = generateArrayCode;
-        }
-        else if(body[i]->getType()==nodeType::caseNode){
-            auto convertedCaseNode = std::dynamic_pointer_cast<CaseNode>(body[i]);
+            generateArrayCode(convertedArrayNode);
         }
         else if(body[i]->getType()==nodeType::conditionNode){
             auto convertedConditionNode = std::dynamic_pointer_cast<ConditionNode>(body[i]);
+            generateConditionCode(convertedConditionNode);
         }
         else if(body[i]->getType()==nodeType::consoleNode){
             auto convertedConsoleNode = std::dynamic_pointer_cast<ConsoleNode>(body[i]);
+            generateConsoleCode(convertedConsoleNode);
         }
         else if(body[i]->getType()==nodeType::forLoopNode){
             auto convertedForNode = std::dynamic_pointer_cast<ForLoopNode>(body[i]);
+            generateForCode(convertedForNode);
         }
         else if(body[i]->getType()==nodeType::ifNode){
             auto convertedIfNode = std::dynamic_pointer_cast<IfNode>(body[i]);
+            generateIfCode(convertedIfNode);
         }
         else if(body[i]->getType()==nodeType::functionNode){
             auto convertedFunctionNode = std::dynamic_pointer_cast<FunctionNode>(body[i]);
+            generateFunctionCode(convertedFunctionNode);
         }
         else if(body[i]->getType()==nodeType::functionCallNode){
             auto convertedFunctionCallNode = std::dynamic_pointer_cast<FunctionCallNode>(body[i]);
+            generateFunctionCallCode(convertedFunctionCallNode);
         }
         else if(body[i]->getType()==nodeType::returnNode){
             auto convertedReturnNode = std::dynamic_pointer_cast<ReturnNode>(body[i]);
         }
         else if(body[i]->getType()==nodeType::switchNode){
-            auto convertedSWitchNode = std::dynamic_pointer_cast<SwitchNode>(body[i]);
+            auto convertedSwitchNode = std::dynamic_pointer_cast<SwitchNode>(body[i]);
+            generateSwitchCode(convertedSwitchNode);
         }
         else if(body[i]->getType()==nodeType::whileNode){
             auto convertedWhileNode = std::dynamic_pointer_cast<WhileNode>(body[i]);
+            generateWhileCode(convertedWhileNode);
         }
         else if(body[i]->getType()==nodeType::declarationNode){
             auto convertedDeclarationNode = std::dynamic_pointer_cast<DeclarationNode>(body[i]);
+            generateDeclartionCode(convertedDeclarationNode);
         }
         else if(body[i]->getType()==nodeType::jumpNode){
             auto convertedJumpNode = std::dynamic_pointer_cast<JumpNode>(body[i]);
+            generateJumpNode(convertedJumpNode);
         }
     }
     return completeBodyCodeOutput;
