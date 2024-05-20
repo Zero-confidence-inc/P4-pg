@@ -176,7 +176,7 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
 
 
 
-/* std::string CodeGenerator::generateBodyCode(std::vector<std::shared_ptr<ASTNode>>& body) {
+ std::string CodeGenerator::generateBodyCode(std::vector<std::shared_ptr<ASTNode>>& body) {
     std::string completeBodyCodeOutput;
     std::string bodyArrayCode;
     std::string bodyBoolCode;
@@ -223,7 +223,7 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
         }
     }
     return completeBodyCodeOutput;
-} */
+} 
 
 
 std::string CodeGenerator::generateFunctionCode(FunctionNode& node) {
