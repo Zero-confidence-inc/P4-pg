@@ -256,7 +256,7 @@ void SemanticAnalyser::kowalskiString(const std::shared_ptr<StringNode>& node){
 }
 
 void SemanticAnalyser::kowalskiWhile(const std::shared_ptr<WhileNode>& node){
-    if (node->condition->getType() != nodeType::whileNode){
+    if (node->condition->getType() != nodeType::conditionNode){
         throw std::runtime_error("Not a condition");
     }else {
         symbolTable.enterScope();
@@ -283,7 +283,7 @@ void SemanticAnalyser::kowalskiFor(const std::shared_ptr<ForLoopNode>& node){
     }
 }
 void SemanticAnalyser::kowalskiSwitch(const std::shared_ptr<SwitchNode>& node){
-    if (node->condition->getType() != nodeType::switchNode){
+    if (node->condition->getType() != nodeType::conditionNode){
         throw std::runtime_error("Not a condition");
     }else {
         
@@ -351,7 +351,7 @@ void SemanticAnalyser::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
 
 void SemanticAnalyser::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
     std::string size = node->size;
-    if(isalpha(size[1])){
+    if(isalpha(size[0])){
         std::string type = symbolTable.lookUpVariable(size);
         if (type != "int") {
             throw std::runtime_error("The array size is not an integer");
