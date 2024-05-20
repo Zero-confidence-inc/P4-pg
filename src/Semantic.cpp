@@ -317,11 +317,13 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
                 throw std::runtime_error("Integers only accept integer comparaisons.");
             break;
         case nodeType::charNode:
-            if(aSide != nodeType::charNode && (aSide != nodeType::stringNode && node->aNode->StringOfChars.length() == 1))
+             auto convertedNode = std::dynamic_pointer_cast<StringNode>(node->bNode);
+            if(aSide != nodeType::charNode && (aSide != nodeType::stringNode && convertedNode->StringOfChars.length() == 1))
                 throw std::runtime_error("Chars only accept chars and single letter string comparaisons.");
             break;
         case nodeType::stringNode:
-            if(aSide != nodeType::stringNode && (aSide != nodeType::charNode && node->aNode->StringOfChars.length() == 1))
+            auto convertedNode2 = std::dynamic_pointer_cast<StringNode>(node->bNode);
+            if(aSide != nodeType::stringNode && (aSide != nodeType::charNode && convertedNode2->StringOfChars.length() == 1))
                 throw std::runtime_error("Strings only accept string comparaisons and chars if the string is a single letter string.");
             break;
         
@@ -330,7 +332,8 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
                 throw std::runtime_error("Illegal condition");
                 break;
             }
-            kowalskiKondi(node->bNode);
+            auto convertedNode3 = std::dynamic_pointer_cast<ConditionNode>(node->bNode);
+            kowalskiKondi(convertedNode3);
             break;
         default:
             throw std::runtime_error("Illegal condition");
@@ -372,8 +375,8 @@ void SemanticAnalyser::kowalskiReturn(const std::shared_ptr<ReturnNode>& node) {
 
 nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
         if (node->getType() == nodeType::identifierNode){
-            auto idNode = std::static_pointer_cast<identifierNode>(node);
-            std::string type = symbolTable.lookUpVariable(idNode->identifer);
+            auto idNode = std::dynamic_pointer_cast<IdentifierNode>(node);
+            std::string type = symbolTable.lookUpVariable(idNode->identifier);
             if (type == "int") {return nodeType::intNode;}
             else if (type == "char") {return nodeType::charNode;}
             else if (type == "string") {return nodeType::stringNode;}

@@ -64,20 +64,20 @@ public:
 
 private:
     // Helper methods for code generation
-    std::string generateFunctionCode(FunctionNode& node);
-    std::string generateValueCode(ValueNode& node);
-    std::string generateIntCode(IntNode& node);
-    std::string generateUSCode(UsIntNode& node);
-    std::string generateFloatCode(FloatNode& node);
-    std::string generateBoolCode(BoolNode& node);
-    std::string generateConsoleCode(ConsoleNode& node);
-    std::string generateDeclartionCode(DeclarationNode& node);
-    std::string generateValueCode(ValueNode& node);
-    std::string generateFunctionCallCode(FunctionCallNode& node);
+    std::string generateFunctionCode(std::shared_ptr<FunctionNode>& node);
+    std::string generateValueCode(std::shared_ptr<ValueNode>& node);
+    std::string generateIntCode(std::shared_ptr<IntNode>& node);
+    std::string generateUSCode(std::shared_ptr<UsIntNode>& node);
+    std::string generateFloatCode(std::shared_ptr<FloatNode>& node);
+    std::string generateBoolCode(std::shared_ptr<BoolNode>& node);
+    std::string generateConsoleCode(std::shared_ptr<ConsoleNode>& node);
+    std::string generateDeclartionCode(std::shared_ptr<DeclarationNode>& node);
+    std::string generateValueCode(std::shared_ptr<ValueNode>& node);
+    std::string generateFunctionCallCode(std::shared_ptr<FunctionCallNode>& node);
     std::string generateConditionCode(std::shared_ptr<ConditionNode>& node);
-    std::string generateCharCode(CharNode& node);
-    std::string generateStringCode(StringNode& node);
-    std::string generateIdentifierCode(IdentifierNode& node);
+    std::string generateCharCode(std::shared_ptr<CharNode>& node);
+    std::string generateStringCode(std::shared_ptr<StringNode>& node);
+    std::string generateIdentifierCode(std::shared_ptr<IdentifierNode>& node);
     std::string generateRandomCode(RandomNode& node);
     // Add other helper methods as needed...
 };
