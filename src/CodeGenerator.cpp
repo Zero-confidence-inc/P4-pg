@@ -97,6 +97,46 @@ void CodeGenerator::visit(FunctionCallNode& node) {
 
 }
 
+std::string CodeGenerator::generateIfCode(std::shared_ptr<IfNode>& node) {
+    std::string ifCodeOutput;
+    ifCodeOutput += "if(";
+    ifCodeOutput += generateConditionCode(node->condition);
+    ifCodeOutput += "){";
+    ifCodeOutput += generateBodyCode(node->body);
+    ifCodeOutput += "}";
+    if (node->elseBody.size()>0){
+        ifCodeOutput += "else{";
+        ifCodeOutput += generateBodyCode(node->elseBody);
+        ifCodeOutput += "};";
+        return ifCodeOutput;
+    }
+    else {
+        ifCodeOutput += ";";
+        return ifCodeOutput;
+    }
+}
+
+std::string CodeGenerator::generateBodyCode(std::vector<std::shared_ptr<ASTNode>>& body) {
+    std::string completeBodyCodeOutput;
+    std::string bodyArrayCode;
+    std::string bodyBoolCode;
+    for (int i = 0; i<body.size(); i++){
+        if (body[i]->getType()==nodeType::arrayNode){
+            auto convertedArrayNode = std::dynamic_pointer_cast<ArrayNode>();
+            bodyArrayCode;// = generateArrayCode;
+        }
+        else if(body[i]->getType()==nodeType::boolNode){
+            auto convertedBoolNode = std::dynamic_pointer_cast<BoolNode>(body[i]);
+            bodyBoolCode = generateBoolCode();
+        }
+
+
+        default:
+            break;
+        }
+    }
+    return completeBodyCodeOutput;
+}
 
 std::string CodeGenerator::generateFunctionCode(std::shared_ptr<FunctionNode>& node) {
 
@@ -120,7 +160,7 @@ std::string CodeGenerator::generateDeclartionCode(std::shared_ptr<DeclarationNod
 std::string CodeGenerator::generateConsoleCode(std::shared_ptr<ConsoleNode>& node){
     std::string CodeInString = "std::cout <<" ;
     for(int i=0;i<node->message.size();i++){
-            
+
     if (node->message[i]->getType() == nodeType::intNode){
         auto convertedNode = std::dynamic_pointer_cast<IntNode>(node->message[i]);
         CodeInString += generateIntCode(convertedNode);
@@ -149,7 +189,7 @@ std::string CodeGenerator::generateConsoleCode(std::shared_ptr<ConsoleNode>& nod
     return CodeInString;
 }
 std::string CodeGenerator::generateValueCode(std::shared_ptr<ValueNode>& node){
-            
+
     std::string leString = node->type + " " + node->identifier + "=";
 
     if (node->value->getType() == nodeType::intNode){
@@ -234,7 +274,7 @@ std::string CodeGenerator::generateConditionCode(std::shared_ptr<ConditionNode>&
 
     leString += node->condition;
 
-    
+
     if (node->condition==""){return leString;}
 
     if (node->bNode->getType() == nodeType::conditionNode){

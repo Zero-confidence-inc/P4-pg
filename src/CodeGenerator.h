@@ -79,6 +79,8 @@ private:
     std::string generateStringCode(std::shared_ptr<StringNode>& node);
     std::string generateIdentifierCode(std::shared_ptr<IdentifierNode>& node);
     std::string generateRandomCode(RandomNode& node);
+    std::string generateIfCode(std::shared_ptr<IfNode>& node);
+    std::string generateBodyCode(std::vector<std::shared_ptr<ASTNode>>& body);
     // Add other helper methods as needed...
 };
 
