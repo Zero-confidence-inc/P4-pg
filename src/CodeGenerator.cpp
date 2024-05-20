@@ -155,18 +155,23 @@ std::string CodeGenerator::generateFunctionCode(std::shared_ptr<FunctionNode>& n
 std::string CodeGenerator::generateIntCode(std::shared_ptr<IntNode>& node){
     return std::to_string(node->integer);
 }
+
 std::string CodeGenerator::generateUSCode(std::shared_ptr<UsIntNode>& node){
     return std::to_string(node->usinteger);
 }
+
 std::string CodeGenerator::generateFloatCode(std::shared_ptr<FloatNode>& node){
     return std::to_string(node->Floating_Point);
 }
+
 std::string CodeGenerator::generateBoolCode(std::shared_ptr<BoolNode>& node){
     return std::to_string(node->boolean);
 }
+
 std::string CodeGenerator::generateDeclartionCode(std::shared_ptr<DeclarationNode>& node){
     return node->type + " " + node->identifier + ";";
 }
+
 std::string CodeGenerator::generateConsoleCode(std::shared_ptr<ConsoleNode>& node){
     std::string CodeInString = "std::cout <<" ;
     for(int i=0;i<node->message.size();i++){
@@ -224,7 +229,7 @@ std::string CodeGenerator::generateValueCode(std::shared_ptr<ValueNode>& node){
     }
 
 
-    return leString;
+    return leString + ";";
 
 }
 std::string CodeGenerator::generateFunctionCallCode(std::shared_ptr<FunctionCallNode>& Node){
