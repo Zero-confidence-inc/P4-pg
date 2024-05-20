@@ -136,6 +136,6 @@ TEST(CGTEST,ConsoleTest){
     ConsoleOutputTest->identifier = "x";
     ConsoleOutputTest->value = ConsoleOutputIntTest;
     std::string Consolemsg = "is an int, it is:";
-    ConsoleTest->message.push_back(ConsoleOutputTest->identifier);
+    //ConsoleTest->message.push_back(ConsoleOutputTest->identifier);
 }
 
