@@ -97,6 +97,46 @@ void CodeGenerator::visit(FunctionCallNode& node) {
 
 }
 
+std::string CodeGenerator::generateIfCode(std::shared_ptr<IfNode>& node) {
+    std::string ifCodeOutput;
+    ifCodeOutput += "if(";
+    ifCodeOutput += generateConditionCode(node->condition);
+    ifCodeOutput += "){";
+    ifCodeOutput += generateBodyCode(node->body);
+    ifCodeOutput += "}";
+    if (node->elseBody.size()>0){
+        ifCodeOutput += "else{";
+        ifCodeOutput += generateBodyCode(node->elseBody);
+        ifCodeOutput += "};";
+        return ifCodeOutput;
+    }
+    else {
+        ifCodeOutput += ";";
+        return ifCodeOutput;
+    }
+}
+
+std::string CodeGenerator::generateBodyCode(std::vector<std::shared_ptr<ASTNode>>& body) {
+    std::string completeBodyCodeOutput;
+    std::string bodyArrayCode;
+    std::string bodyBoolCode;
+    for (int i = 0; i<body.size(); i++){
+        if (body[i]->getType()==nodeType::arrayNode){
+            auto convertedArrayNode = std::dynamic_pointer_cast<ArrayNode>();
+            bodyArrayCode;// = generateArrayCode;
+        }
+        else if(body[i]->getType()==nodeType::boolNode){
+            auto convertedBoolNode = std::dynamic_pointer_cast<BoolNode>(body[i]);
+            bodyBoolCode = generateBoolCode();
+        }
+
+
+        default:
+            break;
+        }
+    }
+    return completeBodyCodeOutput;
+}
 
 std::string CodeGenerator::generateFunctionCode(FunctionNode& node) {
 
@@ -141,13 +181,13 @@ std::string CodeGenerator::generateFunctionCallCode(FunctionCallNode& Node){
     }
     return leString +");";
 }
-std::string CodeGenerator::generateConditionCode(ConditionNode& node){
-    std::string leString = node.aNode->getValue() + node.condition;
-    if (node.condition==""){return leString;}
-    if (node.bNode->getType() == nodeType::conditionNode){
-        return leString += generateConditionCode(node.bNode);
+std::string CodeGenerator::generateConditionCode(std::shared_ptr<ConditionNode>& node){
+    std::string leString = node->aNode->getValue() + node->condition;
+    if (node->condition==""){return leString;}
+    if (node->bNode->getType() == nodeType::conditionNode){
+        return leString += generateConditionCode(node->bNode);
     }
-    return leString+node.bNode->getValue();
+    return leString+node->bNode->getValue();
 }
 
 std::string CodeGenerator::generateCharCode(CharNode& node) {

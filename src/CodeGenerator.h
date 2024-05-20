@@ -74,11 +74,13 @@ private:
     std::string generateDeclartionCode(DeclarationNode& node);
     std::string generateValueCode(ValueNode& node);
     std::string generateFunctionCallCode(FunctionCallNode& node);
-    std::string generateConditionCode(ConditionNode& node);
+    std::string generateConditionCode(std::shared_ptr<ConditionNode>& node);
     std::string generateCharCode(CharNode& node);
     std::string generateStringCode(StringNode& node);
     std::string generateIdentifierCode(IdentifierNode& node);
     std::string generateRandomCode(RandomNode& node);
+    std::string generateIfCode(std::shared_ptr<IfNode>& node);
+    std::string generateBodyCode(std::vector<std::shared_ptr<ASTNode>>& body);
     // Add other helper methods as needed...
 };
 
