@@ -66,8 +66,8 @@ void SemanticAnalyser::kowalski(const std::vector<std::shared_ptr<ASTNode>>& roo
     for (int i = 0; i < root.size(); i++){
             analyseNode(root[i]);
         }}
-    catch(std::runtime_error watchoutski){
-        printf(watchoutski);
+    catch(std::runtime_error& withoutski){
+        std::cout << withoutski.what() << "Kowalski is fucked\n";
     }
     //magic??
     symbolTable.exitScope();
