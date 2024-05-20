@@ -116,7 +116,67 @@ std::string CodeGenerator::generateIfCode(std::shared_ptr<IfNode>& node) {
     }
 }
 
-std::string CodeGenerator::generateBodyCode(std::vector<std::shared_ptr<ASTNode>>& body) {
+std::string CodeGenerator::generateWhileCode(std::shared_ptr<WhileNode>& node) {
+    std::string whileCodeOutput;
+    whileCodeOutput += "while(";
+    whileCodeOutput += generateConditionCode(node->condition);
+    whileCodeOutput += "){";
+    whileCodeOutput += generateBodyCode(node->body);
+    whileCodeOutput += "}";
+        return whileCodeOutput;
+    
+}
+
+std::string CodeGenerator::generateStructCode(std::shared_ptr<StructNode>& node) {
+   std::string leString;
+    for(int i = 0;i<node->body.size();i++){
+        
+
+        auto convNode = std::dynamic_pointer_cast<DeclarationNode>(node->body[i]);
+        leString += generateDeclartionCode(convNode);
+
+    }
+    return leString;
+}
+
+std::string CodeGenerator::generateSwitchCode(std::shared_ptr<SwitchNode>& node){
+    std::string leString;
+    leString += "switch(";
+    leString += generateConditionCode(node->condition);
+    leString += ")";
+    leString += "{";
+    for (int i = 0;i < node->caseBranch.size();i++){
+        if(node->caseBranch[i]->){
+
+        } else {
+            leString += "case ";
+            auto convNode = std::dynamic_pointer_cast<ConditionNode>(node->caseBranch[i]->sucessCondition);
+            leString += generateConditionCode(convNode) + ":";
+        }
+
+        generateBodyCode(node->caseBranch[i]->Branch);
+    }
+    leString += "}";
+    return leString;
+}
+
+std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
+    std::string forCodeOutput;
+    forCodeOutput += "for(";
+    forCodeOutput += generateDeclartionCode(node->declaration)+";";
+    forCodeOutput += generateConditionCode(node->condition)+";";
+    forCodeOutput += generateConditionCode(node->expression);
+    forCodeOutput += "){";
+    forCodeOutput += generateBodyCode(node->body);
+    forCodeOutput += "}";
+        return forCodeOutput;
+    
+}
+
+
+
+
+/* std::string CodeGenerator::generateBodyCode(std::vector<std::shared_ptr<ASTNode>>& body) {
     std::string completeBodyCodeOutput;
     std::string bodyArrayCode;
     std::string bodyBoolCode;
@@ -136,7 +196,7 @@ std::string CodeGenerator::generateBodyCode(std::vector<std::shared_ptr<ASTNode>
         }
     }
     return completeBodyCodeOutput;
-}
+} */
 
 std::string CodeGenerator::generateFunctionCode(std::shared_ptr<FunctionNode>& node) {
 
@@ -183,11 +243,13 @@ std::string CodeGenerator::generateConsoleCode(std::shared_ptr<ConsoleNode>& nod
         auto convertedNode = std::dynamic_pointer_cast<BoolNode>(node->message[i]);
         CodeInString += generateBoolCode(convertedNode);
     }
-        }
+    }
     
     CodeInString += "<< std::endl;";
     return CodeInString;
+
 }
+
 std::string CodeGenerator::generateValueCode(std::shared_ptr<ValueNode>& node){
 
     std::string leString = node->type + " " + node->identifier + "=";
