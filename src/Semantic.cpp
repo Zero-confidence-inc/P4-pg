@@ -307,37 +307,29 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
     std::string condition = node->condition;
     nodeType aSide = getType2(node->aNode);
     //todo:: if statement to check if both sides allow || and &&
-    switch(getType2(node->bNode)){
-        case nodeType::floatNode:
-            if(aSide != nodeType::floatNode && aSide != nodeType::intNode)
-                throw std::runtime_error("Floats only accept integer and float comparaisons.");
-            break;
-        case nodeType::intNode:
-            if(aSide != nodeType::intNode)
-                throw std::runtime_error("Integers only accept integer comparaisons.");
-            break;
-        case nodeType::charNode:
-             auto convertedNode = std::dynamic_pointer_cast<StringNode>(node->bNode);
-            if(aSide != nodeType::charNode && (aSide != nodeType::stringNode && convertedNode->StringOfChars.length() == 1))
-                throw std::runtime_error("Chars only accept chars and single letter string comparaisons.");
-            break;
-        case nodeType::stringNode:
-            auto convertedNode2 = std::dynamic_pointer_cast<StringNode>(node->bNode);
-            if(aSide != nodeType::stringNode && (aSide != nodeType::charNode && convertedNode2->StringOfChars.length() == 1))
-                throw std::runtime_error("Strings only accept string comparaisons and chars if the string is a single letter string.");
-            break;
-        
-        case nodeType::conditionNode:
-            if(aSide != nodeType::stringNode && aSide != nodeType::charNode && aSide != nodeType::intNode && aSide!= nodeType::floatNode){
-                throw std::runtime_error("Illegal condition");
-                break;
-            }
-            auto convertedNode3 = std::dynamic_pointer_cast<ConditionNode>(node->bNode);
-            kowalskiKondi(convertedNode3);
-            break;
-        default:
+    if (getType2(node->bNode) == nodeType::floatNode){
+        if(aSide != nodeType::floatNode && aSide != nodeType::intNode)
+            throw std::runtime_error("Floats only accept integer and float comparaisons.");
+    } else if (getType2(node->bNode) == nodeType::intNode){
+        if(aSide != nodeType::intNode)
+            throw std::runtime_error("Integers only accept integer comparaisons.");  
+    } else if (getType2(node->bNode) == nodeType::charNode){
+        auto convertedNode = std::dynamic_pointer_cast<StringNode>(node->bNode);
+        if(aSide != nodeType::charNode && (aSide != nodeType::stringNode && convertedNode->StringOfChars.length() == 1))
+            throw std::runtime_error("Chars only accept chars and single letter string comparaisons.");
+    } else if (getType2(node->bNode) == nodeType::stringNode){
+        auto convertedNode = std::dynamic_pointer_cast<StringNode>(node->bNode);
+        if(aSide != nodeType::stringNode && (aSide != nodeType::charNode && convertedNode->StringOfChars.length() == 1))
+            throw std::runtime_error("Strings only accept string comparaisons and chars if the string is a single letter string.");
+    } else if (getType2(node->bNode) == nodeType::conditionNode){
+        if(aSide != nodeType::stringNode && aSide != nodeType::charNode && aSide != nodeType::intNode && aSide!= nodeType::floatNode)
             throw std::runtime_error("Illegal condition");
-            break;
+        auto convertedNode = std::dynamic_pointer_cast<ConditionNode>(node->bNode);
+        kowalskiKondi(convertedNode);
+    } else if (node->bNode == nullptr){
+        if (node->condition == "=" || "==" || "<" || ">" || "<=" || ">=" || "+=" || "-=" || "!=" || "+" || "-"){
+            throw std::runtime_error("No comparison to be made");
+        }
     }
 }
 
