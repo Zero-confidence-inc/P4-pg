@@ -509,13 +509,15 @@ std::shared_ptr<ASTNode> Parser::parseSwitch() {
                         } else {
                             return nullptr;
                         }
+                    } else {
+                        return nullptr;
                     }
                 }
                 if (lookAhead(TokenType::CONTROL) && tokens[++pos].value == "default"){
                     auto dNode = std::make_shared<DefaultNode>();
                     if(lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == ":"){
                         pos++;
-                        dNode->branch.push_back(parseDeclaration());
+                        dNode->Branch.push_back(parseDeclaration());
                         swNode->deNode = dNode;
                     } else{
                         return nullptr;
