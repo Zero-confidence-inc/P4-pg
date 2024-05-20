@@ -6,3 +6,5 @@ build/CMakeFiles/3.29.3/CMakeDetermineCompilerABI_C.bin
 build/CMakeFiles/3.29.3/CompilerIdC/a.exe
 /cmake-build-debug/
 /CMakeFiles/
+googletest/
+.idea/editor.xml
