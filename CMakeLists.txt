@@ -28,6 +28,7 @@ set(SOURCES
         src/BoolDFA.cpp
         src/ConsoleDFA.cpp
         src/Semantic.cpp
+        src/Semantic.h
 )
 
 add_library(P4_pg_lib ${SOURCES})
