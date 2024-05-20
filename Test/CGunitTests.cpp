@@ -83,3 +83,26 @@ TEST(CGTEST,ValueBoolFalseTest){
     std::string BTFresault = codeGenerator.generateValueCode(VTN_basicValueBool);
     EXPECT_EQ(BTFresault,"bool x=0;");
 }
+
+TEST(CGTEST,CondiTest){
+
+
+    auto CondiNode = std::make_shared<ConditionNode>();
+    auto aNode = std::make_shared<IdentifierNode>();
+    aNode->identifier = "abc";
+    CondiNode->aNode = aNode;
+    CondiNode->condition = "+="
+
+    auto CondiNode2 = std::make_shared<ConditionNode>();
+    auto bNode = std::make_shared<FloatNode>();
+    bNode->const_Float = "5";
+    CondiNode->aNode = aNode;
+    CondiNode->condition = "+"
+    auto cNode = std::make_shared<IntNode>();
+    bNode->integer = "10";
+    CondiNode->bNode = CondiNode2;
+    
+    std::string CondiResault = codeGenerator.generateValueCode(VTN_basicValueBool);
+    EXPECT_EQ(CondiResault,"abc+=5+10;");
+}
+
