@@ -201,33 +201,6 @@ struct FunctionNode : DeclarationNode {
     void accept(ASTNodeVisitor& visitor) override;
 };
 
-class ASTNodeVisitor {
-public:
-    virtual void visit(DeclarationNode& node) = 0;
-    virtual void visit(ConsoleNode& node) = 0;
-    virtual void visit(CharNode& node) = 0;
-    virtual void visit(ForLoopNode& node) = 0;
-    virtual void visit(IfNode& node) = 0;
-    virtual void visit(StructNode& node) = 0;
-    virtual void visit(ValueNode& node) = 0;
-    virtual void visit(IdentifierNode& node) = 0;
-    virtual void visit(ReturnNode& node) = 0;
-    virtual void visit(FloatNode& node) = 0;
-    virtual void visit(IntNode& node) = 0;
-    virtual void visit(UsIntNode& node) = 0;
-    virtual void visit(BoolNode& node) = 0;
-    virtual void visit(StringNode& node) = 0;
-    virtual void visit(SwitchNode& node) = 0;
-    virtual void visit(CaseNode& node) = 0;
-    virtual void visit(ConditionNode& node) = 0;
-    virtual void visit(WhileNode& node) = 0;
-    virtual void visit(JumpNode& node) = 0;
-    virtual void visit(RandomNode& node) = 0;
-    virtual void visit(ArrayNode& node) = 0;
-    virtual void visit(FunctionCallNode& node) = 0;
-    virtual void visit(FunctionNode& node) = 0;
-};
-
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);

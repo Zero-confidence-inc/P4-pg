@@ -35,6 +35,7 @@ target_link_libraries(P4_pg P4_pg_lib)
 
 # Define your test executable
 set(TEST_SOURCES
+        Test/CGunitTests.cpp
         Test/OperatorDFAtests.cpp
         Test/TypeDFAtests.cpp
         Test/IdentifierDFAtest.cpp
