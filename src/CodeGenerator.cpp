@@ -331,39 +331,41 @@ std::string CodeGenerator::generateRandomCode(RandomNode& node) {
     std::string randomCodeOutput;
     std::string randomID = node.identifier;
 
-    if (node.type == "int?"){
-            randomCodeOutput += "int";
-            randomCodeOutput += randomID;
-            randomCodeOutput += "=";
-        if (node.RandomIntRange.size()>0){
-                randomCodeOutput += "rand()%(" + std::to_string(node.RandomIntRange[1]) + "-" + std::to_string(node.RandomIntRange[0]) + "+ 1) + " + std::to_string(node.RandomIntRange[0]) + ";";
-                return randomCodeOutput;
-        }
-        else{
+    if (node.type == "int?") {
+        randomCodeOutput += "int";
+        randomCodeOutput += randomID;
+        randomCodeOutput += "=";
+        if (node.RandomIntRange.size() > 0) {
+            randomCodeOutput +=
+                    "rand()%(" + std::to_string(node.RandomIntRange[1]) + "-" + std::to_string(node.RandomIntRange[0]) +
+                    "+ 1) + " + std::to_string(node.RandomIntRange[0]) + ";";
+            return randomCodeOutput;
+        } else {
             randomCodeOutput += "rand();";
             return randomCodeOutput;
         }
-    }
-    else if (node.type == "float?"){
+    } else if (node.type == "float?") {
         randomCodeOutput += "float";
         randomCodeOutput += randomID;
         randomCodeOutput += "=";
-        if (node.RandomFloatRange.size()>0){
+        if (node.RandomFloatRange.size() > 0) {
             randomCodeOutput += "randomFloat;";
-            randomCodeOutput += "randomFloat = (float range =" + std::to_string(node.RandomFloatRange[1]) + "-" + std::to_string(node.RandomFloatRange[0]) + "+ 1; float num = rand() % range +" + std::to_string(node.RandomFloatRange[0]) + ";)";
-        }
-        else{
+            randomCodeOutput += "randomFloat = (float range =" + std::to_string(node.RandomFloatRange[1]) + "-" +
+                                std::to_string(node.RandomFloatRange[0]) + "+ 1; float num = rand() % range +" +
+                                std::to_string(node.RandomFloatRange[0]) + ";)";
+        } else {
             randomCodeOutput += "randomFloat;";
             randomCodeOutput += "randomFloat = (float)rand();";
             return randomCodeOutput;
         }
-    }
-    else if (node.type == "bool?"){
+    } else if (node.type == "bool?") {
         randomCodeOutput += "bool";
         randomCodeOutput += randomID;
         randomCodeOutput += "=";
-        randomCodeOutput += "int randomBool = rand(); if (randomBool%2==0){" + randomID + "= true); else {" + randomID + "= false);";
+        randomCodeOutput += "int randomBool = rand(); if (randomBool%2==0){" + randomID + "= true); else {" + randomID +
+                            "= false);";
         return randomCodeOutput;
     }
+    return nullptr;
 }
 
