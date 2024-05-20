@@ -22,6 +22,17 @@ TEST(CGTEST,ValueIntTest){
     std::string VTresault = codeGenerator.generateValueCode(VTN_basicValueInt);
     EXPECT_EQ(VTresault,"int x=12;");
 }
+TEST(CGTEST,ValueNegIntTest){
+    auto VTN_basicValueInt = std::make_shared<ValueNode>();
+    VTN_basicValueInt->type = "int";
+    VTN_basicValueInt->identifier = "x";
+    auto ITN_basicValue = std::make_shared<IntNode>();
+    ITN_basicValue->integer = -12;
+    VTN_basicValueInt->value = ITN_basicValue;
+    CodeGenerator codeGenerator;
+    std::string VTresault = codeGenerator.generateValueCode(VTN_basicValueInt);
+    EXPECT_EQ(VTresault,"int x=-12;");
+}
 TEST(CGTEST,ValueFloatTest){
     auto VTN_basicValueFloat = std::make_shared<ValueNode>();
     VTN_basicValueFloat->type = "float";
@@ -82,4 +93,15 @@ TEST(CGTEST,ValueBoolFalseTest){
     CodeGenerator codeGenerator;
     std::string BTFresault = codeGenerator.generateValueCode(VTN_basicValueBool);
     EXPECT_EQ(BTFresault,"bool x=0;");
+}
+TEST(CGTEST,ValueUsIntTest){
+    auto VTN_basicValueUsInt = std::make_shared<ValueNode>();
+    VTN_basicValueUsInt->type = "usint";
+    VTN_basicValueUsInt->identifier = "x";
+    auto UTN_basicValue = std::make_shared<UsIntNode>();
+    UTN_basicValue->usinteger = -12;
+    VTN_basicValueUsInt->value = UTN_basicValue;
+    CodeGenerator codeGenerator;
+    std::string UTresault = codeGenerator.generateValueCode(VTN_basicValueUsInt);
+    EXPECT_EQ(UTresault,"int x=12");
 }
