@@ -226,21 +226,21 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
 } 
 
 
-std::string CodeGenerator::generateFunctionCode(FunctionNode& node) {
-    std:: string functionCodeOutput;
-    functionCodeOutput += node.type;
-    functionCodeOutput += node.identifier;
-    functionCodeOutput += "(";
-    for (int i = 0; i < node.arguments.size(); i++)
-    {
-        auto functionArugment = std::dynamic_pointer_cast<DeclarationNode>(node.arguments[i]);
-        functionCodeOutput += std::to_string(functionArugment);
-    }
-
-}
-
 std::string CodeGenerator::generateFunctionCode(std::shared_ptr<FunctionNode>& node) {
-
+    std:: string functionCodeOutput;
+    functionCodeOutput += node->type;
+    functionCodeOutput += node->identifier;
+    functionCodeOutput += "(";
+    for (int i = 0; i < node->arguments.size(); i++)
+    {
+        if (i>0 ){functionCodeOutput += ",";}
+        auto functionArugment = std::dynamic_pointer_cast<DeclarationNode>(node->arguments[i]);
+        functionCodeOutput += generateDeclartionCode(functionArugment);
+    }
+    functionCodeOutput += "){";
+    functionCodeOutput += generateBodyCode(node->body);
+    functionCodeOutput += "};";
+    return functionCodeOutput;
 }
 
 std::string CodeGenerator::generateIntCode(std::shared_ptr<IntNode>& node){
