@@ -6,8 +6,6 @@
 #include <iostream>
 #include <string>
 
-
-
 void SymbolTable::enterScope(){
 scopes.push_back({});
 }
@@ -302,34 +300,67 @@ for (int i = 0; i < node->Branch.size(); i++){
     symbolTable.exitScope();
 }
 
-
 void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node){
     std::string condition = node->condition;
     nodeType aSide = getType2(node->aNode);
-    //todo:: if statement to check if both sides allow || and &&
-    if (getType2(node->bNode) == nodeType::floatNode){
-        if(aSide != nodeType::floatNode && aSide != nodeType::intNode)
-            throw std::runtime_error("Floats only accept integer and float comparaisons.");
-    } else if (getType2(node->bNode) == nodeType::intNode){
-        if(aSide != nodeType::intNode)
-            throw std::runtime_error("Integers only accept integer comparaisons.");  
-    } else if (getType2(node->bNode) == nodeType::charNode){
-        auto convertedNode = std::dynamic_pointer_cast<StringNode>(node->bNode);
-        if(aSide != nodeType::charNode && (aSide != nodeType::stringNode && convertedNode->StringOfChars.length() == 1))
-            throw std::runtime_error("Chars only accept chars and single letter string comparaisons.");
-    } else if (getType2(node->bNode) == nodeType::stringNode){
-        auto convertedNode = std::dynamic_pointer_cast<StringNode>(node->bNode);
-        if(aSide != nodeType::stringNode && (aSide != nodeType::charNode && convertedNode->StringOfChars.length() == 1))
-            throw std::runtime_error("Strings only accept string comparaisons and chars if the string is a single letter string.");
-    } else if (getType2(node->bNode) == nodeType::conditionNode){
-        if(aSide != nodeType::stringNode && aSide != nodeType::charNode && aSide != nodeType::intNode && aSide!= nodeType::floatNode)
-            throw std::runtime_error("Illegal condition");
-        auto convertedNode = std::dynamic_pointer_cast<ConditionNode>(node->bNode);
-        kowalskiKondi(convertedNode);
-    } else if (node->bNode == nullptr){
-        if (node->condition == "=" || "==" || "<" || ">" || "<=" || ">=" || "+=" || "-=" || "!=" || "+" || "-"){
-            throw std::runtime_error("No comparison to be made");
+    if (condition == "+=" || "-=" || "--" || "++" || "="){
+        if (node->aNode->getType() != nodeType::identifierNode){
+            throw std::runtime_error("Trying to reassign a non identifier");
+        } else if (condition == "+=" || "-=" || "="){
+            if (node->bNode == nullptr)
+                throw std::runtime_error("Trying to reassign nothing");
+            if (getType2(node->aNode) == nodeType::intNode && getType2(node->bNode) != nodeType::intNode)
+                throw std::runtime_error("Trying to assign a non int to an int");
+            if (getType2(node->aNode) == nodeType::floatNode && getType2(node->bNode) != nodeType::intNode && getType2(node->bNode) != nodeType::floatNode)
+                throw std::runtime_error("Trying to assign a non int or float to a float");
+            if (getType2(node->aNode) == nodeType::charNode && getType2(node->bNode) != nodeType::charNode)
+                throw std::runtime_error("Trying to assign a non char to a char");
+            if (getType2(node->aNode) == nodeType::stringNode && getType2(node->bNode) != nodeType::stringNode && getType2(node->bNode) != nodeType::charNode)
+                throw std::runtime_error("Trying to assign non string or char to a char");
+            if (getType2(node->aNode) == nodeType::boolNode && getType2(node->bNode) != nodeType::boolNode)
+                throw std::runtime_error("Trying to assign non bool to a bool");
+        } else if (condition == "--" || "++"){
+            if (node->bNode != nullptr)
+                throw std::runtime_error("Try to assign after \"++\" or \"--\"");
+            if (getType2(node->aNode) == nodeType::charNode)
+                throw std::runtime_error("Trying to increment or decrement a char");
+            if (getType2(node->aNode) == nodeType::stringNode)
+                throw std::runtime_error("Trying to increment or decrement a string");
+            if (getType2(node->aNode) == nodeType::boolNode)
+                throw std::runtime_error("Trying to increment or decrement a bool");
         }
+    } else if (condition == "==" || "!="){
+        if (node->bNode == nullptr)
+            throw std::runtime_error("Trying to compare nothing");
+        if (getType2(node->aNode) == nodeType::intNode && getType2(node->bNode) != nodeType::intNode && getType2(node->bNode) != nodeType::floatNode)
+            throw std::runtime_error("Trying to compare int to non int or non float");
+        if (getType2(node->aNode) == nodeType::floatNode && getType2(node->bNode) != nodeType::intNode && getType2(node->bNode) != nodeType::floatNode)
+            throw std::runtime_error("Trying to compare float to non int or non float");
+        if (getType2(node->aNode) == nodeType::charNode && getType2(node->bNode) != nodeType::charNode && getType2(node->bNode) != nodeType::stringNode)
+            throw std::runtime_error("Trying to compare char to non char or non string");
+        if (getType2(node->aNode) == nodeType::stringNode && getType2(node->bNode) != nodeType::charNode && getType2(node->bNode) != nodeType::stringNode)
+            throw std::runtime_error("Trying to compare string to non char or non string");
+        if (getType2(node->aNode) == nodeType::boolNode && getType2(node->bNode) != nodeType::boolNode)
+            throw std::runtime_error("Trying to compare bool to non bool");
+    } else if (condition == "<=" || ">=" || "<" || ">" || "+" || "-"){
+        if (node->bNode == nullptr){
+            if (condition == "+" || "-") {throw std::runtime_error("Trying to do math on nothing");}
+            else {throw std::runtime_error("Trying to compare nothing");}
+        }
+        if (getType2(node->aNode) == nodeType::boolNode)
+            throw std::runtime_error("Bools can only be compared or reassigned");
+        if (getType2(node->aNode) == nodeType::charNode)
+            throw std::runtime_error("chars can only be compared or reassigned");
+        if (getType2(node->aNode) == nodeType::intNode && getType2(node->bNode) != nodeType::intNode){
+            if(condition == "+" || "-") {throw std::runtime_error("Trying to add or subtract a non int from an int");}
+            else if (getType2(node->bNode) != nodeType::floatNode) {throw std::runtime_error("Trying to do a non int or float operation on an int");}
+        }
+        if (getType2(node->aNode) == nodeType::floatNode && getType2(node->bNode) != nodeType::intNode && getType2(node->bNode) != nodeType::floatNode)
+            throw std::runtime_error("Trying to do an operation on a float that is not followed by an int or a float");
+        if (getType2(node->aNode) == nodeType::stringNode && getType2(node->bNode) != nodeType::stringNode && getType2(node->bNode) != nodeType::charNode)
+            throw std::runtime_error("Trying to do an operation on a string that is not allowed");
+        if (getType2(node->aNode) == nodeType::stringNode && condition != "+")
+            throw std::runtime_error("Trying to do an operation on a string that is not appending");
     }
 }
 
