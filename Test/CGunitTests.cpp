@@ -128,6 +128,14 @@ TEST(CGTEST,CondiTest){
 }
 
 TEST(CGTEST,ConsoleTest){
-    
+    auto ConsoleTest = std::make_shared<ConsoleNode>();
+    auto ConsoleOutputTest = std::make_shared<ValueNode>();
+    auto ConsoleOutputIntTest = std::make_shared<IntNode>();
+    ConsoleOutputIntTest->integer = 12;
+    ConsoleOutputTest->type = "int";
+    ConsoleOutputTest->identifier = "x";
+    ConsoleOutputTest->value = ConsoleOutputIntTest;
+    std::string Consolemsg = "is an int, it is:";
+    ConsoleTest->message.push_back(ConsoleOutputTest->identifier);
 }
 
