@@ -2,6 +2,7 @@
 #include "parser.h"
 #include "CodeGenerator.h"
 #include <string>
+#include <iostream>
 
 TEST(CGTEST,DeclarationTest){
     auto DTN_basicDeclaration = std::make_shared<DeclarationNode>();
@@ -107,24 +108,26 @@ TEST(CGTEST,ValueUsIntTest){
 }
 
 TEST(CGTEST,CondiTest){
+    auto finalCondiNode = std::make_shared<ConditionNode>();
+    auto firstArgument = std::make_shared<IdentifierNode>();
+    firstArgument->identifier = "ABC";
+    finalCondiNode->aNode = firstArgument;
+    finalCondiNode->condition = "+=";
+    auto midCondinode = std::make_shared<ConditionNode>();
+    auto secondArgument = std::make_shared<FloatNode>();
+    secondArgument->Floating_Point = 5.6;
+    midCondinode->condition = "+";
+    auto thirdArgument = std::make_shared<IntNode>();
+    thirdArgument->integer = 10;
+    midCondinode->aNode = secondArgument;
+    midCondinode->bNode = thirdArgument;
+    finalCondiNode->bNode = midCondinode;
+    CodeGenerator codeGenerator;
+    std::string CondiResault = codeGenerator.generateConditionCode(finalCondiNode);
+    EXPECT_EQ(CondiResault,"ABC+=5.600000+10");
+}
 
-
-    auto CondiNode = std::make_shared<ConditionNode>();
-    auto aNode = std::make_shared<IdentifierNode>();
-    aNode->identifier = "abc";
-    CondiNode->aNode = aNode;
-    CondiNode->condition = "+="
-
-    auto CondiNode2 = std::make_shared<ConditionNode>();
-    auto bNode = std::make_shared<FloatNode>();
-    bNode->const_Float = "5";
-    CondiNode->aNode = aNode;
-    CondiNode->condition = "+"
-    auto cNode = std::make_shared<IntNode>();
-    bNode->integer = "10";
-    CondiNode->bNode = CondiNode2;
-
-    std::string CondiResault = codeGenerator.generateValueCode(VTN_basicValueBool);
-    EXPECT_EQ(CondiResault,"abc+=5+10;");
+TEST(CGTEST,ConsoleTest){
+    
 }
 
