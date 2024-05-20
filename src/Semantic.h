@@ -34,9 +34,6 @@ private:
 class SemanticAnalyser{
 public:
     void kowalski(const std::vector<std::shared_ptr<ASTNode>>& root);
-private:
-    SymbolTable symbolTable;
-    FunctionTable functionTable;
     void analyseNode(const std::shared_ptr<ASTNode>& node);
     void kowalskiFunction(const std::shared_ptr<FunctionNode>& node);
     void kowalskiIdentifier(const std::shared_ptr<IdentifierNode>& node);
@@ -48,7 +45,7 @@ private:
     void kowalskiInt(const std::shared_ptr<IntNode>& node);
     void kowalskiBool(const std::shared_ptr<BoolNode>& node);
     void kowalskiWhile(const std::shared_ptr<WhileNode>& node);
-    void kowalskiFor(const std::shared_ptr< ForLoopNode>& node);
+    void kowalskiFor(const std::shared_ptr<ForLoopNode>& node);
     void kowalskiSwitch(const std::shared_ptr<SwitchNode>& node);
     void kowalskiCase(const std::shared_ptr<CaseNode>& node);
     void kowalskiKondi(const std::shared_ptr<ConditionNode>& node);
@@ -59,6 +56,9 @@ private:
     nodeType getType2(const std::shared_ptr<ASTNode>& node);
     void kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode>& node);
     void kowalskiRandom(const std::shared_ptr<RandomNode>& node);
+private:
+    SymbolTable symbolTable;
+    FunctionTable functionTable;
 };
 
 
