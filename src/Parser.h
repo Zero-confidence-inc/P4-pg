@@ -20,7 +20,6 @@ enum nodeType {
     valueNode,
     floatNode,
     stringNode,
-    operatorNode,
     whileNode,
     conditionNode,
     caseNode,
@@ -40,7 +39,6 @@ enum nodeType {
 struct ASTNode {
     virtual ~ASTNode() = default;
     virtual nodeType getType() const = 0;
-    virtual std::string getValue() const = 0;
     virtual void accept(class ASTNodeVisitor& visitor) = 0;
 };
 
@@ -61,7 +59,6 @@ struct ConsoleNode : ASTNode {
 struct CharNode : ASTNode {
     nodeType getType() const override { return nodeType::charNode; }
     std::string character;
-    std::string getValue() const override {return character;}
     void accept(ASTNodeVisitor& visitor) override;
 };
 
@@ -114,7 +111,6 @@ struct ValueNode : DeclarationNode {
 
 struct IdentifierNode : ASTNode {
     std::string identifier;
-    std::string getValue() const override {return identifier;}
     nodeType getType() const override { return nodeType::identifierNode; }
     void accept(ASTNodeVisitor& visitor) override;
 };
@@ -129,27 +125,23 @@ struct ReturnNode : ASTNode {
 struct FloatNode : ASTNode {
     float Floating_Point;
     nodeType getType() const override { return nodeType::floatNode; }
-    std::string getValue() const override {return std::to_string(Floating_Point);}
     void accept(ASTNodeVisitor& visitor) override;
 };
 
 struct IntNode : ASTNode {
     int integer;
-    std::string getValue() const override {return std::to_string(integer);}
     nodeType getType() const override { return nodeType::intNode; }
     void accept(ASTNodeVisitor& visitor) override;
 };
 
 struct UsIntNode : ASTNode {
     int usinteger;
-    std::string getValue() const override {return std::to_string(usinteger);}
     nodeType getType() const override { return nodeType::usIntNode; }
     void accept(ASTNodeVisitor& visitor) override;
 };
 
 struct BoolNode : ASTNode {
     bool boolean;
-    std::string getValue() const override {return std::to_string(boolean);}
     nodeType getType() const override { return nodeType::boolNode; }
     void accept(ASTNodeVisitor& visitor) override;
 };
@@ -157,7 +149,6 @@ struct BoolNode : ASTNode {
 struct StringNode : ASTNode {
     std::string StringOfChars;
     nodeType getType() const override { return nodeType::stringNode; }
-    std::string getValue() const override {return StringOfChars;}
     void accept(ASTNodeVisitor& visitor) override;
 };
 
