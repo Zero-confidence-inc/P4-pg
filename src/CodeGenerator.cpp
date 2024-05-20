@@ -55,15 +55,15 @@ std::string CodeGenerator::generateSwitchCode(std::shared_ptr<SwitchNode>& node)
     leString += ")";
     leString += "{";
     for (int i = 0;i < node->caseBranch.size();i++){
-        /*if(node->caseBranch[i]){
-            default implementation
-        } else {*/
-            leString += "case ";
-            auto convNode = std::dynamic_pointer_cast<ConditionNode>(node->caseBranch[i]->sucessCondition);
-            leString += generateConditionCode(convNode) + ":";
-        //}
+        leString += "case ";
+        auto convNode = std::dynamic_pointer_cast<ConditionNode>(node->caseBranch[i]->sucessCondition);
+        leString += generateConditionCode(convNode) + ":";
 
-        generateBodyCode(node->caseBranch[i]->Branch);
+        leString += generateBodyCode(node->caseBranch[i]->Branch);
+    }
+    if(node->deNode != nullptr){
+        leString += "default:";
+        leString += generateBodyCode(node->deNode->Branch);
     }
     leString += "}";
     return leString;
