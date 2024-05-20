@@ -169,7 +169,15 @@ std::string CodeGenerator::generateBoolCode(std::shared_ptr<BoolNode>& node){
 }
 
 std::string CodeGenerator::generateDeclartionCode(std::shared_ptr<DeclarationNode>& node){
-    return node->type + " " + node->identifier + ";";
+    std::string leString;
+    if (node->type == "string"){
+        leString = "std::" + node->type + " " + node->identifier + ";";
+        return leString;
+    }
+    else{
+        leString = node->type + " " + node->identifier + ";";
+        return leString;
+    }
 }
 
 std::string CodeGenerator::generateConsoleCode(std::shared_ptr<ConsoleNode>& node){
@@ -205,9 +213,14 @@ std::string CodeGenerator::generateConsoleCode(std::shared_ptr<ConsoleNode>& nod
 }
 
 std::string CodeGenerator::generateValueCode(std::shared_ptr<ValueNode>& node){
-
-    std::string leString = node->type + " " + node->identifier + "=";
-
+    std::string leString;
+    
+    if (node->type == "string"){
+        leString = "std::" + node->type + " " + node->identifier + "=";
+    }
+    else{
+        leString = node->type + " " + node->identifier + "=";
+    }
     if (node->value->getType() == nodeType::intNode){
         auto convertedNode = std::dynamic_pointer_cast<IntNode>(node->value);
         leString += generateIntCode(convertedNode);
@@ -325,7 +338,7 @@ std::string CodeGenerator::generateCharCode(std::shared_ptr<CharNode>& node) {
 }
 
 std::string CodeGenerator::generateStringCode(std::shared_ptr<StringNode>& node) {
-    return node->StringOfChars;
+    return '"' + node->StringOfChars + '"';
 }
 
 std::string CodeGenerator::generateIdentifierCode(std::shared_ptr<IdentifierNode>& node) {

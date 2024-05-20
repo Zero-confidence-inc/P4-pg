@@ -42,5 +42,44 @@ TEST(CGTEST,ValueCharTest){
     VTN_basicValueChar->value = CTN_basicValue;
     CodeGenerator codeGenerator;
     std::string CTresault = codeGenerator.generateValueCode(VTN_basicValueChar);
-    EXPECT_EQ(CTresault,'char x=A');
+    EXPECT_EQ(CTresault,"char x=A;");
+}
+TEST(CGTEST,ValueStringTest){
+    auto VTN_basicValueString = std::make_shared<ValueNode>();
+    VTN_basicValueString->type = "string";
+    VTN_basicValueString->identifier = "leString";
+    auto STN_basicValue = std::make_shared<StringNode>();
+    STN_basicValue->StringOfChars = "HELLO FRIEND";
+    VTN_basicValueString->value = STN_basicValue;
+    CodeGenerator codeGenerator;
+    std::string STresault = codeGenerator.generateValueCode(VTN_basicValueString);
+    std::string STexpect;
+    STexpect += "std::string leString=";
+    STexpect += '"';
+    STexpect += "HELLO FRIEND";
+    STexpect += '"';
+    STexpect += ";";
+    EXPECT_EQ(STresault,STexpect);
+}
+TEST(CGTEST,ValueBoolTrueTest){
+    auto VTN_basicValueBool = std::make_shared<ValueNode>();
+    VTN_basicValueBool->type = "bool";
+    VTN_basicValueBool->identifier = "x";
+    auto BTN_basicValue = std::make_shared<BoolNode>();
+    BTN_basicValue->boolean = true;
+    VTN_basicValueBool->value = BTN_basicValue;
+    CodeGenerator codeGenerator;
+    std::string BTTresault = codeGenerator.generateValueCode(VTN_basicValueBool);
+    EXPECT_EQ(BTTresault,"bool x=1;");
+}
+TEST(CGTEST,ValueBoolFalseTest){
+    auto VTN_basicValueBool = std::make_shared<ValueNode>();
+    VTN_basicValueBool->type = "bool";
+    VTN_basicValueBool->identifier = "x";
+    auto BTN_basicValue = std::make_shared<BoolNode>();
+    BTN_basicValue->boolean = false;
+    VTN_basicValueBool->value = BTN_basicValue;
+    CodeGenerator codeGenerator;
+    std::string BTFresault = codeGenerator.generateValueCode(VTN_basicValueBool);
+    EXPECT_EQ(BTFresault,"bool x=0;");
 }

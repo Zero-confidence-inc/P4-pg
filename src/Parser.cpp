@@ -195,7 +195,10 @@ std::shared_ptr<ASTNode> Parser::parseValues() {
         return valueString;
     } else if (tokens[pos - 2].value == "bool") {
         auto valueBool = std::make_shared<BoolNode>();
-        valueBool->boolean = tokens[pos].value[0];
+        if (tokens[pos].value == "true")
+            valueBool->boolean = true;
+        if (tokens[pos].value == "false")
+            valueBool->boolean = false;
         return valueBool;
     } else return nullptr;
 }
