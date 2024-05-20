@@ -320,7 +320,7 @@ std::string CodeGenerator::generateCharCode(std::shared_ptr<CharNode>& node) {
 }
 
 std::string CodeGenerator::generateStringCode(std::shared_ptr<StringNode>& node) {
-    return node->StringOfChars;
+    return '"'+node->StringOfChars+'"';
 }
 
 std::string CodeGenerator::generateIdentifierCode(std::shared_ptr<IdentifierNode>& node) {
