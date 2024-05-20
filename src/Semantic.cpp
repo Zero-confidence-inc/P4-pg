@@ -73,7 +73,7 @@ void SemanticAnalyser::kowalski(const std::vector<std::shared_ptr<ASTNode>>& roo
 }
 
 void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
-    switch(getType2(node)){
+    switch(node->getType()){
         case nodeType::functionNode:
             kowalskiFunction(std::static_pointer_cast<FunctionNode>(node));
             break;
@@ -324,13 +324,15 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
                 throw std::runtime_error("Trying to assign non bool to a bool");
         } else if (condition == "--" || "++"){
             if (node->bNode != nullptr)
-                throw std::runtime_error("Try to assign after \"++\" or \"--\"");
+                throw std::runtime_error("Trying to assign after \"++\" or \"--\"");
             if (getType2(node->aNode) == nodeType::charNode)
                 throw std::runtime_error("Trying to increment or decrement a char");
             if (getType2(node->aNode) == nodeType::stringNode)
                 throw std::runtime_error("Trying to increment or decrement a string");
             if (getType2(node->aNode) == nodeType::boolNode)
                 throw std::runtime_error("Trying to increment or decrement a bool");
+            if (node->aNode->getType() == nodeType::functionCallNode)
+                throw std::runtime_error("Trying to increment or decrement a function");
         }
     } else if (condition == "==" || "!="){
         if (node->bNode == nullptr)
@@ -349,6 +351,10 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
         if (node->bNode == nullptr){
             if (condition == "+" || "-") {throw std::runtime_error("Trying to do math on nothing");}
             else {throw std::runtime_error("Trying to compare nothing");}
+        }
+        if(condition == "+" || "-"){
+            if(node->aNode->getType() == nodeType::functionCallNode || node->bNode->getType() == nodeType::functionCallNode)
+                throw std::runtime_error("Trying to +/- a function");
         }
         if (getType2(node->aNode) == nodeType::boolNode)
             throw std::runtime_error("Bools can only be compared or reassigned");

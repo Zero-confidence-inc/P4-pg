@@ -352,6 +352,9 @@ std::string CodeGenerator::generateConditionCode(std::shared_ptr<ConditionNode>&
     }else if (node->aNode->getType() == nodeType::boolNode){
         auto convertedNode = std::dynamic_pointer_cast<BoolNode>(node->aNode);
         leString = generateBoolCode(convertedNode);
+    }else if (node->aNode->getType() == nodeType::functionCallNode){
+        auto convertedNode = std::dynamic_pointer_cast<FunctionCallNode>(node->aNode);
+        leString = generateFunctionCallCode(convertedNode);
     }
     leString += node->condition;
 
@@ -380,6 +383,9 @@ std::string CodeGenerator::generateConditionCode(std::shared_ptr<ConditionNode>&
     }else if (node->bNode->getType() == nodeType::boolNode){
         auto convertedNode = std::dynamic_pointer_cast<BoolNode>(node->bNode);
         leString += generateBoolCode(convertedNode);
+    }else if (node->bNode->getType() == nodeType::functionCallNode){
+        auto convertedNode = std::dynamic_pointer_cast<FunctionCallNode>(node->aNode);
+        leString = generateFunctionCallCode(convertedNode);
     }
     return leString;
 }
