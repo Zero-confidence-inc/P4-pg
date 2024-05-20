@@ -92,43 +92,50 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
     for (int i = 0; i<body.size(); i++){
         if (body[i]->getType()==nodeType::arrayNode){
             auto convertedArrayNode = std::dynamic_pointer_cast<ArrayNode>(body[i]);
-            bodyArrayCode;// = generateArrayCode;
-        }
-        else if(body[i]->getType()==nodeType::caseNode){
-            auto convertedCaseNode = std::dynamic_pointer_cast<CaseNode>(body[i]);
+            generateArrayCode(convertedArrayNode);
         }
         else if(body[i]->getType()==nodeType::conditionNode){
             auto convertedConditionNode = std::dynamic_pointer_cast<ConditionNode>(body[i]);
+            generateConditionCode(convertedConditionNode);
         }
         else if(body[i]->getType()==nodeType::consoleNode){
             auto convertedConsoleNode = std::dynamic_pointer_cast<ConsoleNode>(body[i]);
+            generateConsoleCode(convertedConsoleNode);
         }
         else if(body[i]->getType()==nodeType::forLoopNode){
             auto convertedForNode = std::dynamic_pointer_cast<ForLoopNode>(body[i]);
+            generateForCode(convertedForNode);
         }
         else if(body[i]->getType()==nodeType::ifNode){
             auto convertedIfNode = std::dynamic_pointer_cast<IfNode>(body[i]);
+            generateIfCode(convertedIfNode);
         }
         else if(body[i]->getType()==nodeType::functionNode){
             auto convertedFunctionNode = std::dynamic_pointer_cast<FunctionNode>(body[i]);
+            generateFunctionCode(convertedFunctionNode);
         }
         else if(body[i]->getType()==nodeType::functionCallNode){
             auto convertedFunctionCallNode = std::dynamic_pointer_cast<FunctionCallNode>(body[i]);
+            generateFunctionCallCode(convertedFunctionCallNode);
         }
         else if(body[i]->getType()==nodeType::returnNode){
             auto convertedReturnNode = std::dynamic_pointer_cast<ReturnNode>(body[i]);
         }
         else if(body[i]->getType()==nodeType::switchNode){
-            auto convertedSWitchNode = std::dynamic_pointer_cast<SwitchNode>(body[i]);
+            auto convertedSwitchNode = std::dynamic_pointer_cast<SwitchNode>(body[i]);
+            generateSwitchCode(convertedSwitchNode);
         }
         else if(body[i]->getType()==nodeType::whileNode){
             auto convertedWhileNode = std::dynamic_pointer_cast<WhileNode>(body[i]);
+            generateWhileCode(convertedWhileNode);
         }
         else if(body[i]->getType()==nodeType::declarationNode){
             auto convertedDeclarationNode = std::dynamic_pointer_cast<DeclarationNode>(body[i]);
+            generateDeclartionCode(convertedDeclarationNode);
         }
         else if(body[i]->getType()==nodeType::jumpNode){
             auto convertedJumpNode = std::dynamic_pointer_cast<JumpNode>(body[i]);
+            generateJumpNode(convertedJumpNode);
         }
     }
     return completeBodyCodeOutput;
@@ -331,39 +338,41 @@ std::string CodeGenerator::generateRandomCode(RandomNode& node) {
     std::string randomCodeOutput;
     std::string randomID = node.identifier;
 
-    if (node.type == "int?"){
-            randomCodeOutput += "int";
-            randomCodeOutput += randomID;
-            randomCodeOutput += "=";
-        if (node.RandomIntRange.size()>0){
-                randomCodeOutput += "rand()%(" + std::to_string(node.RandomIntRange[1]) + "-" + std::to_string(node.RandomIntRange[0]) + "+ 1) + " + std::to_string(node.RandomIntRange[0]) + ";";
-                return randomCodeOutput;
-        }
-        else{
+    if (node.type == "int?") {
+        randomCodeOutput += "int";
+        randomCodeOutput += randomID;
+        randomCodeOutput += "=";
+        if (node.RandomIntRange.size() > 0) {
+            randomCodeOutput +=
+                    "rand()%(" + std::to_string(node.RandomIntRange[1]) + "-" + std::to_string(node.RandomIntRange[0]) +
+                    "+ 1) + " + std::to_string(node.RandomIntRange[0]) + ";";
+            return randomCodeOutput;
+        } else {
             randomCodeOutput += "rand();";
             return randomCodeOutput;
         }
-    }
-    else if (node.type == "float?"){
+    } else if (node.type == "float?") {
         randomCodeOutput += "float";
         randomCodeOutput += randomID;
         randomCodeOutput += "=";
-        if (node.RandomFloatRange.size()>0){
+        if (node.RandomFloatRange.size() > 0) {
             randomCodeOutput += "randomFloat;";
-            randomCodeOutput += "randomFloat = (float range =" + std::to_string(node.RandomFloatRange[1]) + "-" + std::to_string(node.RandomFloatRange[0]) + "+ 1; float num = rand() % range +" + std::to_string(node.RandomFloatRange[0]) + ";)";
-        }
-        else{
+            randomCodeOutput += "randomFloat = (float range =" + std::to_string(node.RandomFloatRange[1]) + "-" +
+                                std::to_string(node.RandomFloatRange[0]) + "+ 1; float num = rand() % range +" +
+                                std::to_string(node.RandomFloatRange[0]) + ";)";
+        } else {
             randomCodeOutput += "randomFloat;";
             randomCodeOutput += "randomFloat = (float)rand();";
             return randomCodeOutput;
         }
-    }
-    else if (node.type == "bool?"){
+    } else if (node.type == "bool?") {
         randomCodeOutput += "bool";
         randomCodeOutput += randomID;
         randomCodeOutput += "=";
-        randomCodeOutput += "int randomBool = rand(); if (randomBool%2==0){" + randomID + "= true); else {" + randomID + "= false);";
+        randomCodeOutput += "int randomBool = rand(); if (randomBool%2==0){" + randomID + "= true); else {" + randomID +
+                            "= false);";
         return randomCodeOutput;
     }
+    return nullptr;
 }
 
