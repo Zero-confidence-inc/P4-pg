@@ -171,7 +171,6 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseStructBody() {
 std::shared_ptr<ASTNode> Parser::parseValues() {
     std::cout << "Entering parseValues at position " << pos << " with token: " << tokens[pos+1].value << std::endl;
     if (tokens[pos - 2].value == "int") {
-
         std::cout << "hacker voice: i'm in " << "pos: " << pos << std::endl;
         auto valueInt = std::make_shared<IntNode>();
         std::cout << "made intnode " << "pos: " << pos << std::endl;
@@ -203,8 +202,8 @@ std::shared_ptr<ASTNode> Parser::parseValues() {
 
 std::shared_ptr<ASTNode> Parser::parseFunctionCall() {
     std::cout << "Entering parseFunctionCall at position " << pos << " with token: " << tokens[pos+1].value << std::endl;
-    if (lookAhead(TokenType::IDENTIFIER) && tokens[++pos].value[0] == '(') {
-        std::string identifier = tokens[pos].value;
+    if (lookAhead(TokenType::IDENTIFIER) && tokens[pos+2].value[0] == '(') {
+        std::string identifier = tokens[++pos].value;
         auto functionCallNode = std::make_shared<FunctionCallNode>();
         functionCallNode->identifier = identifier;
         while (tokens[pos].value[0] != ')') {
@@ -288,8 +287,9 @@ std::shared_ptr<ASTNode> Parser::parseStruct() {
 
 std::shared_ptr<ASTNode> Parser::parseIdentifier() {
     std::cout << "Entering parseIdentifier at position " << pos << " with token: " << tokens[pos+1].value << std::endl;
-    std::string identifier = tokens[++pos].value;
+
     if (lookAhead(TokenType::IDENTIFIER)) {
+        std::string identifier = tokens[++pos].value;
         auto identifierNode = std::make_shared<IdentifierNode>();
         identifierNode->identifier = identifier;
         return identifierNode;
@@ -302,40 +302,40 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
     std::cout << "Entering parseCondition at position " << pos << " with token: " << tokens[pos+1].value << std::endl;
     if (lookAhead(TokenType::CONST) || lookAhead(TokenType::FLOAT_CONST) || lookAhead(TokenType::STRING)
         || lookAhead(TokenType::IDENTIFIER) || lookAhead(TokenType::BOOL)) {
-        pos++;
+
         auto conditionNode = std::make_shared<ConditionNode>();
-        if (tokens[pos].type == TokenType::IDENTIFIER) {
-            conditionNode->bNode = parseIdentifier();
-        } else if (tokens[pos].type == TokenType::CONST) {
-            conditionNode->bNode = parseInt();
-        } else if (tokens[pos].type == TokenType::FLOAT_CONST) {
-            conditionNode->bNode = parseFloat();
-        } else if (tokens[pos].type == TokenType::STRING) {
-            conditionNode->bNode = parseString();
-        } else if (tokens[pos].type == TokenType::BOOL) {
-            conditionNode->bNode = parseBool();
+        if (lookAhead(TokenType::IDENTIFIER)) {
+            conditionNode->aNode = parseIdentifier();
+        } else if (lookAhead(TokenType::CONST)) {
+            conditionNode->aNode = parseInt();
+        } else if (lookAhead(TokenType::FLOAT_CONST)) {
+            conditionNode->aNode = parseFloat();
+        } else if (lookAhead(TokenType::STRING)) {
+            conditionNode->aNode = parseString();
+        } else if (lookAhead(TokenType::BOOL)) {
+            conditionNode->aNode = parseBool();
         }
-        pos++;
-        if (tokens[pos].type == TokenType::OPERATOR) {
-            conditionNode->condition = tokens[pos].value;
+        std::cout << "pos = " << pos <<std::endl;
+        if (lookAhead(TokenType::OPERATOR)) {
+            conditionNode->condition = tokens[++pos].value;
+            std::cout << "pos = " << pos <<std::endl;
         } else {
             return conditionNode;
         }
-        if (lookAhead(TokenType::OPERATOR)) {
-            pos++;
+        if (tokens[pos+2].type == TokenType::OPERATOR) {
             conditionNode->bNode = parseCondition();
         } else if (lookAhead(TokenType::CONST) || lookAhead(TokenType::FLOAT_CONST) || lookAhead(TokenType::STRING)
                    || lookAhead(TokenType::IDENTIFIER) || lookAhead(TokenType::BOOL)) {
-            pos++;
-            if (tokens[pos].type == TokenType::IDENTIFIER) {
+
+            if (lookAhead(TokenType::IDENTIFIER)) {
                 conditionNode->bNode = parseIdentifier();
-            } else if (tokens[pos].type == TokenType::CONST) {
+            } else if (lookAhead(TokenType::CONST)) {
                 conditionNode->bNode = parseInt();
-            } else if (tokens[pos].type == TokenType::FLOAT_CONST) {
-                conditionNode->bNode = parseFloat()
-            } else if (tokens[pos].type == TokenType::STRING) {
+            } else if (lookAhead(TokenType::FLOAT_CONST)) {
+                conditionNode->bNode = parseFloat();
+            } else if (lookAhead(TokenType::STRING)) {
                 conditionNode->bNode = parseString();
-            } else if (tokens[pos].type == TokenType::BOOL) {
+            } else if (lookAhead(TokenType::BOOL)) {
                 conditionNode->bNode = parseBool();
             }
         }
@@ -416,7 +416,7 @@ std::shared_ptr<ASTNode> Parser::parseUsInt() {
     std::cout << "Entering parseUsInt at position " << pos << " with token: " << tokens[pos+1].value << std::endl;
     if (lookAhead(TokenType::CONST)) {
         auto usIntNode = std::make_shared<UsIntNode>();
-        usIntNode->usinteger = std::stoi(tokens[pos].value);
+        usIntNode->usinteger = std::stoi(tokens[++pos].value);
         return usIntNode;
     }
     std::cout << "parseUsInt returning nullptr" << std::endl;
@@ -689,44 +689,52 @@ std::shared_ptr<ASTNode> Parser::parseRandom() {
             std::cout << " before const pos = " << pos << std::endl;
             if (lookAhead(TokenType::CONST)) {
                 std::cout << "after const seen pos = " << pos << std::endl;
-                int RandomIntRangeLowBound = tokens[++pos].value[0];
-                std::cout << "pos = " << pos << std::endl;
+                int RandomIntRangeLowBound = std::stoi(tokens[++pos].value);
+                std::cout << "pos = " << pos << " lowbound =" << RandomIntRangeLowBound << std::endl;
                 randomNode->RandomIntRange.push_back(RandomIntRangeLowBound);
                 std::cout << "survived pos = " << pos << std::endl;
-                if (tokens[pos+1].value == "." && tokens[pos+2].value == ".") {
+                if (tokens[++pos].value == "." && tokens[++pos].value == ".") {
                     std::cout << ".. recognicred pos = " << pos << std::endl;
-                    std::cout << "pos = " << randomIntNode << std::endl;
-                    if (lookAhead(TokenType::CONST) && tokens[++pos].value[0] > RandomIntRangeLowBound) {
+                    if (lookAhead(TokenType::CONST) && std::stoi(tokens[++pos].value) > RandomIntRangeLowBound) {
                         std::cout << "pos = " << pos << std::endl;
-                        int RandomIntRangeHighBound = tokens[pos].value[0];
+                        int RandomIntRangeHighBound = std::stoi(tokens[pos].value);
                         randomNode->RandomIntRange.push_back(RandomIntRangeHighBound);
                         std::cout << "pos = " << pos << std::endl;
+                        pos++;
+                        match(TokenType::PUNCTUATION,"?");
+                        pos--;
                         return randomNode;
                     }
                 }
             }
         }
     } else if (lookAhead(TokenType::TYPE) && tokens[pos+1].value == "float?") { // Random Float
-        pos++;
-        if (tokens[++pos].value[0] == '?') {
-            if (lookAhead(TokenType::CONST)) {
-                float RandomFloatRangeLowBound = tokens[pos].value[0];
+        std::cout << "pos1 = " << pos << std::endl;
+        pos += 2;
+        if (tokens[++pos].value == "?") {
+            std::cout << "pos2 = " << pos << std::endl;
+            if (lookAhead(TokenType::CONST)|| lookAhead(TokenType::FLOAT_CONST)) {
+                std::cout << "pos3 = " << pos << std::endl;
+                float RandomFloatRangeLowBound = std::stof(tokens[++pos].value);
+                std::cout << "pos4 = " << pos << " lowb =" << RandomFloatRangeLowBound<< std::endl;
                 randomNode->RandomFloatRange.push_back(RandomFloatRangeLowBound);
                 pos++;
                 if (tokens[pos].value == "." && tokens[++pos].value == ".") {
-                    pos++;
-                    if (lookAhead(TokenType::CONST) && tokens[pos].value[0] > RandomFloatRangeLowBound) {
-                        float RandomFloatRangeHighBound = tokens[pos].value[0];
+                    std::cout << "pos4 = " << pos << std::endl;
+                    std::cout << "pos5 = " << pos << std::endl;
+                    if (lookAhead(TokenType::CONST) && std::stof(tokens[pos+1].value) > RandomFloatRangeLowBound
+                    ||lookAhead(TokenType::FLOAT_CONST) && std::stof(tokens[pos+1].value) > RandomFloatRangeLowBound) {
+                        std::cout << "pos6 = " << pos << std::endl;
+                        float RandomFloatRangeHighBound = std::stof(tokens[++pos].value);
                         randomNode->RandomFloatRange.push_back(RandomFloatRangeHighBound);
-                        pos--;
-                        pos--;
-                        pos--;
+                        std::cout << "pos7 = " << pos << std::endl;
                         return randomNode;
                     }
                 }
             }
         }
     } else if (lookAhead(TokenType::TYPE) && tokens[pos+1].value == "bool?") { // Random bool
+        pos++;
         return randomNode;
     }
     std::cout << "parseRandom returning nullptr" << std::endl;

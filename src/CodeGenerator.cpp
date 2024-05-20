@@ -146,13 +146,13 @@ std::string CodeGenerator::generateSwitchCode(std::shared_ptr<SwitchNode>& node)
     leString += ")";
     leString += "{";
     for (int i = 0;i < node->caseBranch.size();i++){
-        if(node->caseBranch[i]){
-
-        } else {
+        /*if(node->caseBranch[i]){
+            default implementation
+        } else {*/
             leString += "case ";
             auto convNode = std::dynamic_pointer_cast<ConditionNode>(node->caseBranch[i]->sucessCondition);
             leString += generateConditionCode(convNode) + ":";
-        }
+        //}
 
         generateBodyCode(node->caseBranch[i]->Branch);
     }
