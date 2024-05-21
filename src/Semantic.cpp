@@ -64,8 +64,8 @@ void SemanticAnalyser::kowalski(const std::vector<std::shared_ptr<ASTNode>>& roo
     for (int i = 0; i < root.size(); i++){
             analyseNode(root[i]);
         }}
-    catch(std::runtime_error watchoutski){
-        //printf(watchoutski);
+    catch(std::runtime_error& withoutski){
+        std::cout << withoutski.what() << "Kowalski is fucked\n";
     }
     //magic??
     symbolTable.exitScope();
@@ -115,8 +115,8 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
         case nodeType::intNode:
             kowalskiInt(std::static_pointer_cast<IntNode>(node));
             break;
-        case nodeType::boolNode:
-            kowalskiBool(std::static_pointer_cast<BoolNode>(node));    
+        //case nodeType::boolNode:
+          //kowalskiBool(std::static_pointer_cast<BoolNode>(node));
         default:
             throw std::runtime_error("unknown node type");
     }
@@ -247,14 +247,14 @@ void SemanticAnalyser::kowalskiIf(const std::shared_ptr<IfNode>& node){
     }
 }
 void SemanticAnalyser::kowalskiFloat(const std::shared_ptr<FloatNode>& node){
-    
+
 }
 void SemanticAnalyser::kowalskiString(const std::shared_ptr<StringNode>& node){
     
 }
 
 void SemanticAnalyser::kowalskiWhile(const std::shared_ptr<WhileNode>& node){
-    if (node->condition->getType() != nodeType::conditionNode){
+    if (node->condition->getType() != nodeType::conditionNode || node->condition->getType() != nodeType::identifierNode){
         throw std::runtime_error("Not a condition");
     }else {
         symbolTable.enterScope();

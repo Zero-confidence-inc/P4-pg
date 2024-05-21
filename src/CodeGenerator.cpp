@@ -92,7 +92,7 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
     for (int i = 0; i<body.size(); i++){
         if (body[i]->getType()==nodeType::arrayNode){
             auto convertedArrayNode = std::dynamic_pointer_cast<ArrayNode>(body[i]);
-            generateArrayCode(convertedArrayNode);
+            //generateArrayCode(convertedArrayNode);
         }
         else if(body[i]->getType()==nodeType::conditionNode){
             auto convertedConditionNode = std::dynamic_pointer_cast<ConditionNode>(body[i]);
