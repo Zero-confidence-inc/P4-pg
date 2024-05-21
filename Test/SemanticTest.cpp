@@ -137,5 +137,27 @@ TEST(KowalskiTest,KowalskiFunction_Creation_Call){
     EXPECT_NO_THROW(semanticanalyser.kowalski(contents));
 }
 
+TEST (KowalskiTest,Random_N_ValueDeclartions){
+    auto random = std::make_shared<RandomNode>();
+    auto Value = std::make_shared<ValueNode>();
+    Value->type = "int";
+    Value->identifier = "NormalInt";
+    auto int12 = std::make_shared<IntNode>();
+    int12->integer = 12;
+    Value->value = int12;
+    random->identifier = "unknownIntSpooky";
+    random->type = "int";
+    random->RandomIntRange.push_back(0);
+    random->RandomIntRange.push_back(12);
+
+
+
+    std::vector<std::shared_ptr<ASTNode>> contents;
+    contents.push_back(random);
+    contents.push_back(Value);
+    EXPECT_NO_THROW(semanticanalyser.kowalski(contents));
+
+}
+
 
 

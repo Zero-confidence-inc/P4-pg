@@ -124,11 +124,18 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
             break;
         case nodeType::consoleNode:
             kowalskiConsole(std::static_pointer_cast<ConsoleNode>(node));
+            break;
         case nodeType::arrayNode:
-          kowalskiArray(std::static_pointer_cast<ArrayNode>(node));
+            kowalskiArray(std::static_pointer_cast<ArrayNode>(node));
+            break;
         case nodeType::returnNode:
             kowalskiReturn(std::static_pointer_cast<ReturnNode>(node));
+            break;
+        case nodeType::valueNode:
+            kowalskiValue(std::static_pointer_cast<ValueNode>(node));
+            break;
         default:
+            std::cout << "enum number"+std::to_string(node->getType())<<std::endl;
             throw std::runtime_error("unknown node type");
     }
 }
@@ -387,6 +394,9 @@ void SemanticAnalyser::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
 
 void SemanticAnalyser::kowalskiReturn(const std::shared_ptr<ReturnNode>& node) {
 }
+void SemanticAnalyser::kowalskiValue(const std::shared_ptr<ValueNode>& node){
+
+}
 
 nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
         if (node->getType() == nodeType::identifierNode){
@@ -402,3 +412,4 @@ nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
         
         return node->getType();
 }
+
