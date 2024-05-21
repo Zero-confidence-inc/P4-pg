@@ -14,8 +14,8 @@ int main() {
     Parser parser(tokens);// this would be stupid if we ever planed on running it more than once per main call
     std::vector<std::shared_ptr<ASTNode>> ast = parser.parseProgram();
 
-    SemanticAnalyser semanticAnalyser;
-    semanticAnalyser.kowalski(ast);
+    Kowalski kowalski;
+    kowalski.Analyse(ast);
 
     CodeGenerator codeGenerator;
     std::string code = codeGenerator.generateBodyCode(ast);

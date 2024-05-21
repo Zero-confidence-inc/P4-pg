@@ -2,7 +2,7 @@
 #include "Parser.h"
 #include "Semantic.h"
 
-SemanticAnalyser semanticanalyser;
+Kowalski kowalski;
 
 TEST(KowalskiTest, KowalskiFloat) {
     std::shared_ptr<FloatNode> node = std::make_shared<FloatNode>();
@@ -36,7 +36,7 @@ TEST(KowalskiTest,KowalskiKondi){
     auto bNode = std::make_shared<StringNode>();
     KondiNode->aNode = aNode;
     KondiNode->bNode = bNode;
-    EXPECT_NO_THROW(semanticanalyser.kowalskiKondi(KondiNode));
+    EXPECT_NO_THROW(kowalski.kowalskiKondi(KondiNode));
 
 }
 
@@ -54,7 +54,7 @@ TEST(KowalskiTest, KowalskiWhile) {
     body->identifier = "abc";
     body->type = "int";
     node->body.push_back(body);
-    EXPECT_NO_THROW(semanticanalyser.kowalskiWhile(node));
+    EXPECT_NO_THROW(kowalski.kowalskiWhile(node));
 }
 
 TEST(KowalskiTest,KowalskiFor){
@@ -77,7 +77,7 @@ TEST(KowalskiTest,KowalskiFor){
     expression->condition = "++";
     node->expression =expression;
 
-    EXPECT_NO_THROW(semanticanalyser.kowalskiFor(node));
+    EXPECT_NO_THROW(kowalski.kowalskiFor(node));
 
 }
 
@@ -98,7 +98,7 @@ TEST(KowalskiTest,KowalskiStruct){
     decl->type="string";decl->identifier="def";
     node->body.push_back(decl);
     node->body.push_back(decl2);
-    EXPECT_ANY_THROW(semanticanalyser.kowalskiStruct(node));
+    EXPECT_ANY_THROW(kowalski.kowalskiStruct(node));
 }
 
 TEST(KowalskiTest,KowalskiValue){
@@ -106,7 +106,7 @@ TEST(KowalskiTest,KowalskiValue){
     node->identifier = "xd";
     node->type = "bool";
     node->value = std::make_shared<BoolNode>();
-    //EXPECT_NO_THROW(semanticanalyser.kowalskiValue) den er ikke lavet semantics EW
+    //EXPECT_NO_THROW(kowalski.kowalskiValue) den er ikke lavet semantics EW
 }
 
 TEST(KowalskiTest,KowalskiFunction_Creation_Call){
@@ -134,7 +134,7 @@ TEST(KowalskiTest,KowalskiFunction_Creation_Call){
     funCall->arguments.push_back(std::make_shared<BoolNode>());
     contents.push_back(funCall);
 
-    EXPECT_NO_THROW(semanticanalyser.kowalski(contents));
+    EXPECT_NO_THROW(kowalski.Analyse(contents));
 }
 
 
