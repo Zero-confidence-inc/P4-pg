@@ -116,8 +116,12 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
         case nodeType::intNode:
             kowalskiInt(std::static_pointer_cast<IntNode>(node));
             break;
-        //case nodeType::boolNode:
-          //kowalskiBool(std::static_pointer_cast<BoolNode>(node));
+        case nodeType::consoleNode:
+            kowalskiConsole(std::static_pointer_cast<ConsoleNode>(node));
+        case nodeType::arrayNode:
+          kowalskiArray(std::static_pointer_cast<ArrayNode>(node));
+        case nodeType::returnNode:
+            kowalskiReturn(std::static_pointer_cast<ReturnNode>(node));
         default:
             throw std::runtime_error("unknown node type");
     }

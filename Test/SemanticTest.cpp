@@ -59,3 +59,25 @@ TEST(KowalskiTest, KowalskiWhile) {
     EXPECT_NO_THROW(semanticanalyser.kowalskiWhile(node));
 }
 
+TEST(KowalskiTest,KowalskiFor){
+    auto node = std::make_shared<ForLoopNode>();
+    auto DeclartionNode = std::make_shared<DeclarationNode>();
+    DeclartionNode->type = "int";
+    DeclartionNode->identifier = "abc";
+    node->declaration = DeclartionNode;
+    auto Condi = std::make_shared<ConditionNode>();
+    auto expression = std::make_shared<ConditionNode>();
+    Condi->condition = "==";
+    auto CondiA = std::make_shared<IdentifierNode>();
+    CondiA->identifier = "abc";
+    Condi->bNode = std::make_shared<IntNode>();
+    node->condition = Condi;
+    expression->aNode = CondiA;
+    expression->condition = "++";
+    node->expression =expression;
+
+    EXPECT_NO_THROW(semanticanalyser.kowalskiFor(node));
+
+
+}
+
