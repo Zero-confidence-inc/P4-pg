@@ -122,6 +122,37 @@ TEST(ParserTest, ParseForLoop) {
     auto node = parser.parseForLoop();
     ASSERT_NE(node, nullptr);
     EXPECT_EQ(node->getType(), forLoopNode);
+
+    auto forLoopNodePtr = std::dynamic_pointer_cast<ForLoopNode>(node);
+    ASSERT_NE(forLoopNodePtr, nullptr);
+
+    // Check the declaration part of the for loop
+    auto declarationNode = forLoopNodePtr->declaration;
+    ASSERT_NE(declarationNode, nullptr);
+    EXPECT_EQ(declarationNode->getType(), valueNode);
+    EXPECT_EQ(declarationNode->type, "int");
+    EXPECT_EQ(declarationNode->identifier, "i");
+    ASSERT_NE(declarationNode->value, nullptr);
+    EXPECT_EQ(declarationNode->value->getType(), intNode);
+    auto intNodePtr = std::dynamic_pointer_cast<IntNode>(declarationNode->value);
+    ASSERT_NE(intNodePtr, nullptr);
+    EXPECT_EQ(intNodePtr->integer, 0);
+
+    // Check the condition part of the for loop
+    auto conditionnode = forLoopNodePtr->condition;
+    ASSERT_NE(conditionnode, nullptr);
+    EXPECT_EQ(conditionnode->getType(), conditionNode);
+    EXPECT_EQ(conditionnode->condition, "<");
+    ASSERT_NE(conditionnode->aNode, nullptr);
+    EXPECT_EQ(conditionnode->aNode->getType(), identifierNode);
+    auto identifierNodePtr = std::dynamic_pointer_cast<IdentifierNode>(conditionnode->aNode);
+    ASSERT_NE(identifierNodePtr, nullptr);
+    EXPECT_EQ(identifierNodePtr->identifier, "i");
+    ASSERT_NE(conditionnode->bNode, nullptr);
+    EXPECT_EQ(conditionnode->bNode->getType(), intNode);
+    auto conditionIntNodePtr = std::dynamic_pointer_cast<IntNode>(conditionnode->bNode);
+    ASSERT_NE(conditionIntNodePtr, nullptr);
+    EXPECT_EQ(conditionIntNodePtr->integer, 10);
 }
 
 // Test for parseSwitch

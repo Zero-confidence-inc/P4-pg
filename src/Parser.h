@@ -43,6 +43,7 @@ struct ASTNode {
 
 };
 
+
 // Node for declarations
 struct DeclarationNode : ASTNode {
     std::string identifier;
@@ -86,6 +87,7 @@ struct CaseNode : ASTNode {
 };
 
 struct ForLoopNode : ASTNode {
+    std::shared_ptr<ValueNode> declaration;
     std::shared_ptr<ValueNode> declaration;
     std::shared_ptr<ConditionNode> condition;
     std::shared_ptr<ConditionNode> expression;
