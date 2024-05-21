@@ -155,7 +155,7 @@ TEST (KowalskiTest,Random_N_ValueDeclartions){
     std::vector<std::shared_ptr<ASTNode>> contents;
     contents.push_back(random);
     contents.push_back(Value);
-    EXPECT_NO_THROW(semanticanalyser.kowalski(contents));
+    EXPECT_NO_THROW(kowalski.Analyse(contents));
 
 }
 

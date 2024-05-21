@@ -394,7 +394,7 @@ void Kowalski::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
 
 void Kowalski::kowalskiReturn(const std::shared_ptr<ReturnNode>& node) {
 }
-void SemanticAnalyser::kowalskiValue(const std::shared_ptr<ValueNode>& node){
+void Kowalski::kowalskiValue(const std::shared_ptr<ValueNode>& node){
 
 }
 
