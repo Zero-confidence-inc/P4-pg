@@ -59,9 +59,11 @@ TEST(KowalskiTest, KowalskiWhile) {
 
 TEST(KowalskiTest,KowalskiFor){
     auto node = std::make_shared<ForLoopNode>();
-    auto DeclartionNode = std::make_shared<DeclarationNode>();
+    auto DeclartionNode = std::make_shared<ValueNode>();
     DeclartionNode->type = "int";
     DeclartionNode->identifier = "abc";
+    auto thyInt = std::make_shared<IntNode>();
+    thyInt->integer = 0;
     node->declaration = DeclartionNode;
     auto Condi = std::make_shared<ConditionNode>();
     auto expression = std::make_shared<ConditionNode>();

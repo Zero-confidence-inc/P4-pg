@@ -270,8 +270,8 @@ std::shared_ptr<ASTNode> Parser::parseFunctionCall() {
     }
 }
 
-std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionArguments() {
-    std::vector<std::shared_ptr<ASTNode>> arguments;
+std::vector<std::shared_ptr<DeclarationNode>> Parser::parseFunctionArguments() {
+    std::vector<std::shared_ptr<DeclarationNode>> arguments;
     std::cout << "Entering parseFunctionArguments" << std::endl;
 
     while (true) {

@@ -24,6 +24,7 @@ void SymbolTable::exitScope(){
 }
 void FunctionTable::declareFunction(const std::string& name,std::vector<std::string>& arguments){
     if(!functionMap.empty()){
+
         functionMap.back()[name] = arguments;
     }
     else{
@@ -33,6 +34,7 @@ void FunctionTable::declareFunction(const std::string& name,std::vector<std::str
 std::vector<std::string> FunctionTable::lookUpFunction(const std::string& functionName){
     for(auto it=functionMap.rbegin();it != functionMap.rend();++it){
         if(it->find(functionName)!=it->end()){
+
             return it->at(functionName);
         }
     }
@@ -140,30 +142,9 @@ void SemanticAnalyser::kowalskiFunction(const std::shared_ptr<FunctionNode>& nod
     std::vector<std::string> functionArgumentsString;
     std::string tempType;
     symbolTable.declareVariable(name,type);
+    std::cout<<std::to_string(node->arguments[0]->getType())<<std::endl;
     for (int i = 0; i < node->arguments.size();i++){
-        switch (node->arguments[i]->getType())
-        {
-        case intNode:
-            functionArgumentsString.push_back("int");
-            break;
-        case floatNode:
-            functionArgumentsString.push_back("float");
-            break;
-        case usIntNode:
-            functionArgumentsString.push_back("usint");
-            break;
-        case stringNode:
-            functionArgumentsString.push_back("string");
-            break;
-        case charNode:
-            functionArgumentsString.push_back("char");
-            break;
-        case boolNode:
-            functionArgumentsString.push_back("bool");
-            break;
-        default:
-            break;
-        };
+        functionArgumentsString.push_back(node->arguments[i]->type);
     }
     functionTable.declareFunction(name,functionArgumentsString);
     symbolTable.enterScope();
@@ -214,6 +195,7 @@ void SemanticAnalyser::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNo
         }
     }
     else{
+        std::cout<<"arg 1:"+ std::to_string(expectedArgument.size()) + "and arg 2:"+std::to_string(currentArgument.size())<<std::endl;
         throw std::runtime_error("too many/too few arguemnts for function called");
     }
 }

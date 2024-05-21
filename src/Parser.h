@@ -204,7 +204,7 @@ struct FunctionCallNode : IdentifierNode {
 };
 
 struct FunctionNode : DeclarationNode {
-    std::vector<std::shared_ptr<ASTNode>> arguments;
+    std::vector<std::shared_ptr<DeclarationNode>> arguments;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override { return nodeType::functionNode; }
 
@@ -235,7 +235,7 @@ public:
     std::shared_ptr<ASTNode> parseUsInt();
     std::shared_ptr<ASTNode> parseIdentifier();
     std::shared_ptr<ASTNode> parseFunctionCall();
-    std::vector<std::shared_ptr<ASTNode>> parseFunctionArguments();
+    std::vector<std::shared_ptr<DeclarationNode>> parseFunctionArguments();
 
 private:
     std::vector<Token> tokens;
