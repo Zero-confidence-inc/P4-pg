@@ -39,11 +39,6 @@ TEST(KowalskiTest,KowalskiKondi){
     KondiNode->bNode = bNode;
     EXPECT_NO_THROW(semanticanalyser.kowalskiKondi(KondiNode));
 
-
-
-
-
-
 }
 
 TEST(KowalskiTest, KowalskiWhile) {

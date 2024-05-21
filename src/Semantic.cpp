@@ -36,6 +36,7 @@ std::vector<std::string> FunctionTable::lookUpFunction(const std::string& functi
     throw std::runtime_error("no function has the name: " + functionName);
 }
 
+SemanticAnalyser::SemanticAnalyser() {}
 
 void SymbolTable::declareVariable(const std::string& name,const std::string& type){
     if(!scopes.empty())
@@ -72,7 +73,7 @@ void SemanticAnalyser::kowalski(const std::vector<std::shared_ptr<ASTNode>>& roo
 }
 
 void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
-    switch(getType2(node)){
+    switch(node->getType()){
         case nodeType::functionNode:
             kowalskiFunction(std::static_pointer_cast<FunctionNode>(node));
             break;
@@ -303,10 +304,10 @@ for (int i = 0; i < node->Branch.size(); i++){
 void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node){
     std::string condition = node->condition;
     nodeType aSide = getType2(node->aNode);
-    if (condition == "+=" || "-=" || "--" || "++" || "="){
+    if (condition == "+=" || condition == "-=" || condition == "--" || condition == "++" || condition == "="){
         if (node->aNode->getType() != nodeType::identifierNode){
             throw std::runtime_error("Trying to reassign a non identifier");
-        } else if (condition == "+=" || "-=" || "="){
+        } else if (condition == "+=" || condition == "-=" || condition == "="){
             if (node->bNode == nullptr)
                 throw std::runtime_error("Trying to reassign nothing");
             if (getType2(node->aNode) == nodeType::intNode && getType2(node->bNode) != nodeType::intNode)
@@ -319,17 +320,19 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
                 throw std::runtime_error("Trying to assign non string or char to a char");
             if (getType2(node->aNode) == nodeType::boolNode && getType2(node->bNode) != nodeType::boolNode)
                 throw std::runtime_error("Trying to assign non bool to a bool");
-        } else if (condition == "--" || "++"){
+        } else if (condition == "--" || condition == "++"){
             if (node->bNode != nullptr)
-                throw std::runtime_error("Try to assign after \"++\" or \"--\"");
+                throw std::runtime_error("Trying to assign after \"++\" or \"--\"");
             if (getType2(node->aNode) == nodeType::charNode)
                 throw std::runtime_error("Trying to increment or decrement a char");
             if (getType2(node->aNode) == nodeType::stringNode)
                 throw std::runtime_error("Trying to increment or decrement a string");
             if (getType2(node->aNode) == nodeType::boolNode)
                 throw std::runtime_error("Trying to increment or decrement a bool");
+            if (node->aNode->getType() == nodeType::functionCallNode)
+                throw std::runtime_error("Trying to increment or decrement a function");
         }
-    } else if (condition == "==" || "!="){
+    } else if (condition == "==" || condition == "!="){
         if (node->bNode == nullptr)
             throw std::runtime_error("Trying to compare nothing");
         if (getType2(node->aNode) == nodeType::intNode && getType2(node->bNode) != nodeType::intNode && getType2(node->bNode) != nodeType::floatNode)
@@ -342,10 +345,14 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
             throw std::runtime_error("Trying to compare string to non char or non string");
         if (getType2(node->aNode) == nodeType::boolNode && getType2(node->bNode) != nodeType::boolNode)
             throw std::runtime_error("Trying to compare bool to non bool");
-    } else if (condition == "<=" || ">=" || "<" || ">" || "+" || "-"){
+    } else if (condition == "<=" || condition == ">=" || condition == "<" || condition == ">" || condition == "+" || condition == "-"){
         if (node->bNode == nullptr){
-            if (condition == "+" || "-") {throw std::runtime_error("Trying to do math on nothing");}
+            if (condition == "+" || condition == "-") {throw std::runtime_error("Trying to do math on nothing");}
             else {throw std::runtime_error("Trying to compare nothing");}
+        }
+        if(condition == "+" || condition == "-"){
+            if(node->aNode->getType() == nodeType::functionCallNode || node->bNode->getType() == nodeType::functionCallNode)
+                throw std::runtime_error("Trying to +/- a function");
         }
         if (getType2(node->aNode) == nodeType::boolNode)
             throw std::runtime_error("Bools can only be compared or reassigned");

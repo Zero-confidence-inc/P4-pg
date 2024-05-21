@@ -1,14 +1,8 @@
 #include "gtest/gtest.h"
 #include "Parser.h"
 #include "Token.h"
+#include "TokenCreator.h"
 
-// Helper function to create a token
-Token createToken(TokenType type, const std::string& value) {
-    Token token;
-    token.type = type;
-    token.value = value;
-    return token;
-}
 
 // Test for parseDeclaration
 TEST(ParserTest, ParseDeclaration) {

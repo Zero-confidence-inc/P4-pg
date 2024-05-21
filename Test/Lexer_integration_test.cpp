@@ -78,9 +78,3 @@ EXPECT_EQ(tokens[0].type, TokenType::START);
 EXPECT_EQ(tokens[1].type, TokenType::IDENTIFIER);
 EXPECT_EQ(tokens[1].getText(), "value");
 }
-
-// Main function to run all tests
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
