@@ -32,10 +32,10 @@ private:
     std::vector<std::map<std::string,std::vector<std::string>>> functionMap;
 };
 
-class SemanticAnalyser{
+class Kowalski{
 public:
-    SemanticAnalyser();
-    void kowalski(const std::vector<std::shared_ptr<ASTNode>>& root);
+    Kowalski();
+    void Analyse(const std::vector<std::shared_ptr<ASTNode>>& root);
     void analyseNode(const std::shared_ptr<ASTNode>& node);
     void kowalskiFunction(const std::shared_ptr<FunctionNode>& node);
     void kowalskiIdentifier(const std::shared_ptr<IdentifierNode>& node);
