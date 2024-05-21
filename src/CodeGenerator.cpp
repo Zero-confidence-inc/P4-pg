@@ -1,8 +1,11 @@
 #include "CodeGenerator.h"
 #include <string>
 
-void CodeGenerator::generateCode(const std::shared_ptr<ASTNode>& root) {
-    
+CodeGenerator::CodeGenerator() {}
+
+std::string CodeGenerator::generateCode(std::vector<std::shared_ptr<ASTNode>>& root) {
+   std::string code = generateBodyCode(root);
+    return code;
 }
 
 
@@ -54,15 +57,15 @@ std::string CodeGenerator::generateSwitchCode(std::shared_ptr<SwitchNode>& node)
     leString += ")";
     leString += "{";
     for (int i = 0;i < node->caseBranch.size();i++){
-        /*if(node->caseBranch[i]){
-            default implementation
-        } else {*/
-            leString += "case ";
-            auto convNode = std::dynamic_pointer_cast<ConditionNode>(node->caseBranch[i]->sucessCondition);
-            leString += generateConditionCode(convNode) + ":";
-        //}
+        leString += "case ";
+        auto convNode = std::dynamic_pointer_cast<ConditionNode>(node->caseBranch[i]->sucessCondition);
+        leString += generateConditionCode(convNode) + ":";
 
-        generateBodyCode(node->caseBranch[i]->Branch);
+        leString += generateBodyCode(node->caseBranch[i]->Branch);
+    }
+    if(node->deNode != nullptr){
+        leString += "default:";
+        leString += generateBodyCode(node->deNode->Branch);
     }
     leString += "}";
     return leString;
@@ -150,7 +153,7 @@ std::string CodeGenerator::generateArrayCode(std::shared_ptr<ArrayNode>& node){
     }
     else{
         leString = node->type + " " + node->identifier + "["+node->size+"]";
-    }   
+    }
     for (int i = 0;i<node->body.size();i++)
         {
             if(i==0){
@@ -181,7 +184,7 @@ std::string CodeGenerator::generateArrayCode(std::shared_ptr<ArrayNode>& node){
                 leString += generateUSCode(convertedNode);
             }else if (node->body[i]->getType() == nodeType::boolNode){
                 auto convertedNode = std::dynamic_pointer_cast<BoolNode>(node->body[i]);
-                leString += generateBoolCode(convertedNode);    
+                leString += generateBoolCode(convertedNode);
             }
             leString+="]";
         }
@@ -231,9 +234,9 @@ std::string CodeGenerator::generateDeclartionCode(std::shared_ptr<DeclarationNod
 std::string CodeGenerator::generateConsoleCode(std::shared_ptr<ConsoleNode>& node){
     std::string CodeInString = "std::cout <<" ;
     for(int i=0;i<node->message.size();i++){
-    
+
         if (i>0){CodeInString +="+";}
-    
+
         if (node->message[i]->getType() == nodeType::intNode){
             auto convertedNode = std::dynamic_pointer_cast<IntNode>(node->message[i]);
             CodeInString += generateIntCode(convertedNode);
@@ -352,6 +355,9 @@ std::string CodeGenerator::generateConditionCode(std::shared_ptr<ConditionNode>&
     }else if (node->aNode->getType() == nodeType::boolNode){
         auto convertedNode = std::dynamic_pointer_cast<BoolNode>(node->aNode);
         leString = generateBoolCode(convertedNode);
+    }else if (node->aNode->getType() == nodeType::functionCallNode){
+        auto convertedNode = std::dynamic_pointer_cast<FunctionCallNode>(node->aNode);
+        leString = generateFunctionCallCode(convertedNode);
     }
     leString += node->condition;
 
@@ -381,7 +387,10 @@ std::string CodeGenerator::generateConditionCode(std::shared_ptr<ConditionNode>&
         }else if (node->bNode->getType() == nodeType::boolNode){
             auto convertedNode = std::dynamic_pointer_cast<BoolNode>(node->bNode);
             leString += generateBoolCode(convertedNode);
-        }
+        }else if (node->bNode->getType() == nodeType::functionCallNode){
+        auto convertedNode = std::dynamic_pointer_cast<FunctionCallNode>(node->aNode);
+        leString = generateFunctionCallCode(convertedNode);
+    }
     }
     if (leString.find_last_of(';')){
         return leString;

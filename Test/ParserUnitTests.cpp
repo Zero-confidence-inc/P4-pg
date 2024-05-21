@@ -1,14 +1,8 @@
 #include "gtest/gtest.h"
 #include "Parser.h"
 #include "Token.h"
+#include "TokenCreator.h"
 
-// Helper function to create a token
-Token createToken(TokenType type, const std::string& value) {
-    Token token;
-    token.type = type;
-    token.value = value;
-    return token;
-}
 
 // Test for parseDeclaration
 TEST(ParserTest, ParseDeclaration) {
@@ -140,13 +134,20 @@ TEST(ParserTest, ParseSwitch) {
             createToken(TokenType::PUNCTUATION, ")"),
             createToken(TokenType::PUNCTUATION, "{"),
             createToken(TokenType::CONTROL, "case"),
+            createToken(TokenType::PUNCTUATION, "("),
             createToken(TokenType::CONST, "1"),
+            createToken(TokenType::PUNCTUATION, ")"),
             createToken(TokenType::PUNCTUATION, ":"),
             createToken(TokenType::TYPE, "int"),
             createToken(TokenType::IDENTIFIER, "y"),
             createToken(TokenType::OPERATOR, "="),
             createToken(TokenType::CONST, "2"),
             createToken(TokenType::PUNCTUATION, ";"),
+            createToken(TokenType::CONTROL, "default"),
+            createToken(TokenType::PUNCTUATION, ":"),
+            createToken(TokenType::IDENTIFIER, "k"),
+            createToken(TokenType::OPERATOR, "="),
+            createToken(TokenType::CONST, "3"),
             createToken(TokenType::PUNCTUATION, "}")
     };
     Parser parser(tokens);
