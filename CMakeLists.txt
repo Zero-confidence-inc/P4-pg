@@ -26,6 +26,7 @@ set(SOURCES
         src/CommentsDFA.cpp
         src/Parser.h
         src/CodeGenerator.cpp
+        src/Semantic.cpp
 )
 
 add_library(P4_pg_lib ${SOURCES})
