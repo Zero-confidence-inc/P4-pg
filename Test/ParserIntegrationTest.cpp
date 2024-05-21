@@ -19,26 +19,31 @@ TEST(ParserIntegrationTest, ParseProgram) {
             createToken(TokenType::IDENTIFIER, "y"),
             createToken(TokenType::OPERATOR, "="),
             createToken(TokenType::FLOAT_CONST, "3.14"),
-            createToken(TokenType::PUNCTUATION, ";"),
+            createToken(TokenType::PUNCTUATION, ";"),//10
+            createToken(TokenType::TYPE,"int"),
+            createToken(TokenType::IDENTIFIER,"Function1"),
+            createToken(TokenType::PUNCTUATION,"("),
+            createToken(TokenType::PUNCTUATION,")"),
+            createToken(TokenType::PUNCTUATION,"{"),
             createToken(TokenType::CONTROL, "if"),
             createToken(TokenType::PUNCTUATION, "("),
             createToken(TokenType::IDENTIFIER, "x"),
             createToken(TokenType::OPERATOR, "=="),
-            createToken(TokenType::CONST, "42"),
+            createToken(TokenType::CONST, "42"),//20
             createToken(TokenType::PUNCTUATION, ")"),
             createToken(TokenType::PUNCTUATION, "{"),
             createToken(TokenType::IDENTIFIER, "y"),
             createToken(TokenType::OPERATOR, "="),
             createToken(TokenType::FLOAT_CONST, "6.28"),
             createToken(TokenType::PUNCTUATION, ";"),
-            createToken(TokenType::PUNCTUATION, "}")
+            createToken(TokenType::PUNCTUATION, "}"),
+            createToken(TokenType::PUNCTUATION,"}")//28
     };
 
     Parser parser(tokens);
     auto ast = parser.parseProgram();
 
     ASSERT_FALSE(ast.empty());
-
 
     // Check the first node (declaration of int x = 42)
     auto firstNode = ast[0];
@@ -60,21 +65,38 @@ TEST(ParserIntegrationTest, ParseProgram) {
     EXPECT_EQ(valueNode2->identifier, "y");
     EXPECT_EQ(valueNode2->value->getType(), floatNode);
 
-    // Check the third node (if statement)
+    // Check the third node (function declaration)
     auto thirdNode = ast[2];
     ASSERT_NE(thirdNode, nullptr);
-    EXPECT_EQ(thirdNode->getType(), ifNode);
-    auto ifNodePtr = std::dynamic_pointer_cast<IfNode>(thirdNode);
+    EXPECT_EQ(thirdNode->getType(), functionNode);
+    auto functionNodePtr = std::dynamic_pointer_cast<FunctionNode>(thirdNode);
+    ASSERT_NE(functionNodePtr, nullptr);
+    EXPECT_EQ(functionNodePtr->type, "int");
+    EXPECT_EQ(functionNodePtr->identifier, "Function1");
+
+    // Check the function's body (if statement)
+    ASSERT_FALSE(functionNodePtr->body.empty());
+    auto ifNodePtr = std::dynamic_pointer_cast<IfNode>(functionNodePtr->body[0]);
     ASSERT_NE(ifNodePtr, nullptr);
     ASSERT_NE(ifNodePtr->condition, nullptr);
     EXPECT_EQ(ifNodePtr->condition->getType(), conditionNode);
+
+    // Check the if body node (should be a condition node representing y = 6.28)
     EXPECT_EQ(ifNodePtr->body.size(), 1); // Only one statement inside if
     auto ifBodyNode = ifNodePtr->body[0];
     ASSERT_NE(ifBodyNode, nullptr);
-    EXPECT_EQ(ifBodyNode->getType(), valueNode);
-    auto ifValueNode = std::dynamic_pointer_cast<ValueNode>(ifBodyNode);
-    ASSERT_NE(ifValueNode, nullptr);
-    EXPECT_EQ(ifValueNode->type, "float");
-    EXPECT_EQ(ifValueNode->identifier, "y");
-    EXPECT_EQ(ifValueNode->value->getType(), floatNode);
+    EXPECT_EQ(ifBodyNode->getType(), conditionNode);
+    auto conditionNode = std::dynamic_pointer_cast<ConditionNode>(ifBodyNode);
+    ASSERT_NE(conditionNode, nullptr);
+    EXPECT_EQ(conditionNode->condition, "=");
+    ASSERT_NE(conditionNode->aNode, nullptr);
+    EXPECT_EQ(conditionNode->aNode->getType(), identifierNode);
+    auto identifierNodePtr = std::dynamic_pointer_cast<IdentifierNode>(conditionNode->aNode);
+    ASSERT_NE(identifierNodePtr, nullptr);
+    EXPECT_EQ(identifierNodePtr->identifier, "y");
+    ASSERT_NE(conditionNode->bNode, nullptr);
+    EXPECT_EQ(conditionNode->bNode->getType(), floatNode);
+    auto floatNodePtr = std::dynamic_pointer_cast<FloatNode>(conditionNode->bNode);
+    ASSERT_NE(floatNodePtr, nullptr);
+    EXPECT_EQ(floatNodePtr->Floating_Point, 6.28f);
 }
