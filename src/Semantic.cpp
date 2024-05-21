@@ -254,17 +254,15 @@ void SemanticAnalyser::kowalskiString(const std::shared_ptr<StringNode>& node){
 }
 
 void SemanticAnalyser::kowalskiWhile(const std::shared_ptr<WhileNode>& node){
-    if (node->condition->getType() != nodeType::conditionNode || node->condition->getType() != nodeType::identifierNode){
-        throw std::runtime_error("Not a condition");
-    }else {
-        symbolTable.enterScope();
+
         kowalskiKondi(node->condition);
+        symbolTable.enterScope();
         for (int i = 0; i < node->body.size(); i++){
             analyseNode(node->body[i]);
         }
         symbolTable.exitScope();
     }
-}
+
 void SemanticAnalyser::kowalskiFor(const std::shared_ptr<ForLoopNode>& node){
     if (node->condition->getType() != nodeType::conditionNode){
         throw std::runtime_error("Not a condition");

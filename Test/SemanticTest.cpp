@@ -30,6 +30,22 @@ TEST(KowalskiTest, KowalskiChar) {
     EXPECT_EQ("r",node->character);
 }
 
+TEST(KowalskiTest,KowalskiKondi){
+    auto KondiNode = std::make_shared<ConditionNode>();
+    auto aNode = std::make_shared<StringNode>();
+    auto bNode = std::make_shared<StringNode>();
+    std::cout<< KondiNode->condition<<std::endl;
+    KondiNode->aNode = aNode;
+    KondiNode->bNode = bNode;
+    EXPECT_NO_THROW(semanticanalyser.kowalskiKondi(KondiNode));
+
+
+
+
+
+
+}
+
 TEST(KowalskiTest, KowalskiWhile) {
     std::shared_ptr<WhileNode> node = std::make_shared<WhileNode>();
     std::shared_ptr<IntNode> Anode = std::make_shared<IntNode>();
@@ -40,6 +56,11 @@ TEST(KowalskiTest, KowalskiWhile) {
     node->condition->aNode = Anode;
     node->condition->condition = ">=";
     node->condition->bNode = Bnode;
+    auto body = std::shared_ptr<DeclarationNode>(); //lazy why to write it : )
+    body->identifier = "abc";
+    body->type = "int";
+    node->body.push_back(body);
+
     EXPECT_NO_THROW(semanticanalyser.kowalskiWhile(node));
 }
 
