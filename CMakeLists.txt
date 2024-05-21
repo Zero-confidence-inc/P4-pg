@@ -30,6 +30,7 @@ set(SOURCES
         src/Semantic.cpp
         src/Semantic.h
         src/CodeGenerator.cpp
+        src/Semantic.cpp
 )
 
 add_library(P4_pg_lib ${SOURCES})

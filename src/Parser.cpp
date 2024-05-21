@@ -283,7 +283,10 @@ std::vector<std::shared_ptr<DeclarationNode>> Parser::parseFunctionArguments() {
             declaration->identifier = identifier;
             arguments.push_back(declaration);
             std::cout << "Parsed argument type: " << type << ", identifier: " << identifier << std::endl;
-        } else if (lookAhead(TokenType::PUNCTUATION) && tokens[pos+1].value == ")") {
+        } else if (lookAhead(TokenType::PUNCTUATION) && tokens[pos+1].value == ","){
+            pos++;
+
+        }else if (lookAhead(TokenType::PUNCTUATION) && tokens[pos+1].value == ")") {
             pos++;
             std::cout << "Ending parseFunctionArguments with closing parenthesis at position " << pos << std::endl;
             break;
@@ -297,7 +300,7 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
     std::cout << "Entering parseLoopBody" << std::endl;
     std::cout << "current pos is " << pos << " infiltration starting shortly" << std::endl;
-    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos+1].value[0] == '{') {
+    if (lookAhead(TokenType::PUNCTUATION) && tokens[pos+1].value == "{") {
         pos++;
         std::cout << "first if infiltrated current pos = " << pos << std::endl;
         while (tokens[pos+1].value != "}") {
@@ -315,7 +318,7 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
                     auto switchStatement = parseSwitch();
                     contents.push_back(switchStatement);
                 }
-            }else if(lookAhead(TokenType::LOOP)){
+            } else if(lookAhead(TokenType::LOOP)){
                 if(tokens[pos+1].value == "for"){
                     auto forStatement = parseForLoop();
                     contents.push_back(forStatement);
@@ -333,14 +336,14 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
                    contents.push_back(jump);
                 }
             }else if (lookAhead(TokenType::IDENTIFIER)){
-                if(tokens[pos+2].value == "=" || tokens[pos+2].value == "+=" ||tokens[pos+2].value == "-=") {
+                std::cout<< "you shall not pass" <<std::endl;
+                if(tokens[pos+2].value == "=" || tokens[pos+2].value == "+="||tokens[pos+2].value == "-="
+                    ||tokens[pos+2].value == "++"||tokens[pos+2].value == "--") {
                     auto condi = parseCondition();
                     contents.push_back(condi);
                 }
             }
         }
-    } else {
-        return {};
     }
     return contents;
 }
@@ -410,7 +413,7 @@ std::shared_ptr<ASTNode> Parser::parseCondition() {
         if (tokens[pos+2].type == TokenType::OPERATOR) {
             conditionNode->bNode = parseCondition();
         } else if (lookAhead(TokenType::CONST) || lookAhead(TokenType::FLOAT_CONST) || lookAhead(TokenType::STRING)
-                   || lookAhead(TokenType::IDENTIFIER) || lookAhead(TokenType::BOOL)) {
+                   || lookAhead(TokenType::IDENTIFIER) || lookAhead(TokenType::BOOL) || lookAhead(TokenType::PUNCTUATION) && tokens[pos+1].value == ";") {
 
             if (lookAhead(TokenType::IDENTIFIER)) {
 
@@ -741,14 +744,17 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop() {
             // Skip ')' and parses the body of the if statement, thereafter it assigns the condition and body.
             if (lookAhead(TokenType::PUNCTUATION) && tokens[pos+1].value[0] == ')') {
                 pos++;
+                std::cout<< "pos = " << pos <<std::endl;
                 if (lookAhead(TokenType::PUNCTUATION) && tokens[pos+1].value[0] == '{') {
-                    pos++;
                     auto bodyNode = parseLoopBody();
+
                     whileNode->condition = std::dynamic_pointer_cast<ConditionNode>(conditionNode);
                     whileNode->body = bodyNode;
                     std::cout << "pos = " << pos << std::endl;
+                    pos++;
                     match(TokenType::PUNCTUATION,"}");
                     --pos;
+                    std::cout << "homerun!!"<< std::endl;
                     return whileNode;
                 }
             }
