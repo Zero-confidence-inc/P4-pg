@@ -34,7 +34,6 @@ TEST(KowalskiTest,KowalskiKondi){
     auto KondiNode = std::make_shared<ConditionNode>();
     auto aNode = std::make_shared<StringNode>();
     auto bNode = std::make_shared<StringNode>();
-    std::cout<< KondiNode->condition<<std::endl;
     KondiNode->aNode = aNode;
     KondiNode->bNode = bNode;
     EXPECT_NO_THROW(semanticanalyser.kowalskiKondi(KondiNode));
@@ -42,20 +41,19 @@ TEST(KowalskiTest,KowalskiKondi){
 }
 
 TEST(KowalskiTest, KowalskiWhile) {
-    std::shared_ptr<WhileNode> node = std::make_shared<WhileNode>();
-    std::shared_ptr<IntNode> Anode = std::make_shared<IntNode>();
-    std::shared_ptr<IntNode> Bnode = std::make_shared<IntNode>();
+    auto node = std::make_shared<WhileNode>();
+    auto Anode = std::make_shared<IntNode>();
+    auto Bnode = std::make_shared<IntNode>();
     Anode->integer = 4;
     Bnode->integer = 3;
     node->condition = std::make_shared<ConditionNode>();
     node->condition->aNode = Anode;
-    node->condition->condition = ">=";
+    node->condition->condition = "==";
     node->condition->bNode = Bnode;
-    auto body = std::shared_ptr<DeclarationNode>(); //lazy why to write it : )
+    auto body = std::make_shared<DeclarationNode>(); //lazy why to write it
     body->identifier = "abc";
     body->type = "int";
     node->body.push_back(body);
-
     EXPECT_NO_THROW(semanticanalyser.kowalskiWhile(node));
 }
 
@@ -70,6 +68,7 @@ TEST(KowalskiTest,KowalskiFor){
     Condi->condition = "==";
     auto CondiA = std::make_shared<IdentifierNode>();
     CondiA->identifier = "abc";
+    Condi->aNode = CondiA;
     Condi->bNode = std::make_shared<IntNode>();
     node->condition = Condi;
     expression->aNode = CondiA;
@@ -78,6 +77,63 @@ TEST(KowalskiTest,KowalskiFor){
 
     EXPECT_NO_THROW(semanticanalyser.kowalskiFor(node));
 
-
 }
+
+TEST(KowalskiTest,KowalskiIf){
+    auto Node = std::make_shared<IfNode>();
+    auto Condi = std::make_shared<ConditionNode>();
+    Condi->aNode = std::make_shared<IntNode>();
+    //Node->EXPECT_NO_THROW();
+}
+
+TEST(KowalskiTest,KowalskiStruct){
+    auto node = std::make_shared<StructNode>();
+    node->identifier="abc";
+    node->type = "struct";
+    auto decl = std::make_shared<DeclarationNode>();
+    decl->type="int";decl->identifier="abc";
+    auto decl2 = std::make_shared<DeclarationNode>();
+    decl->type="string";decl->identifier="def";
+    node->body.push_back(decl);
+    node->body.push_back(decl2);
+    EXPECT_ANY_THROW(semanticanalyser.kowalskiStruct(node));
+}
+
+TEST(KowalskiTest,KowalskiValue){
+    auto node = std::make_shared<ValueNode>();
+    node->identifier = "xd";
+    node->type = "bool";
+    node->value = std::make_shared<BoolNode>();
+    //EXPECT_NO_THROW(semanticanalyser.kowalskiValue) den er ikke lavet semantics EW
+}
+
+TEST(KowalskiTest,KowalskiFunction_Creation_Call){
+
+    auto node = std::make_shared<FunctionNode>();
+    node->type = "bool";
+    node->identifier = "hardcock";
+    auto clara = std::make_shared<DeclarationNode>();
+    clara->identifier = "soft";
+    clara->type = "bool";
+    node->arguments.push_back(clara);
+    auto condi = std::make_shared<ConditionNode>();
+    condi->condition = "=";
+    condi->bNode = std::make_shared<BoolNode>();
+    auto id =std::make_shared<IdentifierNode>();
+    id->identifier = "hardcock";
+    condi->aNode = id;
+    node->body.push_back(condi);
+    std::vector<std::shared_ptr<ASTNode>> contents;
+    contents.push_back(node);
+    //this is creation function after this i will add a function call to call the function we made to contents
+
+    auto funCall = std::make_shared<FunctionCallNode>();
+    funCall->identifier = "hardcock";
+    funCall->arguments.push_back(std::make_shared<BoolNode>());
+    contents.push_back(funCall);
+
+    EXPECT_NO_THROW(semanticanalyser.kowalski(contents));
+}
+
+
 

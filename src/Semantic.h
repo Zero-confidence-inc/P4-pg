@@ -25,6 +25,7 @@ private:
 
 class FunctionTable{
 public:
+    void enterScope();
     void declareFunction(const std::string& name,std::vector<std::string>& arguments);
     std::vector<std::string> lookUpFunction(const std::string& functionName);
 private:

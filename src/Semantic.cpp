@@ -7,7 +7,10 @@
 #include <string>
 
 void SymbolTable::enterScope(){
-scopes.push_back({});
+    scopes.push_back({});
+}
+void FunctionTable::enterScope(){
+    functionMap.push_back({});
 }
 
 void SymbolTable::exitScope(){
@@ -59,16 +62,17 @@ std::string SymbolTable::lookUpVariable(const std::string& name){
 }
 void SemanticAnalyser::kowalski(const std::vector<std::shared_ptr<ASTNode>>& root){
     symbolTable.enterScope();
-    try {
+    functionTable.enterScope();
+    //try {
     
     
     for (int i = 0; i < root.size(); i++){
             analyseNode(root[i]);
-        }}
+        }/*}
     catch(std::runtime_error& withoutski){
         std::cout << withoutski.what() << "Kowalski is fucked\n";
-    }
-    //magic??
+    }*/
+
     symbolTable.exitScope();
 }
 
@@ -269,9 +273,6 @@ void SemanticAnalyser::kowalskiWhile(const std::shared_ptr<WhileNode>& node){
     }
 
 void SemanticAnalyser::kowalskiFor(const std::shared_ptr<ForLoopNode>& node){
-    if (node->condition->getType() != nodeType::conditionNode){
-        throw std::runtime_error("Not a condition");
-    }else {
         symbolTable.enterScope();
         kowalskiDeclaration(node->declaration);
         kowalskiKondi(node->condition);
@@ -282,7 +283,7 @@ void SemanticAnalyser::kowalskiFor(const std::shared_ptr<ForLoopNode>& node){
         }
         symbolTable.exitScope();
     }
-}
+
 void SemanticAnalyser::kowalskiSwitch(const std::shared_ptr<SwitchNode>& node){
     if (node->condition->getType() != nodeType::conditionNode){
         throw std::runtime_error("Not a condition");
@@ -382,14 +383,12 @@ void SemanticAnalyser::kowalskiConsole(const std::shared_ptr<ConsoleNode>& node)
 }
 
 void SemanticAnalyser::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
-    if(node->struct_main->getType() != nodeType::structNode) {
-        throw std::runtime_error("Not a struct");
-    } else {
+
         for (int i = 0; i < node->body.size(); i++){
             analyseNode(node->body[i]);
         }
     }
-}
+
 
 void SemanticAnalyser::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
     std::string size = node->size;
