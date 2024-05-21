@@ -178,9 +178,12 @@ TEST(CGTEST,WhileTest){
 
 TEST(CGTEST,forTests){
     auto forTestNode = std::make_shared<ForLoopNode>();
-    auto forDeclartionNode = std::make_shared<DeclarationNode>();
+    auto forDeclartionNode = std::make_shared<ValueNode>();
     forDeclartionNode->identifier = "i";
     forDeclartionNode->type = "int";
+    auto forDeclarationIntNode = std::make_shared<IntNode>();
+    forDeclarationIntNode->integer = 0;
+    forDeclartionNode->value = forDeclarationIntNode;
     auto forCountNode = std::make_shared<ConditionNode>();
     auto forCountIdNode = std::make_shared<IdentifierNode>();
     forCountIdNode->identifier = "i";
@@ -202,7 +205,7 @@ TEST(CGTEST,forTests){
     forTestNode->body.push_back(forBodyElementNode);
     CodeGenerator codeGenerator;
     std::string FTresault = codeGenerator.generateForCode(forTestNode);
-    EXPECT_EQ(FTresault,"for(int i;i<10;i++){int x=10;}");
+    EXPECT_EQ(FTresault,"for(int i=0;i<10;i++){int x=10;}");
 }
 
 TEST(CGTEST,ifTest){

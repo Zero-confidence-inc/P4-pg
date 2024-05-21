@@ -452,7 +452,7 @@ std::shared_ptr<ASTNode> Parser::parseForLoop() {
 
                         std::cout << "recon on end-bracket complete" << std::endl;
                         auto bodyNode = parseLoopBody();
-                        forLoopNode->declaration = std::dynamic_pointer_cast<DeclarationNode>(declarationNode);
+                        forLoopNode->declaration = std::dynamic_pointer_cast<ValueNode>(valueNode);
                         forLoopNode->condition = std::dynamic_pointer_cast<ConditionNode>(conditionNode);
                         forLoopNode->expression = std::dynamic_pointer_cast<ConditionNode>(expressionNode);
                         forLoopNode->body = bodyNode;

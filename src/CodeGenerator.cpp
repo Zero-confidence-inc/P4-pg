@@ -71,7 +71,7 @@ std::string CodeGenerator::generateSwitchCode(std::shared_ptr<SwitchNode>& node)
 std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
     std::string forCodeOutput;
     forCodeOutput += "for(";
-    forCodeOutput += generateDeclartionCode(node->declaration);
+    forCodeOutput += generateValueCode(node->declaration);
     forCodeOutput += generateConditionCode(node->condition) + ";";
     forCodeOutput += generateConditionCode(node->expression);
     forCodeOutput += "){";

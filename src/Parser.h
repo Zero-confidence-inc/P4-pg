@@ -50,6 +50,13 @@ struct DeclarationNode : ASTNode {
 
 };
 
+// Node for variable declarations
+struct ValueNode : DeclarationNode {
+    std::shared_ptr<ASTNode> value;
+    nodeType getType() const override { return nodeType::valueNode; }
+
+};
+
 struct ConsoleNode : ASTNode {
     nodeType getType() const override { return nodeType::consoleNode; }
     std::vector<std::shared_ptr<ASTNode>> message;
@@ -78,7 +85,7 @@ struct CaseNode : ASTNode {
 };
 
 struct ForLoopNode : ASTNode {
-    std::shared_ptr<DeclarationNode> declaration;
+    std::shared_ptr<ValueNode> declaration;
     std::shared_ptr<ConditionNode> condition;
     std::shared_ptr<ConditionNode> expression;
     std::vector<std::shared_ptr<ASTNode>> body;
@@ -99,13 +106,6 @@ struct StructNode : DeclarationNode {
     std::shared_ptr<ASTNode> struct_main;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override { return nodeType::structNode; }
-
-};
-
-// Node for variable declarations
-struct ValueNode : DeclarationNode {
-    std::shared_ptr<ASTNode> value;
-    nodeType getType() const override { return nodeType::valueNode; }
 
 };
 
