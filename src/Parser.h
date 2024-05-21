@@ -152,7 +152,6 @@ struct StringNode : ASTNode {
     nodeType getType() const override { return nodeType::stringNode; }
 
 };
-
 struct DefaultNode : ASTNode {
     std::vector<std::shared_ptr<ASTNode>> Branch;
     nodeType getType() const override { return nodeType::defaultNode; }
@@ -164,10 +163,7 @@ struct SwitchNode : ASTNode {
     std::shared_ptr<DefaultNode> deNode;
     nodeType getType() const override { return nodeType::switchNode; }
     SwitchNode() : condition(nullptr), caseBranch() {}
-
 };
-
-
 
 struct WhileNode : ASTNode {
     std::shared_ptr<ConditionNode> condition;
@@ -213,7 +209,7 @@ struct FunctionNode : DeclarationNode {
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);
-    void parseProgram();
+    std::vector<std::shared_ptr<ASTNode>> parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
     std::shared_ptr<ASTNode> parseChar();
     std::shared_ptr<ASTNode> parseBool();

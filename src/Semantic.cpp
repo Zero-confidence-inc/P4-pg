@@ -36,6 +36,7 @@ std::vector<std::string> FunctionTable::lookUpFunction(const std::string& functi
     throw std::runtime_error("no function has the name: " + functionName);
 }
 
+SemanticAnalyser::SemanticAnalyser() {}
 
 void SymbolTable::declareVariable(const std::string& name,const std::string& type){
     if(!scopes.empty())

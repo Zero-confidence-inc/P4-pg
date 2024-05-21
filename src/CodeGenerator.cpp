@@ -1,8 +1,11 @@
 #include "CodeGenerator.h"
 #include <string>
 
-void CodeGenerator::generateCode(const std::shared_ptr<ASTNode>& root) {
-    
+CodeGenerator::CodeGenerator() {}
+
+std::string CodeGenerator::generateCode(std::vector<std::shared_ptr<ASTNode>>& root) {
+   std::string code = generateBodyCode(root);
+    return code;
 }
 
 
@@ -92,7 +95,7 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
     for (int i = 0; i<body.size(); i++){
         if (body[i]->getType()==nodeType::arrayNode){
             auto convertedArrayNode = std::dynamic_pointer_cast<ArrayNode>(body[i]);
-            generateArrayCode(convertedArrayNode);
+            //generateArrayCode(convertedArrayNode);
         }
         else if(body[i]->getType()==nodeType::conditionNode){
             auto convertedConditionNode = std::dynamic_pointer_cast<ConditionNode>(body[i]);
@@ -147,7 +150,7 @@ std::string CodeGenerator::generateArrayCode(std::shared_ptr<ArrayNode>& node){
     }
     else{
         leString = node->type + " " + node->identifier + "["+node->size+"]";
-    }   
+    }
     for (int i = 0;i<node->body.size();i++)
         {
             if(i==0){
@@ -178,7 +181,7 @@ std::string CodeGenerator::generateArrayCode(std::shared_ptr<ArrayNode>& node){
                 leString += generateUSCode(convertedNode);
             }else if (node->body[i]->getType() == nodeType::boolNode){
                 auto convertedNode = std::dynamic_pointer_cast<BoolNode>(node->body[i]);
-                leString += generateBoolCode(convertedNode);    
+                leString += generateBoolCode(convertedNode);
             }
             leString+="]";
         }
@@ -228,9 +231,9 @@ std::string CodeGenerator::generateDeclartionCode(std::shared_ptr<DeclarationNod
 std::string CodeGenerator::generateConsoleCode(std::shared_ptr<ConsoleNode>& node){
     std::string CodeInString = "std::cout <<" ;
     for(int i=0;i<node->message.size();i++){
-    
+
         if (i>0){CodeInString +="+";}
-    
+
         if (node->message[i]->getType() == nodeType::intNode){
             auto convertedNode = std::dynamic_pointer_cast<IntNode>(node->message[i]);
             CodeInString += generateIntCode(convertedNode);

@@ -7,7 +7,8 @@
 
 class CodeGenerator{
 public:
-    void generateCode(const std::shared_ptr<ASTNode>& root);
+    CodeGenerator();
+    std::string generateCode(std::vector<std::shared_ptr<ASTNode>>& root);
     std::string generateArrayCode(std::shared_ptr<ArrayNode>& node);
     std::string generateFunctionCode(std::shared_ptr<FunctionNode>& node);
     std::string generateValueCode(std::shared_ptr<ValueNode>& node);
@@ -29,7 +30,6 @@ public:
     std::string generateSwitchCode(std::shared_ptr<SwitchNode>& node);
     std::string generateStructCode(std::shared_ptr<StructNode>& node);
     std::string generateBodyCode(std::vector<std::shared_ptr<ASTNode>>& body);
-    // Add other helper methods as needed...
 
 private:
 
