@@ -160,14 +160,11 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
 } 
 
 std::string CodeGenerator::generateJumpCode(std::shared_ptr<JumpNode>& node){
-    std::string JumpCodeOutput;
-    if (node->breaker!="null"){
-        JumpCodeOutput += "break;";
-        return JumpCodeOutput;
+    if (node->continuer != "null"){
+        return node->continuer += ";";
     }
-    else if (node->continuer != "null"){
-        JumpCodeOutput += "continue;";
-        return JumpCodeOutput;
+    else if (node->breaker != "null"){
+        return node->breaker += ";";
     }
 }
 

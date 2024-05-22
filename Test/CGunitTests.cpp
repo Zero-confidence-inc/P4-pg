@@ -368,8 +368,12 @@ TEST(CGTEST,JumpBreakTest){
 TEST(CGTEST,JumpContinueTest){
     auto JumpOutput = std::make_shared<JumpNode>();
     JumpOutput->breaker = "null";
-    JumpOutput->continuer = "continue;";
+    JumpOutput->continuer = "continue";
     CodeGenerator codeGenerator;
     std::string JCTresault = codeGenerator.generateJumpCode(JumpOutput);
     EXPECT_EQ(JCTresault,"continue;");
+}
+
+TEST(CGTEST,SwitchCaseTest){
+
 }
