@@ -12,6 +12,7 @@ TEST(CGTEST,DeclarationTest){
     std::string DTresault = codeGenerator.generateDeclartionCode(DTN_basicDeclaration);
     EXPECT_EQ(DTresault,"int x;");
 }
+
 TEST(CGTEST,ValueIntTest){
     auto VTN_basicValueInt = std::make_shared<ValueNode>();
     VTN_basicValueInt->type = "int";
@@ -23,6 +24,7 @@ TEST(CGTEST,ValueIntTest){
     std::string VTresault = codeGenerator.generateValueCode(VTN_basicValueInt);
     EXPECT_EQ(VTresault,"int x=12;");
 }
+
 TEST(CGTEST,ValueNegIntTest){
     auto VTN_basicValueInt = std::make_shared<ValueNode>();
     VTN_basicValueInt->type = "int";
@@ -34,6 +36,7 @@ TEST(CGTEST,ValueNegIntTest){
     std::string VTresault = codeGenerator.generateValueCode(VTN_basicValueInt);
     EXPECT_EQ(VTresault,"int x=-12;");
 }
+
 TEST(CGTEST,ValueFloatTest){
     auto VTN_basicValueFloat = std::make_shared<ValueNode>();
     VTN_basicValueFloat->type = "float";
@@ -45,6 +48,7 @@ TEST(CGTEST,ValueFloatTest){
     std::string FTresault = codeGenerator.generateValueCode(VTN_basicValueFloat);
     EXPECT_EQ(FTresault, "float x=7.350000;");
 }
+
 TEST(CGTEST,ValueCharTest){
     auto VTN_basicValueChar = std::make_shared<ValueNode>();
     VTN_basicValueChar->type = "char";
@@ -56,6 +60,7 @@ TEST(CGTEST,ValueCharTest){
     std::string CTresault = codeGenerator.generateValueCode(VTN_basicValueChar);
     EXPECT_EQ(CTresault,"char x=A;");
 }
+
 TEST(CGTEST,ValueStringTest){
     auto VTN_basicValueString = std::make_shared<ValueNode>();
     VTN_basicValueString->type = "string";
@@ -73,6 +78,7 @@ TEST(CGTEST,ValueStringTest){
     STexpect += ";";
     EXPECT_EQ(STresault,STexpect);
 }
+
 TEST(CGTEST,ValueBoolTrueTest){
     auto VTN_basicValueBool = std::make_shared<ValueNode>();
     VTN_basicValueBool->type = "bool";
@@ -84,6 +90,7 @@ TEST(CGTEST,ValueBoolTrueTest){
     std::string BTTresault = codeGenerator.generateValueCode(VTN_basicValueBool);
     EXPECT_EQ(BTTresault,"bool x=1;");
 }
+
 TEST(CGTEST,ValueBoolFalseTest){
     auto VTN_basicValueBool = std::make_shared<ValueNode>();
     VTN_basicValueBool->type = "bool";
@@ -95,6 +102,7 @@ TEST(CGTEST,ValueBoolFalseTest){
     std::string BTFresault = codeGenerator.generateValueCode(VTN_basicValueBool);
     EXPECT_EQ(BTFresault,"bool x=0;");
 }
+
 TEST(CGTEST,ValueUsIntTest){
     auto VTN_basicValueUsInt = std::make_shared<ValueNode>();
     VTN_basicValueUsInt->type = "usint";
@@ -129,13 +137,243 @@ TEST(CGTEST,CondiTest){
 
 TEST(CGTEST,ConsoleTest){
     auto ConsoleTest = std::make_shared<ConsoleNode>();
-    auto ConsoleOutputTest = std::make_shared<ValueNode>();
+    auto Consolemsg = std::make_shared<StringNode>();
     auto ConsoleOutputIntTest = std::make_shared<IntNode>();
     ConsoleOutputIntTest->integer = 12;
-    ConsoleOutputTest->type = "int";
-    ConsoleOutputTest->identifier = "x";
-    ConsoleOutputTest->value = ConsoleOutputIntTest;
-    std::string Consolemsg = "is an int, it is:";
-    //ConsoleTest->message.push_back(ConsoleOutputTest->identifier);
+    int ConsoleExpectInt = ConsoleOutputIntTest->integer;
+    Consolemsg->StringOfChars = "x is an int, it is:";
+    ConsoleTest->message.push_back(Consolemsg);
+    ConsoleTest->message.push_back(ConsoleOutputIntTest);
+    CodeGenerator codeGenerator;
+    std::string ConsoleResault = codeGenerator.generateConsoleCode(ConsoleTest);
+    std:: string ConsoleExpect = "std::cout <<";
+    ConsoleExpect += '"';
+    ConsoleExpect += "x is an int, it is:";
+    ConsoleExpect += '"';
+    ConsoleExpect += "+";
+    ConsoleExpect += std::to_string(ConsoleExpectInt);
+    ConsoleExpect += "<< std::endl;";
+    EXPECT_EQ(ConsoleResault,ConsoleExpect);
 }
 
+TEST(CGTEST,WhileTest){
+    auto WhileTestOutput = std::make_shared<WhileNode>();
+    auto WhileCondition = std::make_shared<ConditionNode>();
+    auto WhileaNode = std::make_shared<IdentifierNode>();
+    auto WhilebNode = std::make_shared<IntNode>();
+    WhileaNode->identifier = "a";
+    WhilebNode->integer = 12;
+    WhileCondition->aNode = WhileaNode;
+    WhileCondition->condition = "==";
+    WhileCondition->bNode = WhilebNode;
+    WhileTestOutput->condition = WhileCondition;
+    auto WhileElement = std::make_shared<DeclarationNode>();
+    WhileElement->type = "int";
+    WhileElement->identifier = "x";
+    WhileTestOutput->body.push_back(WhileElement);
+    CodeGenerator codeGenerator;
+    std::string WTresault = codeGenerator.generateWhileCode(WhileTestOutput);
+    EXPECT_EQ(WTresault,"while(a==12){int x;}");
+}
+
+TEST(CGTEST,ForTests){
+    auto forTestNode = std::make_shared<ForLoopNode>();
+    auto forDeclartionNode = std::make_shared<ValueNode>();
+    forDeclartionNode->identifier = "i";
+    forDeclartionNode->type = "int";
+    auto forDeclarationIntNode = std::make_shared<IntNode>();
+    forDeclarationIntNode->integer = 0;
+    forDeclartionNode->value = forDeclarationIntNode;
+    auto forCountNode = std::make_shared<ConditionNode>();
+    auto forCountIdNode = std::make_shared<IdentifierNode>();
+    forCountIdNode->identifier = "i";
+    forCountNode->aNode = forCountIdNode;
+    forCountNode->condition = "<";
+    auto forCountIntNode = std::make_shared<IntNode>();
+    forCountIntNode->integer = 10;
+    forCountNode->bNode = forCountIntNode;
+    auto forIncreaseNode = std::make_shared<ConditionNode>();
+    forIncreaseNode->aNode = forCountIdNode;
+    forIncreaseNode->condition = "++";
+    forTestNode->declaration = forDeclartionNode;
+    forTestNode->condition = forCountNode;
+    forTestNode->expression = forIncreaseNode;
+    auto forBodyElementNode = std::make_shared<ValueNode>();
+    forBodyElementNode->type = "int";
+    forBodyElementNode->identifier = "x";
+    forBodyElementNode->value = forCountIntNode;
+    forTestNode->body.push_back(forBodyElementNode);
+    CodeGenerator codeGenerator;
+    std::string FTresault = codeGenerator.generateForCode(forTestNode);
+    EXPECT_EQ(FTresault,"for(int i=0;i<10;i++){int x=10;}");
+}
+
+TEST(CGTEST,IfTest){
+    auto ifTestNode = std::make_shared<IfNode>();
+    auto ifConditionNode = std::make_shared<ConditionNode>();
+    auto ifXNode = std::make_shared<IdentifierNode>();
+    auto ifYNode = std::make_shared<IntNode>();
+    ifXNode->identifier = "a";
+    ifYNode->integer = 12;
+    ifConditionNode->aNode = ifXNode;
+    ifConditionNode->condition = "==";
+    ifConditionNode->bNode = ifYNode;
+    ifTestNode->condition = ifConditionNode;
+    auto ifBody = std::make_shared<ValueNode>();
+    ifBody->type = "int";
+    ifBody->identifier = "b";
+    ifBody->value = ifYNode;
+    ifTestNode->body.push_back(ifBody);
+    CodeGenerator codeGenerator;
+    std::string ITresault = codeGenerator.generateIfCode(ifTestNode);
+    EXPECT_EQ(ITresault,"if(a==12){int b=12;}");
+}
+
+TEST(CGTEST,IfElseTest){
+    auto ifElseTest = std::make_shared<IfNode>();
+    auto ifConditionNode = std::make_shared<ConditionNode>();
+    auto ifXNode = std::make_shared<IdentifierNode>();
+    auto ifYNode = std::make_shared<IntNode>();
+    ifXNode->identifier = "a";
+    ifYNode->integer = 12;
+    ifConditionNode->aNode = ifXNode;
+    ifConditionNode->condition = "==";
+    ifConditionNode->bNode = ifYNode;
+    ifElseTest->condition = ifConditionNode;
+    auto IfBody = std::make_shared<ValueNode>();
+    IfBody->type = "int";
+    IfBody->identifier = "b";
+    IfBody->value = ifYNode;
+    ifElseTest->body.push_back(IfBody);
+    auto IfElseBody = std::make_shared<ValueNode>();
+    IfElseBody->type = "int";
+    IfElseBody->identifier = "b";
+    auto IfElseBodyValue = std::make_shared<IntNode>();
+    IfElseBodyValue->integer = 14;
+    IfElseBody->value = IfElseBodyValue;
+    ifElseTest->elseBody.push_back(IfElseBody);
+    CodeGenerator codeGenerator;
+    std::string IETresault = codeGenerator.generateIfCode(ifElseTest);
+    EXPECT_EQ(IETresault,"if(a==12){int b=12;}else{int b=14;}");
+}
+
+TEST(CGTEST,StructTest){
+    auto structTestOutput = std::make_shared<StructNode>();
+    structTestOutput->type = "struct";
+    structTestOutput->identifier = "ABC";
+    auto structBody1 = std::make_shared<DeclarationNode>();
+    structBody1->type = "int";
+    structBody1->identifier = "a";
+    auto structBody2 = std::make_shared<DeclarationNode>();
+    structBody2->type = "string";
+    structBody2->identifier = "b";
+    structTestOutput->body.push_back(structBody1);
+    structTestOutput->body.push_back(structBody2);
+    CodeGenerator codeGenerator;
+    std::string STresault = codeGenerator.generateStructCode(structTestOutput);
+    std::string STexpect = "struct ABC{int a;std::string b;};";
+    EXPECT_EQ(STresault,STexpect);
+}
+
+TEST(CGTEST,IDTest){
+    auto IdTestOutput = std::make_shared<IdentifierNode>();
+    IdTestOutput->identifier = "a";
+    CodeGenerator codeGenerator;
+    std::string IDresault = codeGenerator.generateIdentifierCode(IdTestOutput);
+    EXPECT_EQ(IDresault,"a");
+}
+
+TEST(CGTEST,ReturnTest){
+    auto ReturnTestOutput = std::make_shared<ReturnNode>();
+    ReturnTestOutput->identifier = "a";;
+    CodeGenerator codeGenerator;
+    std::string RTresault = codeGenerator.generateReturnCode(ReturnTestOutput);
+    EXPECT_EQ(RTresault,"return a;");
+}
+
+TEST(CGTEST,RandomIntUnboundTest){
+    auto RandomIntUnboundOutput = std::make_shared<RandomNode>();
+    RandomIntUnboundOutput->type = "int?";
+    RandomIntUnboundOutput->identifier = "x";
+    CodeGenerator codeGenerator;
+    std::string RIUTresault = codeGenerator.generateRandomCode(RandomIntUnboundOutput);
+    EXPECT_EQ(RIUTresault,"int x=rand();");
+}
+
+TEST(CGTEST,RandomIntBoundTest){
+    auto RandomIntBoundOutput = std::make_shared<RandomNode>();
+    RandomIntBoundOutput->type = "int?";
+    RandomIntBoundOutput->identifier = "x";
+    RandomIntBoundOutput->RandomIntRange.push_back(1);
+    RandomIntBoundOutput->RandomIntRange.push_back(10);
+    CodeGenerator codeGenerator;
+    std::string RIBTresault = codeGenerator.generateRandomCode(RandomIntBoundOutput);
+    EXPECT_EQ(RIBTresault,"int x=rand()%(10-1+1)+1;");
+}
+
+TEST(CGTEST,RandomFloatUnboundTest){
+    auto RandomFloatUnboundOutput = std::make_shared<RandomNode>();
+    RandomFloatUnboundOutput->type = "float?";
+    RandomFloatUnboundOutput->identifier = "x";
+    CodeGenerator codeGenerator;
+    std::string RFUTresault = codeGenerator.generateRandomCode(RandomFloatUnboundOutput);
+    EXPECT_EQ(RFUTresault,"float x=randomFloat; randomFloat = (float)rand();");
+}
+
+TEST(CGTEST,RandomFloatBoundTest){
+    auto RandomFloatBoundOutput = std::make_shared<RandomNode>();
+    RandomFloatBoundOutput->type = "float?";
+    RandomFloatBoundOutput->identifier = "x";
+    RandomFloatBoundOutput->RandomFloatRange.push_back(3.5);
+    RandomFloatBoundOutput->RandomFloatRange.push_back(10.8);
+    CodeGenerator codeGenerator;
+    std::string RFBTresault = codeGenerator.generateRandomCode(RandomFloatBoundOutput);
+    EXPECT_EQ(RFBTresault,"float x=randomFloat; randomFloat = (float range =10.800000-3.500000+ 1; float num = rand() % range +3.500000;)");
+}
+
+TEST(CGTEST,RandomBoolTest){
+    auto RandomBoolOutput = std::make_shared<RandomNode>();
+    RandomBoolOutput->type = "bool?";
+    RandomBoolOutput->identifier = "x";
+    CodeGenerator codeGenerator;
+    std::string RBTresault = codeGenerator.generateRandomCode(RandomBoolOutput);
+    EXPECT_EQ(RBTresault,"bool x; int randomBool = rand(); if (randomBool%2==0){x= true); else {x= false);");
+}
+
+TEST(CGTEST,ArrayTest){
+    auto ArrayOutput = std::make_shared<ArrayNode>();
+    ArrayOutput->type = "int";
+    ArrayOutput->identifier = "x";
+    ArrayOutput->size = "5";
+    auto ArrayBody1 = std::make_shared<IntNode>();
+    auto ArrayBody2 = std::make_shared<IntNode>();
+    ArrayBody1->integer = 2;
+    ArrayBody2->integer = 15;
+    ArrayOutput->body.push_back(ArrayBody1);
+    ArrayOutput->body.push_back(ArrayBody2);
+    CodeGenerator codeGenerator;
+    std::string ATresault = codeGenerator.generateArrayCode(ArrayOutput);
+    EXPECT_EQ(ATresault,"int x[5] = [2,15];");
+}
+
+TEST(CGTEST,JumpBreakTest){
+    auto JumpOutput = std::make_shared<JumpNode>();
+    JumpOutput->breaker = "break";
+    JumpOutput->continuer = "null";
+    CodeGenerator codeGenerator;
+    std::string JBTresault = codeGenerator.generateJumpCode(JumpOutput);
+    EXPECT_EQ(JBTresault,"break;");
+}
+
+TEST(CGTEST,JumpContinueTest){
+    auto JumpOutput = std::make_shared<JumpNode>();
+    JumpOutput->breaker = "null";
+    JumpOutput->continuer = "continue";
+    CodeGenerator codeGenerator;
+    std::string JCTresault = codeGenerator.generateJumpCode(JumpOutput);
+    EXPECT_EQ(JCTresault,"continue;");
+}
+
+TEST(CGTEST,SwitchCaseTest){
+
+}

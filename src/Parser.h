@@ -58,6 +58,7 @@ struct ValueNode : DeclarationNode {
     nodeType getType() const override { return nodeType::valueNode; }
 
 };
+
 struct ConsoleNode : ASTNode {
     nodeType getType() const override { return nodeType::consoleNode; }
     std::vector<std::shared_ptr<ASTNode>> message;
@@ -104,13 +105,10 @@ struct IfNode : ASTNode {
 
 // Node for Struct declarations
 struct StructNode : DeclarationNode {
-    std::shared_ptr<ASTNode> struct_main;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override { return nodeType::structNode; }
 
 };
-
-
 
 struct IdentifierNode : ASTNode {
     std::string identifier;
@@ -119,7 +117,6 @@ struct IdentifierNode : ASTNode {
 };
 
 struct ReturnNode : ASTNode {
-    std::string returning;
     std::string identifier;
     nodeType getType() const override { return nodeType::returnNode; }
 

@@ -134,6 +134,9 @@ void Kowalski::analyseNode(const std::shared_ptr<ASTNode>& node){
         case nodeType::valueNode:
             kowalskiValue(std::static_pointer_cast<ValueNode>(node));
             break;
+        case nodeType::boolNode:
+            kowalskiBool(std::static_pointer_cast<BoolNode>(node));
+            break;
         default:
 
             throw std::runtime_error("unknown node type");
@@ -227,6 +230,10 @@ void Kowalski::kowalskiChar(const std::shared_ptr<CharNode>& node){
 void Kowalski::kowalskiInt(const std::shared_ptr<IntNode>& node){
     
 }
+void Kowalski::kowalskiBool(const std::shared_ptr<BoolNode>& node){
+
+}
+
 void Kowalski::kowalskiIf(const std::shared_ptr<IfNode>& node){
         kowalskiKondi(node->condition);
 
@@ -371,11 +378,14 @@ void Kowalski::kowalskiConsole(const std::shared_ptr<ConsoleNode>& node) {
 }
 
 void Kowalski::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
-
+    if(node->getType() != nodeType::structNode) {
+        throw std::runtime_error("Not a struct");
+    } else {
         for (int i = 0; i < node->body.size(); i++){
             analyseNode(node->body[i]);
         }
     }
+}
 
 
 void Kowalski::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
