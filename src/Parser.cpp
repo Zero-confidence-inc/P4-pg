@@ -67,7 +67,7 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
             auto structNode = std::make_shared<StructNode>();
             structNode->type = type;
             structNode->identifier = identifier;
-            structNode->struct_main = parseStruct();
+            structNode->body.push_back(parseStruct());
             return structNode;
         } else if (tokens[pos + 1].type == TokenType::PUNCTUATION && tokens[pos + 1].value[0] == '[') {
             pos++;
@@ -175,7 +175,6 @@ std::shared_ptr<ASTNode> Parser::parseReturn() {
     std::cout << "Entering parseReturn at position " << pos << " with token: " << tokens[pos+1].value << std::endl;
     if (lookAhead(TokenType::JUMP) && tokens[++pos].value == "return") {
         auto returnNode = std::make_shared<ReturnNode>();
-        returnNode->returning = tokens[pos].value;
         returnNode->identifier = tokens[++pos].value;
         return returnNode;
     }
@@ -346,19 +345,13 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
 }
 
 std::shared_ptr<ASTNode> Parser::parseStruct() {
-    std::cout << "Entering parseStruct at position " << pos << " with token: " << tokens[pos+1].value << std::endl;
     if (lookAhead(TokenType::TYPE) && tokens[++pos].value == "struct") {
-        std::cout << "pos = " << pos << std::endl;
         auto identify = tokens[++pos].value;
-        std::cout << "pos = " << pos << std::endl;
         if (lookAhead(TokenType::PUNCTUATION) && tokens[++pos].value == "{") {
-            std::cout << "pos = " << pos << std::endl;
             auto structNode = std::make_shared<StructNode>();
-            structNode->identifier = identify;
             structNode->body = parseStructBody();
             match(TokenType::PUNCTUATION, "}");
             pos--;
-            std::cout << "pos = " << pos << std::endl;
             return structNode;
         }
     }

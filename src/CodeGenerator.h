@@ -30,6 +30,7 @@ public:
     std::string generateSwitchCode(std::shared_ptr<SwitchNode>& node);
     std::string generateStructCode(std::shared_ptr<StructNode>& node);
     std::string generateBodyCode(std::vector<std::shared_ptr<ASTNode>>& body);
+    std::string generateReturnCode(std::shared_ptr<ReturnNode>& node);
 
 private:
 

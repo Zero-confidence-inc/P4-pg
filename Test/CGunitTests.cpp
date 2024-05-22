@@ -176,7 +176,7 @@ TEST(CGTEST,WhileTest){
     EXPECT_EQ(WTresault,"while(a==12){int x;}");
 }
 
-TEST(CGTEST,forTests){
+TEST(CGTEST,ForTests){
     auto forTestNode = std::make_shared<ForLoopNode>();
     auto forDeclartionNode = std::make_shared<ValueNode>();
     forDeclartionNode->identifier = "i";
@@ -208,7 +208,7 @@ TEST(CGTEST,forTests){
     EXPECT_EQ(FTresault,"for(int i=0;i<10;i++){int x=10;}");
 }
 
-TEST(CGTEST,ifTest){
+TEST(CGTEST,IfTest){
     auto ifTestNode = std::make_shared<IfNode>();
     auto ifConditionNode = std::make_shared<ConditionNode>();
     auto ifXNode = std::make_shared<IdentifierNode>();
@@ -229,7 +229,7 @@ TEST(CGTEST,ifTest){
     EXPECT_EQ(ITresault,"if(a==12){int b=12;}");
 }
 
-TEST(CGTEST,ifElseTest){
+TEST(CGTEST,IfElseTest){
     auto ifElseTest = std::make_shared<IfNode>();
     auto ifConditionNode = std::make_shared<ConditionNode>();
     auto ifXNode = std::make_shared<IdentifierNode>();
@@ -255,4 +255,42 @@ TEST(CGTEST,ifElseTest){
     CodeGenerator codeGenerator;
     std::string IETresault = codeGenerator.generateIfCode(ifElseTest);
     EXPECT_EQ(IETresault,"if(a==12){int b=12;}else{int b=14;}");
+}
+
+TEST(CGTEST,StructTest){
+    auto structTestOutput = std::make_shared<StructNode>();
+    structTestOutput->type = "struct";
+    structTestOutput->identifier = "ABC";
+    auto structBody1 = std::make_shared<DeclarationNode>();
+    structBody1->type = "int";
+    structBody1->identifier = "a";
+    auto structBody2 = std::make_shared<DeclarationNode>();
+    structBody2->type = "string";
+    structBody2->identifier = "b";
+    structTestOutput->body.push_back(structBody1);
+    structTestOutput->body.push_back(structBody2);
+    CodeGenerator codeGenerator;
+    std::string STresault = codeGenerator.generateStructCode(structTestOutput);
+    std::string STexpect = "struct ABC{int a;std::string b;};";
+    EXPECT_EQ(STresault,STexpect);
+}
+
+TEST(CGTEST,IDTest){
+    auto IdTestOutput = std::make_shared<IdentifierNode>();
+    IdTestOutput->identifier = "a";
+    CodeGenerator codeGenerator;
+    std::string IDresault = codeGenerator.generateIdentifierCode(IdTestOutput);
+    EXPECT_EQ(IDresault,"a");
+}
+
+TEST(CGTEST,ReturnTest){
+    auto ReturnTestOutput = std::make_shared<ReturnNode>();
+    ReturnTestOutput->identifier = "a";;
+    CodeGenerator codeGenerator;
+    std::string RTresault = codeGenerator.generateReturnCode(ReturnTestOutput);
+    EXPECT_EQ(RTresault,"return a;");
+}
+
+TEST(CGTEST,RandomIntUnboundTest){
+    auto RandomIntUnboundTest = std::make_shared<RandomNode>();
 }

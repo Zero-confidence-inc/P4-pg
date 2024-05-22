@@ -117,7 +117,8 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
             kowalskiInt(std::static_pointer_cast<IntNode>(node));
             break;
         case nodeType::boolNode:
-            kowalskiBool(std::static_pointer_cast<BoolNode>(node));    
+            kowalskiBool(std::static_pointer_cast<BoolNode>(node));
+            break;
         default:
             throw std::runtime_error("unknown node type");
     }
@@ -230,6 +231,10 @@ void SemanticAnalyser::kowalskiChar(const std::shared_ptr<CharNode>& node){
 void SemanticAnalyser::kowalskiInt(const std::shared_ptr<IntNode>& node){
     
 }
+void SemanticAnalyser::kowalskiBool(const std::shared_ptr<BoolNode>& node){
+
+}
+
 void SemanticAnalyser::kowalskiIf(const std::shared_ptr<IfNode>& node){
     if (getType2(node->condition) != nodeType::conditionNode){
         throw std::runtime_error("Not a condition");
@@ -380,7 +385,7 @@ void SemanticAnalyser::kowalskiConsole(const std::shared_ptr<ConsoleNode>& node)
 }
 
 void SemanticAnalyser::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
-    if(node->struct_main->getType() != nodeType::structNode) {
+    if(node->getType() != nodeType::structNode) {
         throw std::runtime_error("Not a struct");
     } else {
         for (int i = 0; i < node->body.size(); i++){

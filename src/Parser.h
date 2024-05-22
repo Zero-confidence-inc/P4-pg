@@ -88,7 +88,6 @@ struct CaseNode : ASTNode {
 
 struct ForLoopNode : ASTNode {
     std::shared_ptr<ValueNode> declaration;
-    std::shared_ptr<ValueNode> declaration;
     std::shared_ptr<ConditionNode> condition;
     std::shared_ptr<ConditionNode> expression;
     std::vector<std::shared_ptr<ASTNode>> body;
@@ -106,7 +105,6 @@ struct IfNode : ASTNode {
 
 // Node for Struct declarations
 struct StructNode : DeclarationNode {
-    std::shared_ptr<ASTNode> struct_main;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override { return nodeType::structNode; }
 
@@ -119,7 +117,6 @@ struct IdentifierNode : ASTNode {
 };
 
 struct ReturnNode : ASTNode {
-    std::string returning;
     std::string identifier;
     nodeType getType() const override { return nodeType::returnNode; }
 

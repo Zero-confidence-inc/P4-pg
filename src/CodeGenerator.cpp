@@ -34,12 +34,23 @@ std::string CodeGenerator::generateWhileCode(std::shared_ptr<WhileNode>& node) {
     whileCodeOutput += "){";
     whileCodeOutput += generateBodyCode(node->body);
     whileCodeOutput += "}";
-        return whileCodeOutput;
-
+    return whileCodeOutput;
 }
 
+std::string CodeGenerator::generateReturnCode(std::shared_ptr<ReturnNode>& node){
+    std::string returnCodeOutput;
+    returnCodeOutput += "return ";
+    returnCodeOutput += node->identifier;
+    returnCodeOutput += ";";
+    return returnCodeOutput;
+}
+
+
 std::string CodeGenerator::generateStructCode(std::shared_ptr<StructNode>& node) {
-   std::string leString;
+    std::string leString;
+    leString += "struct ";
+    leString += node->identifier;
+    leString += "{";
     for(int i = 0;i<node->body.size();i++){
 
 
@@ -47,6 +58,7 @@ std::string CodeGenerator::generateStructCode(std::shared_ptr<StructNode>& node)
         leString += generateDeclartionCode(convNode);
 
     }
+    leString += "};";
     return leString;
 }
 
