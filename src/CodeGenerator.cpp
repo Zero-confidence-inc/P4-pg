@@ -74,6 +74,7 @@ std::string CodeGenerator::generateSwitchCode(std::shared_ptr<SwitchNode>& node)
         leString += generateConditionCode(convNode) + ":";
 
         leString += generateBodyCode(node->caseBranch[i]->Branch);
+        leString += "break;";
     }
     if(node->deNode != nullptr){
         leString += "default:";
@@ -166,6 +167,8 @@ std::string CodeGenerator::generateJumpCode(std::shared_ptr<JumpNode>& node){
     else if (node->breaker != "null"){
         return node->breaker += ";";
     }
+    std::string jumpCodeFail = "you done fucked up";
+    return jumpCodeFail;
 }
 
 std::string CodeGenerator::generateArrayCode(std::shared_ptr<ArrayNode>& node){
@@ -474,6 +477,5 @@ std::string CodeGenerator::generateRandomCode(std::shared_ptr<RandomNode>& node)
                             "= false);";
         return randomCodeOutput;
     }
-    return nullptr;
 }
 

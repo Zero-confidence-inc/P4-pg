@@ -375,5 +375,44 @@ TEST(CGTEST,JumpContinueTest){
 }
 
 TEST(CGTEST,SwitchCaseTest){
+    auto SwitchAndCaseOutput = std::make_shared<SwitchNode>();
+    auto SACCondition = std::make_shared<ConditionNode>();
+    auto SACCID = std::make_shared<IdentifierNode>();
+    SACCID->identifier = "x";
+    SACCondition->aNode = SACCID;
+    SwitchAndCaseOutput->condition = SACCondition;
 
+    auto SACCN1 = std::make_shared<CaseNode>();
+    auto SACCN1C = std::make_shared<ConditionNode>();
+    auto SACCN1CAN = std::make_shared<IntNode>();
+    SACCN1CAN->integer = 1;
+    SACCN1C->aNode = SACCN1CAN;
+    SACCN1->sucessCondition = SACCN1C;
+    auto SACCN1B = std::make_shared<ValueNode>();
+    SACCN1B->type = "int";
+    SACCN1B->identifier = "X1";
+    auto SACCN1BV = std::make_shared<IntNode>();
+    SACCN1BV->integer=12;
+    SACCN1B->value = SACCN1BV;
+    SACCN1->Branch.push_back(SACCN1B);
+    SwitchAndCaseOutput->caseBranch.push_back(SACCN1);
+
+    auto SACCN2 = std::make_shared<CaseNode>();
+    auto SACCN2C = std::make_shared<ConditionNode>();
+    auto SACCN2CAN = std::make_shared<IntNode>();
+    SACCN2CAN->integer = 2;
+    SACCN2C->aNode = SACCN2CAN;
+    SACCN2->sucessCondition = SACCN2C;
+    auto SACCN2B = std::make_shared<ValueNode>();
+    SACCN2B->type = "float";
+    SACCN2B->identifier = "X2";
+    auto SACCN2BV = std::make_shared<FloatNode>();
+    SACCN2BV->Floating_Point = 5.6;
+    SACCN2B->value = SACCN2BV;
+    SACCN2->Branch.push_back(SACCN2B);
+    SwitchAndCaseOutput->caseBranch.push_back(SACCN2);
+
+    CodeGenerator codeGenerator;
+    std::string SACTresault = codeGenerator.generateSwitchCode(SwitchAndCaseOutput);
+    EXPECT_EQ(SACTresault,"switch(x){case 1:int X1=12;break;case 2:float X2=5.600000;break;}");
 }
