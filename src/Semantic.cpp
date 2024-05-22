@@ -228,13 +228,13 @@ void Kowalski::kowalskiInt(const std::shared_ptr<IntNode>& node){
     
 }
 void Kowalski::kowalskiIf(const std::shared_ptr<IfNode>& node){
-    if (getType2(node->condition) != nodeType::conditionNode){
-        throw std::runtime_error("Not a condition");
-    }else {
         kowalskiKondi(node->condition);
+        std::cout << "0" <<std::endl;
         symbolTable.enterScope();
         for (int i = 0; i < node->body.size(); i++){
+            std::cout << i <<std::endl;
             analyseNode(node->body[i]);
+
         }
         symbolTable.exitScope();
         symbolTable.enterScope();
@@ -242,7 +242,7 @@ void Kowalski::kowalskiIf(const std::shared_ptr<IfNode>& node){
             analyseNode(node->elseBody[i]);
         }
         symbolTable.exitScope();
-    }
+    std::cout << "OIJ COUNT"<<std::endl;
 }
 void Kowalski::kowalskiFloat(const std::shared_ptr<FloatNode>& node){
 

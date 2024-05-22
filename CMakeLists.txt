@@ -51,6 +51,7 @@ set(TEST_SOURCES
         Test/Lexer_integration_test.cpp
         Test/ParserUnitTests.cpp
         Test/SemanticTest.cpp
+        Test/IntregrationKowalski.cpp
 )
 
 add_executable(P4_pg_tests ${TEST_SOURCES})
