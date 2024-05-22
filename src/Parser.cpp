@@ -34,7 +34,6 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
     if (lookAhead(TokenType::TYPE)) {
         std::string type = tokens[++pos].value;
         std::string identifier = tokens[++pos].value;
-        std::cout << "Parsed type: " << type << ", identifier: " << identifier << ", current pos: " << pos << std::endl;
 
         if (lookAhead(TokenType::PUNCTUATION) && tokens[pos + 1].value == "(") {
             pos++; // Move to the '(' token
@@ -274,7 +273,7 @@ std::vector<std::shared_ptr<DeclarationNode>> Parser::parseFunctionArguments() {
             declaration->type = type;
             declaration->identifier = identifier;
             arguments.push_back(declaration);
-            std::cout << "Parsed argument type: " << type << ", identifier: " << identifier << std::endl;
+
         } else if (lookAhead(TokenType::PUNCTUATION) && tokens[pos+1].value == ","){
             pos++;
 
