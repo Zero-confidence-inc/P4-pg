@@ -416,3 +416,46 @@ TEST(CGTEST,SwitchCaseTest){
     std::string SACTresault = codeGenerator.generateSwitchCode(SwitchAndCaseOutput);
     EXPECT_EQ(SACTresault,"switch(x){case 1:int X1=12;break;case 2:float X2=5.600000;break;}");
 }
+
+TEST(CGTEST,FunctionTest){
+    auto FunctionOutput = std::make_shared<FunctionNode>();
+    FunctionOutput->type = "int";
+    FunctionOutput->identifier = "calc";
+    auto FunctionArgumentA = std::make_shared<DeclarationNode>();
+    FunctionArgumentA->type = "int";
+    FunctionArgumentA->identifier = "a";
+    FunctionOutput->arguments.push_back(FunctionArgumentA);
+    auto FunctionArgumentB = std::make_shared<DeclarationNode>();
+    FunctionArgumentB->type = "int";
+    FunctionArgumentB->identifier = "b";
+    FunctionOutput->arguments.push_back(FunctionArgumentB);
+
+    auto FunctionBodyFunc1 = std::make_shared<DeclarationNode>();
+    FunctionBodyFunc1->type = "int";
+    FunctionBodyFunc1->identifier = "c";
+    FunctionOutput->body.push_back(FunctionBodyFunc1);
+
+    auto FunctionBodyFunc2 = std::make_shared<ConditionNode>();
+    auto FunctionBodyFunc2_3 = std::make_shared<IdentifierNode>();
+    FunctionBodyFunc2_3->identifier = "c";
+    FunctionBodyFunc2->aNode = FunctionBodyFunc2_3;
+    FunctionBodyFunc2->condition = "=";
+    auto FunctionBodyFunc2_5 = std::make_shared<ConditionNode>();
+    auto FunctionBodyFunc2_5_1 = std::make_shared<IdentifierNode>();
+    FunctionBodyFunc2_5_1->identifier = "a";
+    FunctionBodyFunc2_5->aNode = FunctionBodyFunc2_5_1;
+    FunctionBodyFunc2_5->condition = "+";
+    auto FunctionBodyFunc2_5_2 = std::make_shared<IdentifierNode>();
+    FunctionBodyFunc2_5_2->identifier = "b";
+    FunctionBodyFunc2_5->bNode = FunctionBodyFunc2_5_2;
+    FunctionBodyFunc2->bNode = FunctionBodyFunc2_5;
+    FunctionOutput->body.push_back(FunctionBodyFunc2);
+
+    auto FunctionBodyFunc3 = std::make_shared<ReturnNode>();
+    FunctionBodyFunc3->identifier = "c";
+    FunctionOutput->body.push_back(FunctionBodyFunc3);
+
+    CodeGenerator codeGenerator;
+    std::string FTresault = codeGenerator.generateFunctionCode(FunctionOutput);
+    EXPECT_EQ(FTresault,"int calc(int a,int b){int c;c=a+b;return c;};");
+}

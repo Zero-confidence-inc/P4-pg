@@ -100,7 +100,7 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
 
 
 
- std::string CodeGenerator::generateBodyCode(std::vector<std::shared_ptr<ASTNode>>& body) {
+std::string CodeGenerator::generateBodyCode(std::vector<std::shared_ptr<ASTNode>>& body) {
     std::string completeBodyCodeOutput;
     std::string bodyArrayCode;
     std::string bodyBoolCode;
@@ -112,6 +112,7 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
         else if(body[i]->getType()==nodeType::conditionNode){
             auto convertedConditionNode = std::dynamic_pointer_cast<ConditionNode>(body[i]);
             completeBodyCodeOutput += generateConditionCode(convertedConditionNode);
+            completeBodyCodeOutput += ";";
         }
         else if(body[i]->getType()==nodeType::consoleNode){
             auto convertedConsoleNode = std::dynamic_pointer_cast<ConsoleNode>(body[i]);
@@ -133,9 +134,6 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
             auto convertedFunctionCallNode = std::dynamic_pointer_cast<FunctionCallNode>(body[i]);
             completeBodyCodeOutput += generateFunctionCallCode(convertedFunctionCallNode);
         }
-        else if(body[i]->getType()==nodeType::returnNode){
-            auto convertedReturnNode = std::dynamic_pointer_cast<ReturnNode>(body[i]);
-        }
         else if(body[i]->getType()==nodeType::switchNode){
             auto convertedSwitchNode = std::dynamic_pointer_cast<SwitchNode>(body[i]);
             completeBodyCodeOutput += generateSwitchCode(convertedSwitchNode);
@@ -154,7 +152,11 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
         }
         else if(body[i]->getType()==nodeType::jumpNode){
             auto convertedJumpNode = std::dynamic_pointer_cast<JumpNode>(body[i]);
-            //generateJumpNode(convertedJumpNode);
+            completeBodyCodeOutput += generateJumpCode(convertedJumpNode);
+        }
+        else if(body[i]->getType()==nodeType::returnNode){
+            auto convertedReturnNode = std::dynamic_pointer_cast<ReturnNode>(body[i]);
+            completeBodyCodeOutput += generateReturnCode(convertedReturnNode);
         }
     }
     return completeBodyCodeOutput;
@@ -219,6 +221,7 @@ std::string CodeGenerator::generateArrayCode(std::shared_ptr<ArrayNode>& node){
 std::string CodeGenerator::generateFunctionCode(std::shared_ptr<FunctionNode>& node) {
     std:: string functionCodeOutput;
     functionCodeOutput += node->type;
+    functionCodeOutput += " ";
     functionCodeOutput += node->identifier;
     functionCodeOutput += "(";
     for (int i = 0; i < node->arguments.size(); i++)
@@ -226,6 +229,7 @@ std::string CodeGenerator::generateFunctionCode(std::shared_ptr<FunctionNode>& n
         if (i>0 ){functionCodeOutput += ",";}
         auto functionArugment = std::dynamic_pointer_cast<DeclarationNode>(node->arguments[i]);
         functionCodeOutput += generateDeclartionCode(functionArugment);
+        functionCodeOutput.pop_back();
     }
     functionCodeOutput += "){";
     functionCodeOutput += generateBodyCode(node->body);
@@ -416,12 +420,8 @@ std::string CodeGenerator::generateConditionCode(std::shared_ptr<ConditionNode>&
         auto convertedNode = std::dynamic_pointer_cast<FunctionCallNode>(node->aNode);
         leString = generateFunctionCallCode(convertedNode);
     }
-    }
-    if (leString.find_last_of(';')){
+
         return leString;
-    }
-    else{
-        return leString + ";";
     }
 }
 
