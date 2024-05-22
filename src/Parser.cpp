@@ -117,15 +117,6 @@ bool Parser::lookAhead(TokenType expectedType) {
     return (pos + 1) < tokens.size() && tokens[pos + 1].type == expectedType;
 }
 
-void Parser::match(TokenType expectedType) {
-    if (pos < tokens.size() && tokens[pos].type == expectedType) {
-        pos++;
-    } else {
-        std::cerr << "Syntax error, expected type " << static_cast<int>(expectedType) << std::endl;
-        exit(1);
-    }
-}
-
 void Parser::match(TokenType expectedType, const std::string& expectedValue) {
     if (pos < tokens.size() && tokens[pos].type == expectedType && tokens[pos].value == expectedValue) {
         pos++;
@@ -254,7 +245,7 @@ std::shared_ptr<ASTNode> Parser::parseValues() {
         return valueBool;
     } else if (tokens[++pos].type == TokenType::IDENTIFIER){
         if(lookAhead(TokenType::PUNCTUATION) && tokens[pos+1].value == "("){
-            //auto valueFunctionCall = std::make_shared<FunctionCallNode>(); //parse functioncall apperently returns astnode so this did not work
+            //auto valueFunctionCall = std::make_shared<FunctionCallNode>(); //parse functionCall apperently returns astnode so this did not work
             pos--;
             auto valueFunctionCall = parseFunctionCall();
             std::cout<<"Parsed functionCallNode"<<std::endl;
@@ -772,7 +763,6 @@ std::shared_ptr<ASTNode> Parser::parseWhileLoop() {
                     pos++;
                     match(TokenType::PUNCTUATION,"}");
                     --pos;
-                    std::cout << "homerun!!"<< std::endl;
                     std::cout<<"Parsed whileNode"<<std::endl;
                     return whileNode;
                 }
@@ -823,8 +813,6 @@ std::shared_ptr<ASTNode> Parser::parseRandom() {
 
     if (lookAhead(TokenType::TYPE) && tokens[pos+1].value == "int?") { // Random Int
         pos +=2;
-        auto randomIntNode = std::make_shared<RandomNode>();
-
 
         if (tokens[++pos].value[0] == '?') {
 
@@ -842,6 +830,7 @@ std::shared_ptr<ASTNode> Parser::parseRandom() {
                         randomNode->RandomIntRange.push_back(RandomIntRangeHighBound);
 
                         pos++;
+                        std::cout<<"test pos = " << pos << std::endl;
                         match(TokenType::PUNCTUATION,"?");
                         pos--;
                         std::cout<<"Parsed randomNode"<<std::endl;

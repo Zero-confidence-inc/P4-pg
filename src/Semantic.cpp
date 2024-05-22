@@ -135,7 +135,7 @@ void Kowalski::analyseNode(const std::shared_ptr<ASTNode>& node){
             kowalskiValue(std::static_pointer_cast<ValueNode>(node));
             break;
         default:
-            std::cout << "enum number"+std::to_string(node->getType())<<std::endl;
+
             throw std::runtime_error("unknown node type");
     }
 }
@@ -202,7 +202,7 @@ void Kowalski::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode> &nod
         }
     }
     else{
-        std::cout<<"arg 1:"+ std::to_string(expectedArgument.size()) + "and arg 2:"+std::to_string(currentArgument.size())<<std::endl;
+        std::cout<<"arg 1:" << std::to_string(expectedArgument.size()) << "and arg 2:" <<std::to_string(currentArgument.size())<<std::endl;
         throw std::runtime_error("too many/too few arguemnts for function called");
     }
 }
@@ -229,10 +229,9 @@ void Kowalski::kowalskiInt(const std::shared_ptr<IntNode>& node){
 }
 void Kowalski::kowalskiIf(const std::shared_ptr<IfNode>& node){
         kowalskiKondi(node->condition);
-        std::cout << "0" <<std::endl;
+
         symbolTable.enterScope();
         for (int i = 0; i < node->body.size(); i++){
-            std::cout << i <<std::endl;
             analyseNode(node->body[i]);
 
         }
@@ -242,7 +241,7 @@ void Kowalski::kowalskiIf(const std::shared_ptr<IfNode>& node){
             analyseNode(node->elseBody[i]);
         }
         symbolTable.exitScope();
-    std::cout << "OIJ COUNT"<<std::endl;
+
 }
 void Kowalski::kowalskiFloat(const std::shared_ptr<FloatNode>& node){
 
