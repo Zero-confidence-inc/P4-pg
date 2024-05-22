@@ -24,6 +24,13 @@ set(SOURCES
         src/JumpStatDFA.cpp
         src/Parser.cpp
         src/CommentsDFA.cpp
+        src/Parser.h
+        src/BoolDFA.cpp
+        src/ConsoleDFA.cpp
+        src/Semantic.cpp
+        src/Semantic.h
+        src/CodeGenerator.cpp
+        src/Semantic.cpp
 )
 
 add_library(P4_pg_lib ${SOURCES})
@@ -34,6 +41,7 @@ target_link_libraries(P4_pg P4_pg_lib)
 
 # Define your test executable
 set(TEST_SOURCES
+        Test/CGunitTests.cpp
         Test/OperatorDFAtests.cpp
         Test/TypeDFAtests.cpp
         Test/IdentifierDFAtest.cpp
@@ -42,12 +50,14 @@ set(TEST_SOURCES
         Test/PunctuationDFAtest.cpp
         Test/Lexer_integration_test.cpp
         Test/ParserUnitTests.cpp
+        Test/SemanticTest.cpp
+        Test/IntregrationKowalski.cpp
 )
 
 add_executable(P4_pg_tests ${TEST_SOURCES})
 
 # Linking Google Test and your library to the test executable
-target_link_libraries(P4_pg_tests P4_pg_lib gtest gtest_main pthread)
+target_link_libraries(P4_pg_tests P4_pg_lib gtest gtest_main)
 
 # Enable testing
 enable_testing()

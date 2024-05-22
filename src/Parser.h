@@ -1,3 +1,6 @@
+//
+// Created by Yuki on 29/04/2024.
+//
 #ifndef PARSER_H
 #define PARSER_H
 
@@ -14,10 +17,9 @@ enum nodeType {
     structNode,
     functionNode,
     functionCallNode,
-    variableNode,
+    valueNode,
     floatNode,
     stringNode,
-    operatorNode,
     whileNode,
     conditionNode,
     caseNode,
@@ -29,34 +31,43 @@ enum nodeType {
     arrayNode,
     returnNode,
     identifierNode,
-    randomNode
+    randomNode,
+    jumpNode,
+    defaultNode
 };
 
 // Base class for all AST nodes
 struct ASTNode {
     virtual ~ASTNode() = default;
     virtual nodeType getType() const = 0;
-    virtual void accept(class ASTNodeVisitor& visitor) = 0;
+
 };
+
 
 // Node for declarations
 struct DeclarationNode : ASTNode {
     std::string identifier;
     std::string type;
     nodeType getType() const override { return nodeType::declarationNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
+// Node for variable declarations
+struct ValueNode : DeclarationNode {
+    std::shared_ptr<ASTNode> value;
+    nodeType getType() const override { return nodeType::valueNode; }
+
+};
 struct ConsoleNode : ASTNode {
     nodeType getType() const override { return nodeType::consoleNode; }
     std::vector<std::shared_ptr<ASTNode>> message;
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct CharNode : ASTNode {
     nodeType getType() const override { return nodeType::charNode; }
     std::string character;
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct ConditionNode : ASTNode {
@@ -64,23 +75,23 @@ struct ConditionNode : ASTNode {
     std::shared_ptr<ASTNode> aNode;
     std::shared_ptr<ASTNode> bNode;
     nodeType getType() const override { return nodeType::conditionNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct CaseNode : ASTNode {
     std::shared_ptr<ASTNode> sucessCondition;
     std::vector<std::shared_ptr<ASTNode>> Branch;
     nodeType getType() const override { return nodeType::caseNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct ForLoopNode : ASTNode {
-    std::shared_ptr<DeclarationNode> declaration;
+    std::shared_ptr<ValueNode> declaration;
     std::shared_ptr<ConditionNode> condition;
     std::shared_ptr<ConditionNode> expression;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override { return nodeType::forLoopNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct IfNode : ASTNode {
@@ -88,7 +99,7 @@ struct IfNode : ASTNode {
     std::vector<std::shared_ptr<ASTNode>> body;
     std::vector<std::shared_ptr<ASTNode>> elseBody;
     nodeType getType() const override { return nodeType::ifNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 // Node for Struct declarations
@@ -96,146 +107,113 @@ struct StructNode : DeclarationNode {
     std::shared_ptr<ASTNode> struct_main;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override { return nodeType::structNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
-// Node for variable declarations
-struct ValueNode : DeclarationNode {
-    std::shared_ptr<ASTNode> value;
-    nodeType getType() const override {
-        if (type == "int") return nodeType::intNode;
-        else if (type == "char") return nodeType::charNode;
-        else if (type == "string") return nodeType::stringNode;
-        else if (type == "float") return nodeType::floatNode;
-        else if (type == "bool") return nodeType::boolNode;
-        else return nodeType::declarationNode;
-    }
-    void accept(ASTNodeVisitor& visitor) override;
-};
+
 
 struct IdentifierNode : ASTNode {
     std::string identifier;
     nodeType getType() const override { return nodeType::identifierNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct ReturnNode : ASTNode {
     std::string returning;
     std::string identifier;
     nodeType getType() const override { return nodeType::returnNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct FloatNode : ASTNode {
     float Floating_Point;
     nodeType getType() const override { return nodeType::floatNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct IntNode : ASTNode {
     int integer;
     nodeType getType() const override { return nodeType::intNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct UsIntNode : ASTNode {
     int usinteger;
     nodeType getType() const override { return nodeType::usIntNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct BoolNode : ASTNode {
     bool boolean;
     nodeType getType() const override { return nodeType::boolNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct StringNode : ASTNode {
     std::string StringOfChars;
     nodeType getType() const override { return nodeType::stringNode; }
-    void accept(ASTNodeVisitor& visitor) override;
-};
 
+};
+struct DefaultNode : ASTNode {
+    std::vector<std::shared_ptr<ASTNode>> Branch;
+    nodeType getType() const override { return nodeType::defaultNode; }
+};
 struct SwitchNode : ASTNode {
     std::shared_ptr<ConditionNode> condition;
     std::vector<std::shared_ptr<CaseNode>> caseBranch;
+    std::shared_ptr<DefaultNode> deNode;
     nodeType getType() const override { return nodeType::switchNode; }
     SwitchNode() : condition(nullptr), caseBranch() {}
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
+
+
 
 struct WhileNode : ASTNode {
     std::shared_ptr<ConditionNode> condition;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override { return nodeType::whileNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct JumpNode : ASTNode {
     std::string breaker;
     std::string continuer;
-    nodeType getType() const override { return nodeType::declarationNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+    nodeType getType() const override { return nodeType::jumpNode; }
+
 };
 
 struct RandomNode : DeclarationNode {
     std::vector<int> RandomIntRange;
     std::vector<float> RandomFloatRange;
     nodeType getType() const override { return nodeType::randomNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct ArrayNode : DeclarationNode {
     std::string size;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override { return nodeType::arrayNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct FunctionCallNode : IdentifierNode {
     std::vector<std::shared_ptr<ASTNode>> arguments;
     nodeType getType() const override { return nodeType::functionCallNode; }
-    void accept(ASTNodeVisitor& visitor) override;
+
 };
 
 struct FunctionNode : DeclarationNode {
-    std::vector<std::shared_ptr<ASTNode>> arguments;
+    std::vector<std::shared_ptr<DeclarationNode>> arguments;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override { return nodeType::functionNode; }
-    void accept(ASTNodeVisitor& visitor) override;
-};
 
-class ASTNodeVisitor {
-public:
-    virtual void visit(DeclarationNode& node) = 0;
-    virtual void visit(ConsoleNode& node) = 0;
-    virtual void visit(CharNode& node) = 0;
-    virtual void visit(ForLoopNode& node) = 0;
-    virtual void visit(IfNode& node) = 0;
-    virtual void visit(StructNode& node) = 0;
-    virtual void visit(ValueNode& node) = 0;
-    virtual void visit(IdentifierNode& node) = 0;
-    virtual void visit(ReturnNode& node) = 0;
-    virtual void visit(FloatNode& node) = 0;
-    virtual void visit(IntNode& node) = 0;
-    virtual void visit(UsIntNode& node) = 0;
-    virtual void visit(BoolNode& node) = 0;
-    virtual void visit(StringNode& node) = 0;
-    virtual void visit(SwitchNode& node) = 0;
-    virtual void visit(CaseNode& node) = 0;
-    virtual void visit(ConditionNode& node) = 0;
-    virtual void visit(WhileNode& node) = 0;
-    virtual void visit(JumpNode& node) = 0;
-    virtual void visit(RandomNode& node) = 0;
-    virtual void visit(ArrayNode& node) = 0;
-    virtual void visit(FunctionCallNode& node) = 0;
-    virtual void visit(FunctionNode& node) = 0;
 };
 
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);
-    void parseProgram();
+    std::vector<std::shared_ptr<ASTNode>> parseProgram();
     std::shared_ptr<ASTNode> parseDeclaration();
     std::shared_ptr<ASTNode> parseChar();
     std::shared_ptr<ASTNode> parseBool();
@@ -246,7 +224,7 @@ public:
     std::shared_ptr<ASTNode> parseForLoop();
     std::shared_ptr<ASTNode> parseSwitch();
     std::shared_ptr<ASTNode> parseStruct();
-    std::shared_ptr<ASTNode> parseArray();
+    //std::shared_ptr<ASTNode> parseArray();
     std::shared_ptr<ASTNode> parseIfStatement();
     std::shared_ptr<ASTNode> parseConsole();
     std::shared_ptr<ASTNode> parseJump();
@@ -257,7 +235,7 @@ public:
     std::shared_ptr<ASTNode> parseUsInt();
     std::shared_ptr<ASTNode> parseIdentifier();
     std::shared_ptr<ASTNode> parseFunctionCall();
-    std::vector<std::shared_ptr<ASTNode>> parseFunctionArguments();
+    std::vector<std::shared_ptr<DeclarationNode>> parseFunctionArguments();
 
 private:
     std::vector<Token> tokens;

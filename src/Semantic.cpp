@@ -6,10 +6,11 @@
 #include <iostream>
 #include <string>
 
-
-
 void SymbolTable::enterScope(){
-scopes.push_back({});
+    scopes.push_back({});
+}
+void FunctionTable::enterScope(){
+    functionMap.push_back({});
 }
 
 void SymbolTable::exitScope(){
@@ -23,6 +24,7 @@ void SymbolTable::exitScope(){
 }
 void FunctionTable::declareFunction(const std::string& name,std::vector<std::string>& arguments){
     if(!functionMap.empty()){
+
         functionMap.back()[name] = arguments;
     }
     else{
@@ -32,12 +34,14 @@ void FunctionTable::declareFunction(const std::string& name,std::vector<std::str
 std::vector<std::string> FunctionTable::lookUpFunction(const std::string& functionName){
     for(auto it=functionMap.rbegin();it != functionMap.rend();++it){
         if(it->find(functionName)!=it->end()){
+
             return it->at(functionName);
         }
     }
     throw std::runtime_error("no function has the name: " + functionName);
 }
 
+Kowalski::Kowalski() {}
 
 void SymbolTable::declareVariable(const std::string& name,const std::string& type){
     if(!scopes.empty())
@@ -58,23 +62,24 @@ std::string SymbolTable::lookUpVariable(const std::string& name){
         }
     throw std::runtime_error("variable '" + name + "' NOT declared in this scope :c");
 }
-void SemanticAnalyser::kowalski(const std::vector<std::shared_ptr<ASTNode>>& root){
+void Kowalski::Analyse(const std::vector<std::shared_ptr<ASTNode>>& root){
     symbolTable.enterScope();
-    try {
+    functionTable.enterScope();
+    //try {
     
     
     for (int i = 0; i < root.size(); i++){
             analyseNode(root[i]);
-        }}
-    catch(std::runtime_error watchoutski){
-        printf(watchoutski);
-    }
-    //magic??
+        }/*}
+    catch(std::runtime_error& withoutski){
+        std::cout << withoutski.what() << "Kowalski is fucked\n";
+    }*/
+
     symbolTable.exitScope();
 }
 
-void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
-    switch(getType2(node)){
+void Kowalski::analyseNode(const std::shared_ptr<ASTNode>& node){
+    switch(node->getType()){
         case nodeType::functionNode:
             kowalskiFunction(std::static_pointer_cast<FunctionNode>(node));
             break;
@@ -117,9 +122,20 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
         case nodeType::intNode:
             kowalskiInt(std::static_pointer_cast<IntNode>(node));
             break;
-        case nodeType::boolNode:
-            kowalskiBool(std::static_pointer_cast<BoolNode>(node));    
+        case nodeType::consoleNode:
+            kowalskiConsole(std::static_pointer_cast<ConsoleNode>(node));
+            break;
+        case nodeType::arrayNode:
+            kowalskiArray(std::static_pointer_cast<ArrayNode>(node));
+            break;
+        case nodeType::returnNode:
+            kowalskiReturn(std::static_pointer_cast<ReturnNode>(node));
+            break;
+        case nodeType::valueNode:
+            kowalskiValue(std::static_pointer_cast<ValueNode>(node));
+            break;
         default:
+
             throw std::runtime_error("unknown node type");
     }
 }
@@ -127,56 +143,32 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
 // todo: make sure the first 4 methods are using in methods going forward, approiatly :3
 // it goes through all nodes, some nodes needs to do nothing but still need a case so we don't default
 
-void SemanticAnalyser::kowalskiFunction(const std::shared_ptr<FunctionNode>& node){
+void Kowalski::kowalskiFunction(const std::shared_ptr<FunctionNode>& node){
     std::string name = node->identifier;
     std::string type = node->type;
     std::vector<std::string> functionArgumentsString;
     std::string tempType;
     symbolTable.declareVariable(name,type);
+    std::cout<<std::to_string(node->arguments[0]->getType())<<std::endl;
     for (int i = 0; i < node->arguments.size();i++){
-        switch (node->arguments[i]->getType())
-        {
-        case intNode:
-            functionArgumentsString.push_back("int");
-            break;
-        case floatNode:
-            functionArgumentsString.push_back("float");
-            break;
-        case usIntNode:
-            functionArgumentsString.push_back("usint");
-            break;
-        case stringNode:
-            functionArgumentsString.push_back("string");
-            break;
-        case charNode:
-            functionArgumentsString.push_back("char");
-            break;
-        case boolNode:
-            functionArgumentsString.push_back("bool");
-            break;
-        default:
-            break;
-        };
+        functionArgumentsString.push_back(node->arguments[i]->type);
     }
     functionTable.declareFunction(name,functionArgumentsString);
+    symbolTable.enterScope();
     // checks args
     for (int i = 0; i < node->arguments.size();i++){
-        analyseNode(node->arguments);
+        analyseNode(node->arguments[i]);
     }
-    symbolTable.enterScope();
-    //declara args in scope
-    for (int i = 0; i < node->arguments.size();i++){
-        kowalskiDeclaration(node->arguments[i]);
-    }
+
     //function body
     for (int i = 0; i <node->body.size();i++){
-        analyseNode(node->body);
+        analyseNode(node->body[i]);
     }
 }
-void SemanticAnalyser::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode> &node){
+void Kowalski::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode> &node){
     std::string name = node->identifier;
     std::vector<std::string> currentArgument;
-    std::vector<std::string> exprectedArgument;
+    std::vector<std::string> expectedArgument;
     for (int i = 0; i < node->arguments.size();i++){
         switch (getType2(node->arguments[i])){
             case intNode:
@@ -201,47 +193,47 @@ void SemanticAnalyser::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNo
             break;
         }
     }
-    exprectedArgument = functionTable.lookUpFunction(node->identifier);
-    if(exprectedArgument.size() == currentArgument.size()){
+    expectedArgument = functionTable.lookUpFunction(node->identifier);
+    if(expectedArgument.size() == currentArgument.size()){
         for (int i = 0; i < node->arguments.size();i++){
-            if (exprectedArgument[i]!=currentArgument[i]){
+            if (expectedArgument[i]!=currentArgument[i]){
                 throw std::runtime_error("Arguments do not match");
             }
         }
     }
     else{
+        std::cout<<"arg 1:" << std::to_string(expectedArgument.size()) << "and arg 2:" <<std::to_string(currentArgument.size())<<std::endl;
         throw std::runtime_error("too many/too few arguemnts for function called");
     }
 }
-void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node){
+void Kowalski::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node){
     std::string name = node->identifier;
     std::string type = node->type;
     symbolTable.declareVariable(name,type);
 }
-void SemanticAnalyser::kowalskiRandom(const std::shared_ptr<RandomNode>& node){
+void Kowalski::kowalskiRandom(const std::shared_ptr<RandomNode>& node){
     std::string name = node->identifier;
     std::string type = node->type;
     symbolTable.declareVariable(name,type);
 }
 
 
-void SemanticAnalyser::kowalskiChar(const std::shared_ptr<CharNode>& node){
+void Kowalski::kowalskiChar(const std::shared_ptr<CharNode>& node){
     //no this is not declaring but just typing on raw, nice example thou in case
     //that comment was wrong my bad I just read the error in the case above so use its case
     //okay 3rd comment about this lets redo
     
 }
-void SemanticAnalyser::kowalskiInt(const std::shared_ptr<IntNode>& node){
+void Kowalski::kowalskiInt(const std::shared_ptr<IntNode>& node){
     
 }
-void SemanticAnalyser::kowalskiIf(const std::shared_ptr<IfNode>& node){
-    if (getType2(node->condition) != nodeType::conditionNode){
-        throw std::runtime_error("Not a condition");
-    }else {
+void Kowalski::kowalskiIf(const std::shared_ptr<IfNode>& node){
         kowalskiKondi(node->condition);
+
         symbolTable.enterScope();
         for (int i = 0; i < node->body.size(); i++){
             analyseNode(node->body[i]);
+
         }
         symbolTable.exitScope();
         symbolTable.enterScope();
@@ -249,31 +241,26 @@ void SemanticAnalyser::kowalskiIf(const std::shared_ptr<IfNode>& node){
             analyseNode(node->elseBody[i]);
         }
         symbolTable.exitScope();
-    }
+
 }
-void SemanticAnalyser::kowalskiFloat(const std::shared_ptr<FloatNode>& node){
-    
+void Kowalski::kowalskiFloat(const std::shared_ptr<FloatNode>& node){
+
 }
-void SemanticAnalyser::kowalskiString(const std::shared_ptr<StringNode>& node){
+void Kowalski::kowalskiString(const std::shared_ptr<StringNode>& node){
     
 }
 
-void SemanticAnalyser::kowalskiWhile(const std::shared_ptr<WhileNode>& node){
-    if (node->condition->getType() != nodeType::whileNode){
-        throw std::runtime_error("Not a condition");
-    }else {
-        symbolTable.enterScope();
+void Kowalski::kowalskiWhile(const std::shared_ptr<WhileNode>& node){
+
         kowalskiKondi(node->condition);
+        symbolTable.enterScope();
         for (int i = 0; i < node->body.size(); i++){
             analyseNode(node->body[i]);
         }
         symbolTable.exitScope();
     }
-}
-void SemanticAnalyser::kowalskiFor(const std::shared_ptr<ForLoopNode>& node){
-    if (node->condition->getType() != nodeType::conditionNode){
-        throw std::runtime_error("Not a condition");
-    }else {
+
+void Kowalski::kowalskiFor(const std::shared_ptr<ForLoopNode>& node){
         symbolTable.enterScope();
         kowalskiDeclaration(node->declaration);
         kowalskiKondi(node->condition);
@@ -284,19 +271,21 @@ void SemanticAnalyser::kowalskiFor(const std::shared_ptr<ForLoopNode>& node){
         }
         symbolTable.exitScope();
     }
-}
-void SemanticAnalyser::kowalskiSwitch(const std::shared_ptr<SwitchNode>& node){
-    if (node->condition->getType() != nodeType::switchNode){
+
+void Kowalski::kowalskiSwitch(const std::shared_ptr<SwitchNode>& node){
+    if (node->condition->getType() != nodeType::conditionNode){
         throw std::runtime_error("Not a condition");
     }else {
-        
         kowalskiKondi(node->condition);
         for (int i = 0; i < node->caseBranch.size(); i++){
             analyseNode(node->caseBranch[i]);
         }
+        if (node->deNode != nullptr){
+            analyseNode(node->deNode);
+        }
     }
 }
-void SemanticAnalyser::kowalskiCase(const std::shared_ptr<CaseNode>& node)
+void Kowalski::kowalskiCase(const std::shared_ptr<CaseNode>& node)
 {
     symbolTable.enterScope();
 for (int i = 0; i < node->Branch.size(); i++){
@@ -305,61 +294,93 @@ for (int i = 0; i < node->Branch.size(); i++){
     symbolTable.exitScope();
 }
 
-
-void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node){
+void Kowalski::kowalskiKondi(const std::shared_ptr<ConditionNode>& node){
     std::string condition = node->condition;
     nodeType aSide = getType2(node->aNode);
-    //todo:: if statement to check if both sides allow || and &&
-    switch(getType2(node->bNode)){
-        case nodeType::floatNode:
-            if(aSide != nodeType::floatNode && aSide != nodeType::intNode)
-                throw std::runtime_error("Floats only accept integer and float comparaisons.");
-            break;
-        case nodeType::intNode:
-            if(aSide != nodeType::intNode)
-                throw std::runtime_error("Integers only accept integer comparaisons.");
-            break;
-        case nodeType::charNode:
-            if(aSide != nodeType::charNode && (aSide != nodeType::stringNode && node->aNode->StringOfChars.length() == 1))
-                throw std::runtime_error("Chars only accept chars and single letter string comparaisons.");
-            break;
-        case nodeType::stringNode:
-            if(aSide != nodeType::stringNode && (aSide != nodeType::charNode && node->aNode->StringOfChars.length() == 1))
-                throw std::runtime_error("Strings only accept string comparaisons and chars if the string is a single letter string.");
-            break;
-        
-        case nodeType::conditionNode:
-            if(aSide != nodeType::stringNode && aSide != nodeType::charNode && aSide != nodeType::intNode && aSide!= nodeType::floatNode){
-                throw std::runtime_error("Illegal condition");
-                break;
-            }
-            kowalskiKondi(node->bNode);
-            break;
-        default:
-            throw std::runtime_error("Illegal condition");
-            break;
+    if (condition == "+=" || condition == "-=" || condition == "--" || condition == "++" || condition == "="){
+        if (node->aNode->getType() != nodeType::identifierNode){
+            throw std::runtime_error("Trying to reassign a non identifier");
+        } else if (condition == "+=" || condition == "-=" || condition == "="){
+            if (node->bNode == nullptr)
+                throw std::runtime_error("Trying to reassign nothing");
+            if (getType2(node->aNode) == nodeType::intNode && getType2(node->bNode) != nodeType::intNode)
+                throw std::runtime_error("Trying to assign a non int to an int");
+            if (getType2(node->aNode) == nodeType::floatNode && getType2(node->bNode) != nodeType::intNode && getType2(node->bNode) != nodeType::floatNode)
+                throw std::runtime_error("Trying to assign a non int or float to a float");
+            if (getType2(node->aNode) == nodeType::charNode && getType2(node->bNode) != nodeType::charNode)
+                throw std::runtime_error("Trying to assign a non char to a char");
+            if (getType2(node->aNode) == nodeType::stringNode && getType2(node->bNode) != nodeType::stringNode && getType2(node->bNode) != nodeType::charNode)
+                throw std::runtime_error("Trying to assign non string or char to a char");
+            if (getType2(node->aNode) == nodeType::boolNode && getType2(node->bNode) != nodeType::boolNode)
+                throw std::runtime_error("Trying to assign non bool to a bool");
+        } else if (condition == "--" || condition == "++"){
+            if (node->bNode != nullptr)
+                throw std::runtime_error("Trying to assign after \"++\" or \"--\"");
+            if (getType2(node->aNode) == nodeType::charNode)
+                throw std::runtime_error("Trying to increment or decrement a char");
+            if (getType2(node->aNode) == nodeType::stringNode)
+                throw std::runtime_error("Trying to increment or decrement a string");
+            if (getType2(node->aNode) == nodeType::boolNode)
+                throw std::runtime_error("Trying to increment or decrement a bool");
+            if (node->aNode->getType() == nodeType::functionCallNode)
+                throw std::runtime_error("Trying to increment or decrement a function");
+        }
+    } else if (condition == "==" || condition == "!="){
+        if (node->bNode == nullptr)
+            throw std::runtime_error("Trying to compare nothing");
+        if (getType2(node->aNode) == nodeType::intNode && getType2(node->bNode) != nodeType::intNode && getType2(node->bNode) != nodeType::floatNode)
+            throw std::runtime_error("Trying to compare int to non int or non float");
+        if (getType2(node->aNode) == nodeType::floatNode && getType2(node->bNode) != nodeType::intNode && getType2(node->bNode) != nodeType::floatNode)
+            throw std::runtime_error("Trying to compare float to non int or non float");
+        if (getType2(node->aNode) == nodeType::charNode && getType2(node->bNode) != nodeType::charNode && getType2(node->bNode) != nodeType::stringNode)
+            throw std::runtime_error("Trying to compare char to non char or non string");
+        if (getType2(node->aNode) == nodeType::stringNode && getType2(node->bNode) != nodeType::charNode && getType2(node->bNode) != nodeType::stringNode)
+            throw std::runtime_error("Trying to compare string to non char or non string");
+        if (getType2(node->aNode) == nodeType::boolNode && getType2(node->bNode) != nodeType::boolNode)
+            throw std::runtime_error("Trying to compare bool to non bool");
+    } else if (condition == "<=" || condition == ">=" || condition == "<" || condition == ">" || condition == "+" || condition == "-"){
+        if (node->bNode == nullptr){
+            if (condition == "+" || condition == "-") {throw std::runtime_error("Trying to do math on nothing");}
+            else {throw std::runtime_error("Trying to compare nothing");}
+        }
+        if(condition == "+" || condition == "-"){
+            if(node->aNode->getType() == nodeType::functionCallNode || node->bNode->getType() == nodeType::functionCallNode)
+                throw std::runtime_error("Trying to +/- a function");
+        }
+        if (getType2(node->aNode) == nodeType::boolNode)
+            throw std::runtime_error("Bools can only be compared or reassigned");
+        if (getType2(node->aNode) == nodeType::charNode)
+            throw std::runtime_error("chars can only be compared or reassigned");
+        if (getType2(node->aNode) == nodeType::intNode && getType2(node->bNode) != nodeType::intNode){
+            if(condition == "+" || "-") {throw std::runtime_error("Trying to add or subtract a non int from an int");}
+            else if (getType2(node->bNode) != nodeType::floatNode) {throw std::runtime_error("Trying to do a non int or float operation on an int");}
+        }
+        if (getType2(node->aNode) == nodeType::floatNode && getType2(node->bNode) != nodeType::intNode && getType2(node->bNode) != nodeType::floatNode)
+            throw std::runtime_error("Trying to do an operation on a float that is not followed by an int or a float");
+        if (getType2(node->aNode) == nodeType::stringNode && getType2(node->bNode) != nodeType::stringNode && getType2(node->bNode) != nodeType::charNode)
+            throw std::runtime_error("Trying to do an operation on a string that is not allowed");
+        if (getType2(node->aNode) == nodeType::stringNode && condition != "+")
+            throw std::runtime_error("Trying to do an operation on a string that is not appending");
     }
 }
 
-void SemanticAnalyser::kowalskiConsole(const std::shared_ptr<ConsoleNode>& node) {
+void Kowalski::kowalskiConsole(const std::shared_ptr<ConsoleNode>& node) {
         for (int i = 0; i < node->message.size(); i++){
             analyseNode(node->message[i]);
         }
 }
 
-void SemanticAnalyser::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
-    if(node->struct_main->getType() != nodeType::structNode) {
-        throw std::runtime_error("Not a struct");
-    } else {
+void Kowalski::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
+
         for (int i = 0; i < node->body.size(); i++){
             analyseNode(node->body[i]);
         }
     }
-}
 
-void SemanticAnalyser::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
+
+void Kowalski::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
     std::string size = node->size;
-    if(isalpha(size[1])){
+    if(isalpha(size[0])){
         std::string type = symbolTable.lookUpVariable(size);
         if (type != "int") {
             throw std::runtime_error("The array size is not an integer");
@@ -370,14 +391,16 @@ void SemanticAnalyser::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
     }
 }
 
-void SemanticAnalyser::kowalskiReturn(const std::shared_ptr<ReturnNode>& node) {
-    
+void Kowalski::kowalskiReturn(const std::shared_ptr<ReturnNode>& node) {
+}
+void Kowalski::kowalskiValue(const std::shared_ptr<ValueNode>& node){
+
 }
 
-nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
+nodeType Kowalski::getType2(const std::shared_ptr<ASTNode>& node){
         if (node->getType() == nodeType::identifierNode){
-            auto idNode = std::static_pointer_cast<identifierNode>(node);
-            std::string type = symbolTable.lookUpVariable(idNode->identifer);
+            auto idNode = std::dynamic_pointer_cast<IdentifierNode>(node);
+            std::string type = symbolTable.lookUpVariable(idNode->identifier);
             if (type == "int") {return nodeType::intNode;}
             else if (type == "char") {return nodeType::charNode;}
             else if (type == "string") {return nodeType::stringNode;}
@@ -388,3 +411,4 @@ nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
         
         return node->getType();
 }
+

@@ -23,11 +23,12 @@ auto tokens = lexer.tokenize(input);
                   << ", Token Value: '" << token.value << "'" << std::endl;
     }
 //ASSERT_EQ(tokens.size(), 5);
-EXPECT_EQ(tokens[0].type, TokenType::TYPE);
-EXPECT_EQ(tokens[1].type, TokenType::IDENTIFIER);
-EXPECT_EQ(tokens[2].type, TokenType::OPERATOR);
-EXPECT_EQ(tokens[3].type, TokenType::CONST);
-EXPECT_EQ(tokens[4].type, TokenType::PUNCTUATION);
+EXPECT_EQ(tokens[0].type, TokenType::START);
+EXPECT_EQ(tokens[1].type, TokenType::TYPE);
+EXPECT_EQ(tokens[2].type, TokenType::IDENTIFIER);
+EXPECT_EQ(tokens[3].type, TokenType::OPERATOR);
+EXPECT_EQ(tokens[4].type, TokenType::CONST);
+EXPECT_EQ(tokens[5].type, TokenType::PUNCTUATION);
 }
 
 // Test handling of mixed token types
@@ -35,14 +36,15 @@ TEST(LexerTest, MixedTokenTypes) {
 Lexer lexer;
 std::string input = "func(123, 'text324');";
 auto tokens = lexer.tokenize(input);
-ASSERT_EQ(tokens.size(), 7);
-EXPECT_EQ(tokens[0].type, TokenType::IDENTIFIER);
-EXPECT_EQ(tokens[1].type, TokenType::PUNCTUATION);
-EXPECT_EQ(tokens[2].type, TokenType::CONST);
-EXPECT_EQ(tokens[3].type, TokenType::PUNCTUATION);
-EXPECT_EQ(tokens[4].type, TokenType::STRING);
-EXPECT_EQ(tokens[5].type, TokenType::PUNCTUATION);
+ASSERT_EQ(tokens.size(), 8);
+EXPECT_EQ(tokens[0].type, TokenType::START);
+EXPECT_EQ(tokens[1].type, TokenType::IDENTIFIER);
+EXPECT_EQ(tokens[2].type, TokenType::PUNCTUATION);
+EXPECT_EQ(tokens[3].type, TokenType::CONST);
+EXPECT_EQ(tokens[4].type, TokenType::PUNCTUATION);
+EXPECT_EQ(tokens[5].type, TokenType::STRING);
 EXPECT_EQ(tokens[6].type, TokenType::PUNCTUATION);
+EXPECT_EQ(tokens[7].type, TokenType::PUNCTUATION);
 }
 
 // Test error handling
@@ -71,13 +73,8 @@ TEST(LexerTest, EndOfInputHandling) {
 Lexer lexer;
 std::string input = "value";
 auto tokens = lexer.tokenize(input);
-ASSERT_EQ(tokens.size(), 1);
-EXPECT_EQ(tokens[0].type, TokenType::IDENTIFIER);
-EXPECT_EQ(tokens[0].getText(), "value");
-}
-
-// Main function to run all tests
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+ASSERT_EQ(tokens.size(), 2);
+EXPECT_EQ(tokens[0].type, TokenType::START);
+EXPECT_EQ(tokens[1].type, TokenType::IDENTIFIER);
+EXPECT_EQ(tokens[1].getText(), "value");
 }
