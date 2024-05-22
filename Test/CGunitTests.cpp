@@ -292,5 +292,84 @@ TEST(CGTEST,ReturnTest){
 }
 
 TEST(CGTEST,RandomIntUnboundTest){
-    auto RandomIntUnboundTest = std::make_shared<RandomNode>();
+    auto RandomIntUnboundOutput = std::make_shared<RandomNode>();
+    RandomIntUnboundOutput->type = "int?";
+    RandomIntUnboundOutput->identifier = "x";
+    CodeGenerator codeGenerator;
+    std::string RIUTresault = codeGenerator.generateRandomCode(RandomIntUnboundOutput);
+    EXPECT_EQ(RIUTresault,"int x=rand();");
+}
+
+TEST(CGTEST,RandomIntBoundTest){
+    auto RandomIntBoundOutput = std::make_shared<RandomNode>();
+    RandomIntBoundOutput->type = "int?";
+    RandomIntBoundOutput->identifier = "x";
+    RandomIntBoundOutput->RandomIntRange.push_back(1);
+    RandomIntBoundOutput->RandomIntRange.push_back(10);
+    CodeGenerator codeGenerator;
+    std::string RIBTresault = codeGenerator.generateRandomCode(RandomIntBoundOutput);
+    EXPECT_EQ(RIBTresault,"int x=rand()%(10-1+1)+1;");
+}
+
+TEST(CGTEST,RandomFloatUnboundTest){
+    auto RandomFloatUnboundOutput = std::make_shared<RandomNode>();
+    RandomFloatUnboundOutput->type = "float?";
+    RandomFloatUnboundOutput->identifier = "x";
+    CodeGenerator codeGenerator;
+    std::string RFUTresault = codeGenerator.generateRandomCode(RandomFloatUnboundOutput);
+    EXPECT_EQ(RFUTresault,"float x=randomFloat; randomFloat = (float)rand();");
+}
+
+TEST(CGTEST,RandomFloatBoundTest){
+    auto RandomFloatBoundOutput = std::make_shared<RandomNode>();
+    RandomFloatBoundOutput->type = "float?";
+    RandomFloatBoundOutput->identifier = "x";
+    RandomFloatBoundOutput->RandomFloatRange.push_back(3.5);
+    RandomFloatBoundOutput->RandomFloatRange.push_back(10.8);
+    CodeGenerator codeGenerator;
+    std::string RFBTresault = codeGenerator.generateRandomCode(RandomFloatBoundOutput);
+    EXPECT_EQ(RFBTresault,"float x=randomFloat; randomFloat = (float range =10.800000-3.500000+ 1; float num = rand() % range +3.500000;)");
+}
+
+TEST(CGTEST,RandomBoolTest){
+    auto RandomBoolOutput = std::make_shared<RandomNode>();
+    RandomBoolOutput->type = "bool?";
+    RandomBoolOutput->identifier = "x";
+    CodeGenerator codeGenerator;
+    std::string RBTresault = codeGenerator.generateRandomCode(RandomBoolOutput);
+    EXPECT_EQ(RBTresault,"bool x; int randomBool = rand(); if (randomBool%2==0){x= true); else {x= false);");
+}
+
+TEST(CGTEST,ArrayTest){
+    auto ArrayOutput = std::make_shared<ArrayNode>();
+    ArrayOutput->type = "int";
+    ArrayOutput->identifier = "x";
+    ArrayOutput->size = "5";
+    auto ArrayBody1 = std::make_shared<IntNode>();
+    auto ArrayBody2 = std::make_shared<IntNode>();
+    ArrayBody1->integer = 2;
+    ArrayBody2->integer = 15;
+    ArrayOutput->body.push_back(ArrayBody1);
+    ArrayOutput->body.push_back(ArrayBody2);
+    CodeGenerator codeGenerator;
+    std::string ATresault = codeGenerator.generateArrayCode(ArrayOutput);
+    EXPECT_EQ(ATresault,"int x[5] = [2,15];");
+}
+
+TEST(CGTEST,JumpBreakTest){
+    auto JumpOutput = std::make_shared<JumpNode>();
+    JumpOutput->breaker = "break";
+    JumpOutput->continuer = "null";
+    CodeGenerator codeGenerator;
+    std::string JBTresault = codeGenerator.generateJumpCode(JumpOutput);
+    EXPECT_EQ(JBTresault,"break;");
+}
+
+TEST(CGTEST,JumpContinueTest){
+    auto JumpOutput = std::make_shared<JumpNode>();
+    JumpOutput->breaker = "null";
+    JumpOutput->continuer = "continue;";
+    CodeGenerator codeGenerator;
+    std::string JCTresault = codeGenerator.generateJumpCode(JumpOutput);
+    EXPECT_EQ(JCTresault,"continue;");
 }

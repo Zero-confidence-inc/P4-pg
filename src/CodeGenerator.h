@@ -23,7 +23,7 @@ public:
     std::string generateCharCode(std::shared_ptr<CharNode>& node);
     std::string generateStringCode(std::shared_ptr<StringNode>& node);
     std::string generateIdentifierCode(std::shared_ptr<IdentifierNode>& node);
-    std::string generateRandomCode(RandomNode& node);
+    std::string generateRandomCode(std::shared_ptr<RandomNode>& node);
     std::string generateIfCode(std::shared_ptr<IfNode>& node);
     std::string generateWhileCode(std::shared_ptr<WhileNode>& node);
     std::string generateForCode(std::shared_ptr<ForLoopNode>& node);
@@ -31,6 +31,7 @@ public:
     std::string generateStructCode(std::shared_ptr<StructNode>& node);
     std::string generateBodyCode(std::vector<std::shared_ptr<ASTNode>>& body);
     std::string generateReturnCode(std::shared_ptr<ReturnNode>& node);
+    std::string generateJumpCode(std::shared_ptr<JumpNode>& node);
 
 private:
 

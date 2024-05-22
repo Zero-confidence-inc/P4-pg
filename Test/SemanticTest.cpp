@@ -18,9 +18,7 @@ TEST(KowalskiTest, KowalskiInt) {
 
 TEST(KowalskiTest, KowalskiReturn) {
     std::shared_ptr<ReturnNode> node = std::make_shared<ReturnNode>();
-    node->returning = "return";
     node->identifier = "xD";
-    EXPECT_EQ("return",node->returning);
     EXPECT_EQ("xD",node->identifier);
 }
 

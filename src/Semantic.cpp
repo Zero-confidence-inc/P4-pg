@@ -386,6 +386,7 @@ void Kowalski::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
             analyseNode(node->body[i]);
         }
     }
+}
 
 
 void Kowalski::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {

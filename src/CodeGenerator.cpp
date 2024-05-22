@@ -158,8 +158,21 @@ std::string CodeGenerator::generateForCode(std::shared_ptr<ForLoopNode>& node) {
     }
     return completeBodyCodeOutput;
 } 
+
+std::string CodeGenerator::generateJumpCode(std::shared_ptr<JumpNode>& node){
+    std::string JumpCodeOutput;
+    if (node->breaker!="null"){
+        JumpCodeOutput += "break;";
+        return JumpCodeOutput;
+    }
+    else if (node->continuer != "null"){
+        JumpCodeOutput += "continue;";
+        return JumpCodeOutput;
+    }
+}
+
 std::string CodeGenerator::generateArrayCode(std::shared_ptr<ArrayNode>& node){
- std::string leString;
+    std::string leString;
     if (node->type == "string"){
         leString = "std::" + node->type + " " + node->identifier + "["+node->size+"]";
     }
@@ -169,7 +182,7 @@ std::string CodeGenerator::generateArrayCode(std::shared_ptr<ArrayNode>& node){
     for (int i = 0;i<node->body.size();i++)
         {
             if(i==0){
-                leString += "= [";
+                leString += " = [";
             }else{
                 leString += ",";
             }
@@ -198,8 +211,8 @@ std::string CodeGenerator::generateArrayCode(std::shared_ptr<ArrayNode>& node){
                 auto convertedNode = std::dynamic_pointer_cast<BoolNode>(node->body[i]);
                 leString += generateBoolCode(convertedNode);
             }
-            leString+="]";
         }
+        leString+="]";
     return leString +";";
 }
 
@@ -424,41 +437,42 @@ std::string CodeGenerator::generateIdentifierCode(std::shared_ptr<IdentifierNode
     return node->identifier;
 }
 
-std::string CodeGenerator::generateRandomCode(RandomNode& node) {
+std::string CodeGenerator::generateRandomCode(std::shared_ptr<RandomNode>& node) {
     std::string randomCodeOutput;
-    std::string randomID = node.identifier;
+    std::string randomID = node->identifier;
 
-    if (node.type == "int?") {
-        randomCodeOutput += "int";
+    if (node->type == "int?") {
+        randomCodeOutput += "int ";
         randomCodeOutput += randomID;
         randomCodeOutput += "=";
-        if (node.RandomIntRange.size() > 0) {
+        if (node->RandomIntRange.size() > 0) {
             randomCodeOutput +=
-                    "rand()%(" + std::to_string(node.RandomIntRange[1]) + "-" + std::to_string(node.RandomIntRange[0]) +
-                    "+ 1) + " + std::to_string(node.RandomIntRange[0]) + ";";
+                    "rand()%(" + std::to_string(node->RandomIntRange[1]) + "-" + std::to_string(node->RandomIntRange[0]) +
+                    "+1)+" + std::to_string(node->RandomIntRange[0]) + ";";
             return randomCodeOutput;
         } else {
             randomCodeOutput += "rand();";
             return randomCodeOutput;
         }
-    } else if (node.type == "float?") {
-        randomCodeOutput += "float";
+    } else if (node->type == "float?") {
+        randomCodeOutput += "float ";
         randomCodeOutput += randomID;
         randomCodeOutput += "=";
-        if (node.RandomFloatRange.size() > 0) {
-            randomCodeOutput += "randomFloat;";
-            randomCodeOutput += "randomFloat = (float range =" + std::to_string(node.RandomFloatRange[1]) + "-" +
-                                std::to_string(node.RandomFloatRange[0]) + "+ 1; float num = rand() % range +" +
-                                std::to_string(node.RandomFloatRange[0]) + ";)";
+        if (node->RandomFloatRange.size() > 0) {
+            randomCodeOutput += "randomFloat; ";
+            randomCodeOutput += "randomFloat = (float range =" + std::to_string(node->RandomFloatRange[1]) + "-" +
+                                std::to_string(node->RandomFloatRange[0]) + "+ 1; float num = rand() % range +" +
+                                std::to_string(node->RandomFloatRange[0]) + ";)";
+            return randomCodeOutput;
         } else {
             randomCodeOutput += "randomFloat;";
-            randomCodeOutput += "randomFloat = (float)rand();";
+            randomCodeOutput += " randomFloat = (float)rand();";
             return randomCodeOutput;
         }
-    } else if (node.type == "bool?") {
-        randomCodeOutput += "bool";
+    } else if (node->type == "bool?") {
+        randomCodeOutput += "bool ";
         randomCodeOutput += randomID;
-        randomCodeOutput += "=";
+        randomCodeOutput += "; ";
         randomCodeOutput += "int randomBool = rand(); if (randomBool%2==0){" + randomID + "= true); else {" + randomID +
                             "= false);";
         return randomCodeOutput;
