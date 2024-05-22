@@ -7,7 +7,10 @@
 #include <string>
 
 void SymbolTable::enterScope(){
-scopes.push_back({});
+    scopes.push_back({});
+}
+void FunctionTable::enterScope(){
+    functionMap.push_back({});
 }
 
 void SymbolTable::exitScope(){
@@ -21,6 +24,7 @@ void SymbolTable::exitScope(){
 }
 void FunctionTable::declareFunction(const std::string& name,std::vector<std::string>& arguments){
     if(!functionMap.empty()){
+
         functionMap.back()[name] = arguments;
     }
     else{
@@ -30,13 +34,14 @@ void FunctionTable::declareFunction(const std::string& name,std::vector<std::str
 std::vector<std::string> FunctionTable::lookUpFunction(const std::string& functionName){
     for(auto it=functionMap.rbegin();it != functionMap.rend();++it){
         if(it->find(functionName)!=it->end()){
+
             return it->at(functionName);
         }
     }
     throw std::runtime_error("no function has the name: " + functionName);
 }
 
-SemanticAnalyser::SemanticAnalyser() {}
+Kowalski::Kowalski() {}
 
 void SymbolTable::declareVariable(const std::string& name,const std::string& type){
     if(!scopes.empty())
@@ -57,22 +62,23 @@ std::string SymbolTable::lookUpVariable(const std::string& name){
         }
     throw std::runtime_error("variable '" + name + "' NOT declared in this scope :c");
 }
-void SemanticAnalyser::kowalski(const std::vector<std::shared_ptr<ASTNode>>& root){
+void Kowalski::Analyse(const std::vector<std::shared_ptr<ASTNode>>& root){
     symbolTable.enterScope();
-    try {
+    functionTable.enterScope();
+    //try {
     
     
     for (int i = 0; i < root.size(); i++){
             analyseNode(root[i]);
-        }}
-    catch(std::runtime_error watchoutski){
-        //printf(watchoutski);
-    }
-    //magic??
+        }/*}
+    catch(std::runtime_error& withoutski){
+        std::cout << withoutski.what() << "Kowalski is fucked\n";
+    }*/
+
     symbolTable.exitScope();
 }
 
-void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
+void Kowalski::analyseNode(const std::shared_ptr<ASTNode>& node){
     switch(node->getType()){
         case nodeType::functionNode:
             kowalskiFunction(std::static_pointer_cast<FunctionNode>(node));
@@ -116,10 +122,23 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
         case nodeType::intNode:
             kowalskiInt(std::static_pointer_cast<IntNode>(node));
             break;
+        case nodeType::consoleNode:
+            kowalskiConsole(std::static_pointer_cast<ConsoleNode>(node));
+            break;
+        case nodeType::arrayNode:
+            kowalskiArray(std::static_pointer_cast<ArrayNode>(node));
+            break;
+        case nodeType::returnNode:
+            kowalskiReturn(std::static_pointer_cast<ReturnNode>(node));
+            break;
+        case nodeType::valueNode:
+            kowalskiValue(std::static_pointer_cast<ValueNode>(node));
+            break;
         case nodeType::boolNode:
             kowalskiBool(std::static_pointer_cast<BoolNode>(node));
             break;
         default:
+            std::cout << "enum number"+std::to_string(node->getType())<<std::endl;
             throw std::runtime_error("unknown node type");
     }
 }
@@ -127,36 +146,15 @@ void SemanticAnalyser::analyseNode(const std::shared_ptr<ASTNode>& node){
 // todo: make sure the first 4 methods are using in methods going forward, approiatly :3
 // it goes through all nodes, some nodes needs to do nothing but still need a case so we don't default
 
-void SemanticAnalyser::kowalskiFunction(const std::shared_ptr<FunctionNode>& node){
+void Kowalski::kowalskiFunction(const std::shared_ptr<FunctionNode>& node){
     std::string name = node->identifier;
     std::string type = node->type;
     std::vector<std::string> functionArgumentsString;
     std::string tempType;
     symbolTable.declareVariable(name,type);
+    std::cout<<std::to_string(node->arguments[0]->getType())<<std::endl;
     for (int i = 0; i < node->arguments.size();i++){
-        switch (node->arguments[i]->getType())
-        {
-        case intNode:
-            functionArgumentsString.push_back("int");
-            break;
-        case floatNode:
-            functionArgumentsString.push_back("float");
-            break;
-        case usIntNode:
-            functionArgumentsString.push_back("usint");
-            break;
-        case stringNode:
-            functionArgumentsString.push_back("string");
-            break;
-        case charNode:
-            functionArgumentsString.push_back("char");
-            break;
-        case boolNode:
-            functionArgumentsString.push_back("bool");
-            break;
-        default:
-            break;
-        };
+        functionArgumentsString.push_back(node->arguments[i]->type);
     }
     functionTable.declareFunction(name,functionArgumentsString);
     symbolTable.enterScope();
@@ -170,7 +168,7 @@ void SemanticAnalyser::kowalskiFunction(const std::shared_ptr<FunctionNode>& nod
         analyseNode(node->body[i]);
     }
 }
-void SemanticAnalyser::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode> &node){
+void Kowalski::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode> &node){
     std::string name = node->identifier;
     std::vector<std::string> currentArgument;
     std::vector<std::string> expectedArgument;
@@ -207,35 +205,36 @@ void SemanticAnalyser::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNo
         }
     }
     else{
+        std::cout<<"arg 1:"+ std::to_string(expectedArgument.size()) + "and arg 2:"+std::to_string(currentArgument.size())<<std::endl;
         throw std::runtime_error("too many/too few arguemnts for function called");
     }
 }
-void SemanticAnalyser::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node){
+void Kowalski::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node){
     std::string name = node->identifier;
     std::string type = node->type;
     symbolTable.declareVariable(name,type);
 }
-void SemanticAnalyser::kowalskiRandom(const std::shared_ptr<RandomNode>& node){
+void Kowalski::kowalskiRandom(const std::shared_ptr<RandomNode>& node){
     std::string name = node->identifier;
     std::string type = node->type;
     symbolTable.declareVariable(name,type);
 }
 
 
-void SemanticAnalyser::kowalskiChar(const std::shared_ptr<CharNode>& node){
+void Kowalski::kowalskiChar(const std::shared_ptr<CharNode>& node){
     //no this is not declaring but just typing on raw, nice example thou in case
     //that comment was wrong my bad I just read the error in the case above so use its case
     //okay 3rd comment about this lets redo
     
 }
-void SemanticAnalyser::kowalskiInt(const std::shared_ptr<IntNode>& node){
+void Kowalski::kowalskiInt(const std::shared_ptr<IntNode>& node){
     
 }
-void SemanticAnalyser::kowalskiBool(const std::shared_ptr<BoolNode>& node){
+void Kowalski::kowalskiBool(const std::shared_ptr<BoolNode>& node){
 
 }
 
-void SemanticAnalyser::kowalskiIf(const std::shared_ptr<IfNode>& node){
+void Kowalski::kowalskiIf(const std::shared_ptr<IfNode>& node){
     if (getType2(node->condition) != nodeType::conditionNode){
         throw std::runtime_error("Not a condition");
     }else {
@@ -252,29 +251,24 @@ void SemanticAnalyser::kowalskiIf(const std::shared_ptr<IfNode>& node){
         symbolTable.exitScope();
     }
 }
-void SemanticAnalyser::kowalskiFloat(const std::shared_ptr<FloatNode>& node){
-    
+void Kowalski::kowalskiFloat(const std::shared_ptr<FloatNode>& node){
+
 }
-void SemanticAnalyser::kowalskiString(const std::shared_ptr<StringNode>& node){
+void Kowalski::kowalskiString(const std::shared_ptr<StringNode>& node){
     
 }
 
-void SemanticAnalyser::kowalskiWhile(const std::shared_ptr<WhileNode>& node){
-    if (node->condition->getType() != nodeType::conditionNode){
-        throw std::runtime_error("Not a condition");
-    }else {
-        symbolTable.enterScope();
+void Kowalski::kowalskiWhile(const std::shared_ptr<WhileNode>& node){
+
         kowalskiKondi(node->condition);
+        symbolTable.enterScope();
         for (int i = 0; i < node->body.size(); i++){
             analyseNode(node->body[i]);
         }
         symbolTable.exitScope();
     }
-}
-void SemanticAnalyser::kowalskiFor(const std::shared_ptr<ForLoopNode>& node){
-    if (node->condition->getType() != nodeType::conditionNode){
-        throw std::runtime_error("Not a condition");
-    }else {
+
+void Kowalski::kowalskiFor(const std::shared_ptr<ForLoopNode>& node){
         symbolTable.enterScope();
         kowalskiDeclaration(node->declaration);
         kowalskiKondi(node->condition);
@@ -285,8 +279,8 @@ void SemanticAnalyser::kowalskiFor(const std::shared_ptr<ForLoopNode>& node){
         }
         symbolTable.exitScope();
     }
-}
-void SemanticAnalyser::kowalskiSwitch(const std::shared_ptr<SwitchNode>& node){
+
+void Kowalski::kowalskiSwitch(const std::shared_ptr<SwitchNode>& node){
     if (node->condition->getType() != nodeType::conditionNode){
         throw std::runtime_error("Not a condition");
     }else {
@@ -299,7 +293,7 @@ void SemanticAnalyser::kowalskiSwitch(const std::shared_ptr<SwitchNode>& node){
         }
     }
 }
-void SemanticAnalyser::kowalskiCase(const std::shared_ptr<CaseNode>& node)
+void Kowalski::kowalskiCase(const std::shared_ptr<CaseNode>& node)
 {
     symbolTable.enterScope();
 for (int i = 0; i < node->Branch.size(); i++){
@@ -308,7 +302,7 @@ for (int i = 0; i < node->Branch.size(); i++){
     symbolTable.exitScope();
 }
 
-void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node){
+void Kowalski::kowalskiKondi(const std::shared_ptr<ConditionNode>& node){
     std::string condition = node->condition;
     nodeType aSide = getType2(node->aNode);
     if (condition == "+=" || condition == "-=" || condition == "--" || condition == "++" || condition == "="){
@@ -378,13 +372,13 @@ void SemanticAnalyser::kowalskiKondi(const std::shared_ptr<ConditionNode>& node)
     }
 }
 
-void SemanticAnalyser::kowalskiConsole(const std::shared_ptr<ConsoleNode>& node) {
+void Kowalski::kowalskiConsole(const std::shared_ptr<ConsoleNode>& node) {
         for (int i = 0; i < node->message.size(); i++){
             analyseNode(node->message[i]);
         }
 }
 
-void SemanticAnalyser::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
+void Kowalski::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
     if(node->getType() != nodeType::structNode) {
         throw std::runtime_error("Not a struct");
     } else {
@@ -392,9 +386,9 @@ void SemanticAnalyser::kowalskiStruct(const std::shared_ptr<StructNode>& node) {
             analyseNode(node->body[i]);
         }
     }
-}
 
-void SemanticAnalyser::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
+
+void Kowalski::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
     std::string size = node->size;
     if(isalpha(size[0])){
         std::string type = symbolTable.lookUpVariable(size);
@@ -407,10 +401,13 @@ void SemanticAnalyser::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
     }
 }
 
-void SemanticAnalyser::kowalskiReturn(const std::shared_ptr<ReturnNode>& node) {
+void Kowalski::kowalskiReturn(const std::shared_ptr<ReturnNode>& node) {
+}
+void Kowalski::kowalskiValue(const std::shared_ptr<ValueNode>& node){
+
 }
 
-nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
+nodeType Kowalski::getType2(const std::shared_ptr<ASTNode>& node){
         if (node->getType() == nodeType::identifierNode){
             auto idNode = std::dynamic_pointer_cast<IdentifierNode>(node);
             std::string type = symbolTable.lookUpVariable(idNode->identifier);
@@ -424,3 +421,4 @@ nodeType SemanticAnalyser::getType2(const std::shared_ptr<ASTNode>& node){
         
         return node->getType();
 }
+

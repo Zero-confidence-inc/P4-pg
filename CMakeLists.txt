@@ -25,9 +25,11 @@ set(SOURCES
         src/Parser.cpp
         src/CommentsDFA.cpp
         src/Parser.h
-        src/CodeGenerator.cpp
+        src/BoolDFA.cpp
+        src/ConsoleDFA.cpp
         src/Semantic.cpp
         src/Semantic.h
+        src/CodeGenerator.cpp
 )
 
 add_library(P4_pg_lib ${SOURCES})
@@ -47,9 +49,7 @@ set(TEST_SOURCES
         Test/PunctuationDFAtest.cpp
         Test/Lexer_integration_test.cpp
         Test/ParserUnitTests.cpp
-        Test/ParserIntegrationTest.cpp
-        Test/TokenCreator.h
-        Test/TestMain.cpp
+        Test/SemanticTest.cpp
 )
 
 add_executable(P4_pg_tests ${TEST_SOURCES})

@@ -155,14 +155,16 @@ struct DefaultNode : ASTNode {
     std::vector<std::shared_ptr<ASTNode>> Branch;
     nodeType getType() const override { return nodeType::defaultNode; }
 };
-
 struct SwitchNode : ASTNode {
     std::shared_ptr<ConditionNode> condition;
     std::vector<std::shared_ptr<CaseNode>> caseBranch;
     std::shared_ptr<DefaultNode> deNode;
     nodeType getType() const override { return nodeType::switchNode; }
     SwitchNode() : condition(nullptr), caseBranch() {}
+
 };
+
+
 
 struct WhileNode : ASTNode {
     std::shared_ptr<ConditionNode> condition;
@@ -199,7 +201,7 @@ struct FunctionCallNode : IdentifierNode {
 };
 
 struct FunctionNode : DeclarationNode {
-    std::vector<std::shared_ptr<ASTNode>> arguments;
+    std::vector<std::shared_ptr<DeclarationNode>> arguments;
     std::vector<std::shared_ptr<ASTNode>> body;
     nodeType getType() const override { return nodeType::functionNode; }
 
@@ -230,7 +232,7 @@ public:
     std::shared_ptr<ASTNode> parseUsInt();
     std::shared_ptr<ASTNode> parseIdentifier();
     std::shared_ptr<ASTNode> parseFunctionCall();
-    std::vector<std::shared_ptr<ASTNode>> parseFunctionArguments();
+    std::vector<std::shared_ptr<DeclarationNode>> parseFunctionArguments();
 
 private:
     std::vector<Token> tokens;

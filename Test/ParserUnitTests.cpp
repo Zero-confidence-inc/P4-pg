@@ -280,8 +280,12 @@ TEST(ParserTest, ParseWhileLoop) {
             createToken(TokenType::IDENTIFIER, "x"),
             createToken(TokenType::OPERATOR, "<"),
             createToken(TokenType::CONST, "10"),
+            createToken(TokenType::PUNCTUATION, ";"),
             createToken(TokenType::PUNCTUATION, ")"),
             createToken(TokenType::PUNCTUATION, "{"),
+            createToken(TokenType::IDENTIFIER, "pos"),
+            createToken(TokenType::OPERATOR, "++"),
+            createToken(TokenType::PUNCTUATION, ";"),
             createToken(TokenType::PUNCTUATION, "}")
     };
     Parser parser(tokens);

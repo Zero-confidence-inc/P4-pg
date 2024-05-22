@@ -25,19 +25,17 @@ private:
 
 class FunctionTable{
 public:
+    void enterScope();
     void declareFunction(const std::string& name,std::vector<std::string>& arguments);
     std::vector<std::string> lookUpFunction(const std::string& functionName);
 private:
     std::vector<std::map<std::string,std::vector<std::string>>> functionMap;
 };
 
-class SemanticAnalyser{
+class Kowalski{
 public:
-    SemanticAnalyser();
-    void kowalski(const std::vector<std::shared_ptr<ASTNode>>& root);
-private:
-    SymbolTable symbolTable;
-    FunctionTable functionTable;
+    Kowalski();
+    void Analyse(const std::vector<std::shared_ptr<ASTNode>>& root);
     void analyseNode(const std::shared_ptr<ASTNode>& node);
     void kowalskiFunction(const std::shared_ptr<FunctionNode>& node);
     void kowalskiIdentifier(const std::shared_ptr<IdentifierNode>& node);
@@ -49,7 +47,7 @@ private:
     void kowalskiInt(const std::shared_ptr<IntNode>& node);
     void kowalskiBool(const std::shared_ptr<BoolNode>& node);
     void kowalskiWhile(const std::shared_ptr<WhileNode>& node);
-    void kowalskiFor(const std::shared_ptr< ForLoopNode>& node);
+    void kowalskiFor(const std::shared_ptr<ForLoopNode>& node);
     void kowalskiSwitch(const std::shared_ptr<SwitchNode>& node);
     void kowalskiCase(const std::shared_ptr<CaseNode>& node);
     void kowalskiKondi(const std::shared_ptr<ConditionNode>& node);
@@ -60,6 +58,10 @@ private:
     nodeType getType2(const std::shared_ptr<ASTNode>& node);
     void kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode>& node);
     void kowalskiRandom(const std::shared_ptr<RandomNode>& node);
+    void kowalskiValue(const std::shared_ptr<ValueNode>& node);
+private:
+    SymbolTable symbolTable;
+    FunctionTable functionTable;
 };
 
 
