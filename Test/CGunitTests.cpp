@@ -459,3 +459,17 @@ TEST(CGTEST,FunctionTest){
     std::string FTresault = codeGenerator.generateFunctionCode(FunctionOutput);
     EXPECT_EQ(FTresault,"int calc(int a,int b){int c;c=a+b;return c;};");
 }
+
+TEST(CGTEST,FunctionCallTest){
+    auto FunctionCallOutput = std::make_shared<FunctionCallNode>();
+    FunctionCallOutput->identifier = "calc";
+    auto FunctionCallArg1 = std::make_shared<IntNode>();
+    FunctionCallArg1->integer = 12;
+    FunctionCallOutput->arguments.push_back(FunctionCallArg1);
+    auto FunctionCallArg2 = std::make_shared<IntNode>();
+    FunctionCallArg2->integer = 8;
+    FunctionCallOutput->arguments.push_back(FunctionCallArg2);
+    CodeGenerator codeGenerator;
+    std::string FCTresault = codeGenerator.generateFunctionCallCode(FunctionCallOutput);
+    EXPECT_EQ(FCTresault,"calc(12,8);");
+}
