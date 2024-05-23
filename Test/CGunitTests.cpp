@@ -375,5 +375,101 @@ TEST(CGTEST,JumpContinueTest){
 }
 
 TEST(CGTEST,SwitchCaseTest){
+    auto SwitchAndCaseOutput = std::make_shared<SwitchNode>();
+    auto SACCondition = std::make_shared<ConditionNode>();
+    auto SACCID = std::make_shared<IdentifierNode>();
+    SACCID->identifier = "x";
+    SACCondition->aNode = SACCID;
+    SwitchAndCaseOutput->condition = SACCondition;
 
+    auto SACCN1 = std::make_shared<CaseNode>();
+    auto SACCN1C = std::make_shared<ConditionNode>();
+    auto SACCN1CAN = std::make_shared<IntNode>();
+    SACCN1CAN->integer = 1;
+    SACCN1C->aNode = SACCN1CAN;
+    SACCN1->sucessCondition = SACCN1C;
+    auto SACCN1B = std::make_shared<ValueNode>();
+    SACCN1B->type = "int";
+    SACCN1B->identifier = "X1";
+    auto SACCN1BV = std::make_shared<IntNode>();
+    SACCN1BV->integer=12;
+    SACCN1B->value = SACCN1BV;
+    SACCN1->Branch.push_back(SACCN1B);
+    SwitchAndCaseOutput->caseBranch.push_back(SACCN1);
+
+    auto SACCN2 = std::make_shared<CaseNode>();
+    auto SACCN2C = std::make_shared<ConditionNode>();
+    auto SACCN2CAN = std::make_shared<IntNode>();
+    SACCN2CAN->integer = 2;
+    SACCN2C->aNode = SACCN2CAN;
+    SACCN2->sucessCondition = SACCN2C;
+    auto SACCN2B = std::make_shared<ValueNode>();
+    SACCN2B->type = "float";
+    SACCN2B->identifier = "X2";
+    auto SACCN2BV = std::make_shared<FloatNode>();
+    SACCN2BV->Floating_Point = 5.6;
+    SACCN2B->value = SACCN2BV;
+    SACCN2->Branch.push_back(SACCN2B);
+    SwitchAndCaseOutput->caseBranch.push_back(SACCN2);
+
+    CodeGenerator codeGenerator;
+    std::string SACTresault = codeGenerator.generateSwitchCode(SwitchAndCaseOutput);
+    EXPECT_EQ(SACTresault,"switch(x){case 1:int X1=12;break;case 2:float X2=5.600000;break;}");
+}
+
+TEST(CGTEST,FunctionTest){
+    auto FunctionOutput = std::make_shared<FunctionNode>();
+    FunctionOutput->type = "int";
+    FunctionOutput->identifier = "calc";
+    auto FunctionArgumentA = std::make_shared<DeclarationNode>();
+    FunctionArgumentA->type = "int";
+    FunctionArgumentA->identifier = "a";
+    FunctionOutput->arguments.push_back(FunctionArgumentA);
+    auto FunctionArgumentB = std::make_shared<DeclarationNode>();
+    FunctionArgumentB->type = "int";
+    FunctionArgumentB->identifier = "b";
+    FunctionOutput->arguments.push_back(FunctionArgumentB);
+
+    auto FunctionBodyFunc1 = std::make_shared<DeclarationNode>();
+    FunctionBodyFunc1->type = "int";
+    FunctionBodyFunc1->identifier = "c";
+    FunctionOutput->body.push_back(FunctionBodyFunc1);
+
+    auto FunctionBodyFunc2 = std::make_shared<ConditionNode>();
+    auto FunctionBodyFunc2_3 = std::make_shared<IdentifierNode>();
+    FunctionBodyFunc2_3->identifier = "c";
+    FunctionBodyFunc2->aNode = FunctionBodyFunc2_3;
+    FunctionBodyFunc2->condition = "=";
+    auto FunctionBodyFunc2_5 = std::make_shared<ConditionNode>();
+    auto FunctionBodyFunc2_5_1 = std::make_shared<IdentifierNode>();
+    FunctionBodyFunc2_5_1->identifier = "a";
+    FunctionBodyFunc2_5->aNode = FunctionBodyFunc2_5_1;
+    FunctionBodyFunc2_5->condition = "+";
+    auto FunctionBodyFunc2_5_2 = std::make_shared<IdentifierNode>();
+    FunctionBodyFunc2_5_2->identifier = "b";
+    FunctionBodyFunc2_5->bNode = FunctionBodyFunc2_5_2;
+    FunctionBodyFunc2->bNode = FunctionBodyFunc2_5;
+    FunctionOutput->body.push_back(FunctionBodyFunc2);
+
+    auto FunctionBodyFunc3 = std::make_shared<ReturnNode>();
+    FunctionBodyFunc3->identifier = "c";
+    FunctionOutput->body.push_back(FunctionBodyFunc3);
+
+    CodeGenerator codeGenerator;
+    std::string FTresault = codeGenerator.generateFunctionCode(FunctionOutput);
+    EXPECT_EQ(FTresault,"int calc(int a,int b){int c;c=a+b;return c;};");
+}
+
+TEST(CGTEST,FunctionCallTest){
+    auto FunctionCallOutput = std::make_shared<FunctionCallNode>();
+    FunctionCallOutput->identifier = "calc";
+    auto FunctionCallArg1 = std::make_shared<IntNode>();
+    FunctionCallArg1->integer = 12;
+    FunctionCallOutput->arguments.push_back(FunctionCallArg1);
+    auto FunctionCallArg2 = std::make_shared<IntNode>();
+    FunctionCallArg2->integer = 8;
+    FunctionCallOutput->arguments.push_back(FunctionCallArg2);
+    CodeGenerator codeGenerator;
+    std::string FCTresault = codeGenerator.generateFunctionCallCode(FunctionCallOutput);
+    EXPECT_EQ(FCTresault,"calc(12,8);");
 }
