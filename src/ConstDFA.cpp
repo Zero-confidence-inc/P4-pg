@@ -15,7 +15,15 @@ bool ConstDFA::processChar(char c) {
                 currentString += c;
                 currentState = State::Minus;
                 return true;
-            } else {
+            } else if (c == 't') {
+                currentString += c;
+                currentState = State::true_1;
+                return true;
+            } else if (c == 'f') {
+                currentString += c;
+                currentState = State::false_1;
+                return true;
+            } else{
                 return false;
             }
 
@@ -55,7 +63,73 @@ bool ConstDFA::processChar(char c) {
 
 
         case State::false_1: {
+            if (c == 'a'){
+                currentString += c;
+                currentState = State::false_2;
+                return true;
+            }else{
+                return false;
+            }
+        }
 
+        case State::false_2: {
+            if (c == 'l'){
+                currentString += c;
+                currentState = State::false_3;
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        case State::false_3: {
+            if (c == 's'){
+                currentString += c;
+                currentState = State::false_4;
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        case State::false_4: {
+            if (c == 'e'){
+                currentString += c;
+                currentState = State::false_5;
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        case State::true_1: {
+            if (c == 'r'){
+                currentString += c;
+                currentState = State::true_2;
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        case State::true_2: {
+            if (c == 'u'){
+                currentString += c;
+                currentState = State::true_3;
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        case State::true_3: {
+            if (c == 'e'){
+                currentString += c;
+                currentState = State::true_4;
+                return true;
+            }else{
+                return false;
+            }
         }
 
             

@@ -52,6 +52,7 @@ set(TEST_SOURCES
         Test/SemanticTest.cpp
         Test/IntregrationKowalski.cpp
         Test/CGIntegrationTest.cpp
+        Test/acceptanceTest.cpp
 )
 
 add_executable(P4_pg_tests ${TEST_SOURCES})

@@ -16,7 +16,7 @@ std::string CodeGenerator::generateIfCode(std::shared_ptr<IfNode>& node) {
     ifCodeOutput += "){";
     ifCodeOutput += generateBodyCode(node->body);
     ifCodeOutput += "}";
-    if (node->elseBody.size()>0){
+    if (node->elseBody.empty()){
         ifCodeOutput += "else{";
         ifCodeOutput += generateBodyCode(node->elseBody);
         ifCodeOutput += "}";
@@ -51,7 +51,7 @@ std::string CodeGenerator::generateStructCode(std::shared_ptr<StructNode>& node)
     leString += "struct ";
     leString += node->identifier;
     leString += "{";
-    for(int i = 0;i<node->body.size();i++){
+    for(int i = 0; i<node->body.size(); i++){
 
 
         auto convNode = std::dynamic_pointer_cast<DeclarationNode>(node->body[i]);
@@ -421,6 +421,8 @@ std::string CodeGenerator::generateConditionCode(std::shared_ptr<ConditionNode>&
 
         return leString;
     }
+    std::cout << "generateConditionCode returned empty" << std::endl;
+    return leString;
 }
 
 std::string CodeGenerator::generateCharCode(std::shared_ptr<CharNode>& node) {
@@ -475,5 +477,7 @@ std::string CodeGenerator::generateRandomCode(std::shared_ptr<RandomNode>& node)
                             "= false);";
         return randomCodeOutput;
     }
+    std::cout<< "randomCodeOutput returned empty string" <<std::endl;
+    return randomCodeOutput;
 }
 
