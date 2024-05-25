@@ -14,21 +14,20 @@ protected:
         // Create the input source code file
         std::ofstream inputFile("input.txt");
         inputFile << R"(
-        bool cryptoMine(bool hard, std::string vString) {
+        bool cryptoMine(bool hard, string vString) {
             while (hard) {
                 if (vString == "") {
                     for (float i = 5.6; i > 0; i--) {
-                        cryptoMine(false, vString);
+                        cryptoMine(false, vString );
                     }
                 }
-                hard = false; // To prevent infinite loop
+                hard = false;
             }
             return true;
         }
 
         int main() {
             bool result = cryptoMine(true, "");
-            std::cout << "Result: " << result << std::endl;
             return 0;
         }
         )";

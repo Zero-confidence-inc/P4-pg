@@ -20,7 +20,8 @@ private:
         Start,
         Content,
         ContentAlt,
-        End
+        End,
+        FAIL
     };
 
     State currentState;

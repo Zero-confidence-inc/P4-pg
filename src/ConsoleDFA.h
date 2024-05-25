@@ -22,7 +22,8 @@ private:
         Console_4,
         Console_5,
         Console_6,
-        Console_7
+        Console_7,
+        FAIL
         };
 
     State currentState;

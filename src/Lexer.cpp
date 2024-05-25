@@ -4,7 +4,7 @@ Lexer::Lexer() : errorOccurred(false), errorMessage("") {
     // Initialize all DFAs and store them in the vector
     dfas = {new LoopStatDFA(), new ControlStatDFA(), new IdentifierDFA(), new ConstDFA(),
             new TypeDFA(), new OperatorDFA(), new PunctuationDFA(), new StringDFA(),
-            new WhitespaceDFA(), new CommentsDFA()};
+            new WhitespaceDFA(), new CommentsDFA(), new JumpStatDFA(), new ConsoleDFA};
 }
 
 std::vector<Token> Lexer::tokenize(const std::string& input) {
@@ -17,25 +17,34 @@ std::vector<Token> Lexer::tokenize(const std::string& input) {
         std::vector<DFA*> tokenReadyDFAs;
         size_t index = tokenStartIndex;
 
+        std::cout << "Starting new token at index: " << tokenStartIndex << std::endl;
+
         while (index <= input.size()) {
             char currentChar = index < input.size() ? input[index] : '\0';
+            std::cout << "Processing char '" << currentChar << "' at index: " << index << std::endl;
 
             bool anyActive = false;
             for (DFA* dfa : dfas) {
                 if (dfa->processChar(currentChar)) {
                     anyActive = true;
+                    std::cout << "DFA " << typeid(*dfa).name() << " is active." << std::endl;
+
                 } else if (dfa->hasToken()) {
                     tokenReadyDFAs.push_back(dfa);
+                    std::cout << "DFA " << typeid(*dfa).name() << " has a token ready." << std::endl;
                 }
             }
 
             if (!anyActive && !tokenReadyDFAs.empty()) {
+                std::cout << "No active DFAs. Finalizing token." << std::endl;
+
                 Token longestToken;
                 size_t longestLength = 0;
 
                 for (DFA* dfa : tokenReadyDFAs) {
                     Token currentToken = dfa->finalizeToken();
-                    if (currentToken.value.length() > longestLength) {
+                    std::cout << "Finalized token: " << currentToken.value << std::endl;
+                    if (currentToken.value.length() > longestLength || currentToken.value.length() == longestLength && currentToken.type != TokenType::IDENTIFIER) {
                         longestLength = currentToken.value.length();
                         longestToken = currentToken;
                     }
@@ -43,6 +52,7 @@ std::vector<Token> Lexer::tokenize(const std::string& input) {
 
                 if (longestToken.type != TokenType::WHITESPACE && longestToken.type != TokenType::COMMENTS) {
                     tokens.push_back(longestToken);
+                    std::cout << "Added token: " << longestToken.value << std::endl;
                 }
 
                 tokenStartIndex += longestLength;
@@ -61,6 +71,7 @@ std::vector<Token> Lexer::tokenize(const std::string& input) {
 
         for (DFA* dfa : dfas) {
             dfa->reset();
+            std::cout << "Resetting DFA " << typeid(*dfa).name() << std::endl;
         }
     }
 

@@ -12,8 +12,10 @@ bool CommentsDFA::processChar(char c) {
                 currentString += c;
                 currentState = State::CommentStarted;
                 return true;
+            }else{
+                currentState = State::FAIL;
+                return false;
             }
-            else return false;
         case State::CommentStarted:
             if(c == '/'){
                 currentString += c;

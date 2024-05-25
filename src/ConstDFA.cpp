@@ -23,7 +23,8 @@ bool ConstDFA::processChar(char c) {
                 currentString += c;
                 currentState = State::false_1;
                 return true;
-            } else{
+            }else{
+                currentState = State::FAIL;
                 return false;
             }
 
@@ -95,8 +96,9 @@ bool ConstDFA::processChar(char c) {
         case State::false_4: {
             if (c == 'e'){
                 currentString += c;
+                currentToken = currentString;
                 currentState = State::false_5;
-                return true;
+                return false;
             }else{
                 return false;
             }
@@ -125,8 +127,9 @@ bool ConstDFA::processChar(char c) {
         case State::true_3: {
             if (c == 'e'){
                 currentString += c;
+                currentToken = currentString;
                 currentState = State::true_4;
-                return true;
+                return false;
             }else{
                 return false;
             }
@@ -138,7 +141,15 @@ bool ConstDFA::processChar(char c) {
 }
 
 Token ConstDFA::finalizeToken(){
-    TokenType type = isFloatingPoint ? TokenType::FLOAT_CONST : TokenType::CONST;
+    TokenType type;
+    if(isFloatingPoint){
+        type = TokenType::FLOAT_CONST;
+    }else if (currentToken == "true"||currentToken == "false"){
+        type = TokenType::BOOL;
+    }else {
+        type = TokenType::CONST;
+    }
+
     Token token(type, currentToken);
     reset();
     return token;

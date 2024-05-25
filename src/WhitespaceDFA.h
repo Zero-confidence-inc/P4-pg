@@ -16,7 +16,8 @@ public:
 private:
     enum class State{
         Start,
-        Whitespace
+        Whitespace,
+        FAIL
     };
 
     State currentState;

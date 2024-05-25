@@ -23,9 +23,10 @@ bool LoopStatDFA::processChar(char c) {
                 currentString += c;
                 currentState = State::do_1;
                 return true;
+            }else{
+                currentState = State::FAIL;
+                return false;
             }
-            else return false;
-
 
         case State::do_1:
             if (c == 'o'){
@@ -92,7 +93,7 @@ bool LoopStatDFA::processChar(char c) {
 }
 
 Token LoopStatDFA::finalizeToken(){
-    Token token(TokenType::CONTROL, currentToken);
+    Token token(TokenType::LOOP, currentToken);
     reset();
     return token;
 }

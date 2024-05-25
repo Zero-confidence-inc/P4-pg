@@ -38,7 +38,8 @@ private:
         return_3,
         return_4,
         return_5,
-        return_6
+        return_6,
+        FAIL
     };
 
     State currentState;

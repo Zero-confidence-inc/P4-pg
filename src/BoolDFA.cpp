@@ -14,9 +14,12 @@ bool BOOLDFA::processChar(char c) {
             {
                 currentString += c;
                 currentState = State::F;
+            }else{
+                currentState = State::FAIL;
+                return false;
             }
             
-            else return false;
+
         case State::T:
             if (c == 'r'){
                 currentString += c;

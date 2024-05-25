@@ -37,9 +37,10 @@ bool ControlStatDFA::processChar(char c) {
                 currentString += c;
                 currentState = State::default_1;
                 return true;
+            }else{
+                currentState = State::FAIL;
+                return false;
             }
-
-            else return false;
 
 
         case State::if_1:

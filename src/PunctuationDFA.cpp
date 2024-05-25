@@ -10,8 +10,10 @@ bool PunctuationDFA::processChar(char c) {
                 currentState = State::Punctuation_confirmed;
                 return false;
 
+            }else{
+                currentState = State::FAIL;
+                return false;
             }
-            else return false;
         default: return false;
     }
 }

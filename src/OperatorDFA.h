@@ -21,7 +21,8 @@ private:
         Plus_operator,
         Measuring_operator,
         And_operator,
-        Or_operator
+        Or_operator,
+        FAIL
     };
 
     State currentState;

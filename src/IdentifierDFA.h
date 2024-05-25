@@ -15,7 +15,8 @@ public:
 private:
     enum class State{
     Start,
-    Working
+    Working,
+    FAIL
     };
     
     State currentState;

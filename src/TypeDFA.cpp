@@ -51,10 +51,10 @@ bool TypeDFA::processChar(char c) {
                 currentString += c;
                 currentState = State::struct_1;
                 return true;
+            }else{
+                currentState = State::FAIL;
+                return false;
             }
-
-            else return false;
-
 
         case State::int_i:
             if (c == 'n'){
@@ -169,7 +169,7 @@ bool TypeDFA::processChar(char c) {
                 
                 currentString += c;
                 currentState = State::string_n;
-                return false;
+                return true;
             }
             else return false;
 
@@ -178,7 +178,7 @@ bool TypeDFA::processChar(char c) {
                 currentString += c;
                 currentToken = currentString;
                 currentState = State::string_g;
-                return true;
+                return false;
             }
             else return false;
         
@@ -214,7 +214,7 @@ bool TypeDFA::processChar(char c) {
                 currentString += c;
                 currentToken = currentString;
                 currentState = State::float_t;
-                return true;
+                return false;
             }
             else return false;
 
@@ -241,7 +241,7 @@ bool TypeDFA::processChar(char c) {
                 currentString += c;
                 currentToken = currentString;
                 currentState = State::bool_l;
-                return true;
+                return false;
             }
             else return false;
 

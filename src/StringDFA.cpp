@@ -14,8 +14,10 @@ bool StringDFA::processChar(char c) {
                 currentString += c;
                 currentState = State::ContentAlt;
                 return true;
+            }else{
+                currentState = State::FAIL;
+                return false;
             }
-            else return false;
         
         case State::Content:
             if (c == '"'){

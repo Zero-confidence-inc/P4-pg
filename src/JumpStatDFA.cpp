@@ -24,8 +24,10 @@ bool JumpStatDFA::processChar(char c) {
                 currentString += c;
                 currentState = State::return_1;
                 return true;
+            }else{
+                currentState = State::FAIL;
+                return false;
             }
-            else return false;
 
 
         case State::break_1:

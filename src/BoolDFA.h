@@ -25,6 +25,7 @@ private:
         FAL,
         FALS,
         FALSE,
+        FAIL
         
     };
     State currentState;

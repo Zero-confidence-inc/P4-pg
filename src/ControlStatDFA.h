@@ -46,7 +46,8 @@ private:
         function_5,
         function_6,
         function_7,
-        function_8
+        function_8,
+        FAIL
     };
 
     State currentState;

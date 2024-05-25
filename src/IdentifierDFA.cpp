@@ -10,8 +10,10 @@ bool IdentifierDFA::processChar(char c) {
     } else if (currentState == State::Working && (isalnum(c) || c == '_')) {
         currentToken += c;
         return true;
-    } else
+    }else{
+        currentState = State::FAIL;
         return false;
+    }
 
 
 }

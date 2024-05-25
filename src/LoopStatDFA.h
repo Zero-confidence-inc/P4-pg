@@ -28,7 +28,8 @@ private:
         while_4,
         while_5,
         do_1,
-        do_2
+        do_2,
+        FAIL
     };
 
     State currentState;

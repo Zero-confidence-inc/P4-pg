@@ -16,7 +16,8 @@ public:
 private: 
     enum class State{
         Start,
-        Punctuation_confirmed
+        Punctuation_confirmed,
+        FAIL
 
     };
 

@@ -53,7 +53,8 @@ private:
         struct_3,
         struct_4,
         struct_5,
-        struct_6
+        struct_6,
+        FAIL
     };
 
     State currentState;

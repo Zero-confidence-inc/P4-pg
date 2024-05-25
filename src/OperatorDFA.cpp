@@ -36,9 +36,11 @@ bool OperatorDFA::processChar(char c) {
                 currentState = State::Or_operator;
                 return true;
 
+            }else{
+                currentState = State::FAIL;
+                return false;
             }
-            return false;
-            
+
         case State::Operator:
             break;
 
@@ -46,17 +48,19 @@ bool OperatorDFA::processChar(char c) {
             if (c == '-' || c == '='){
                 currentToken += c;
                 currentState = State::Operator;
-                
+                return true;
+
             }
             return false;
-            
-        
+
+
         // all states below here checks for double operators(also allows for their single counterpart to be used)
         case State::Plus_operator:
             if (c == '+' || c == '='){
                 currentToken += c;
                 currentState = State::Operator;
-                
+                return true;
+
             }
             return false;
 
@@ -64,7 +68,8 @@ bool OperatorDFA::processChar(char c) {
             if (c == '='){
                 currentToken += c;
                 currentState = State::Operator;
-                
+                return true;
+
             }
             return false;
 
@@ -72,7 +77,8 @@ bool OperatorDFA::processChar(char c) {
             if (c == '&'){
                 currentToken += c;
                 currentState = State::Operator;
-                
+                return true;
+
             }
             return false;
 
@@ -80,7 +86,8 @@ bool OperatorDFA::processChar(char c) {
             if (c == '|'){
                 currentToken += c;
                 currentState = State::Operator;
-                
+                return true;
+
             }
             return false;
     }
@@ -89,7 +96,7 @@ bool OperatorDFA::processChar(char c) {
 Token OperatorDFA::finalizeToken() {
     Token token(TokenType::OPERATOR, currentToken);
     reset(); // Prepare for the next token
-    return token;  
+    return token;
 }
 
 bool OperatorDFA::hasToken() const {

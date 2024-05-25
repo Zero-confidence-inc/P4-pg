@@ -16,6 +16,8 @@
 #include "ControlStatDFA.h"
 #include "LoopStatDFA.h"
 #include "CommentsDFA.h"
+#include "JumpStatDFA.h"
+#include "ConsoleDFA.h"
 #include <iostream>
 
 class Lexer {

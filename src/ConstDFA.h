@@ -27,7 +27,8 @@ private:
         false_2,
         false_3,
         false_4,
-        false_5
+        false_5,
+        FAIL
     };
     bool isFloatingPoint;
     State currentState;

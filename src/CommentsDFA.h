@@ -25,7 +25,8 @@ private:
         SingleLineEnd,
         MultiLineContent,
         MultiLineEnd1,
-        MultiLineEnd2
+        MultiLineEnd2,
+        FAIL
 
     };
 

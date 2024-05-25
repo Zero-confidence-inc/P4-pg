@@ -9,8 +9,10 @@ bool ConsoleDFA::processChar(char c) {
                 currentString += c;
                 currentState = State::Console_1;
                 return true;
+            }else{
+                currentState = State::FAIL;
+                return false;
             }
-            else return false;
         case State::Console_1:
             if (c == 'o'){
                 currentString += c;
