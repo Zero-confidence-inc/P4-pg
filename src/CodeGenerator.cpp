@@ -16,15 +16,14 @@ std::string CodeGenerator::generateIfCode(std::shared_ptr<IfNode>& node) {
     ifCodeOutput += "){";
     ifCodeOutput += generateBodyCode(node->body);
     ifCodeOutput += "}";
-    if (node->elseBody.empty()){
+
+    if (!node->elseBody.empty()) {
         ifCodeOutput += "else{";
         ifCodeOutput += generateBodyCode(node->elseBody);
         ifCodeOutput += "}";
-        return ifCodeOutput;
     }
-    else {
-        return ifCodeOutput;
-    }
+
+    return ifCodeOutput;
 }
 
 std::string CodeGenerator::generateWhileCode(std::shared_ptr<WhileNode>& node) {
