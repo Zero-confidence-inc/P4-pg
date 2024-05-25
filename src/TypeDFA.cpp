@@ -214,7 +214,7 @@ bool TypeDFA::processChar(char c) {
                 currentString += c;
                 currentToken = currentString;
                 currentState = State::float_t;
-                return false;
+                return true;
             }
             else return false;
 

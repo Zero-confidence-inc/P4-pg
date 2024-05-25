@@ -275,7 +275,7 @@ TEST(ParserTest, ParseJump) {
 TEST(ParserTest, ParseWhileLoop) {
     std::vector<Token> tokens = {
             createToken(TokenType::START, "START"),
-            createToken(TokenType::CONTROL, "while"),
+            createToken(TokenType::LOOP, "while"),
             createToken(TokenType::PUNCTUATION, "("),
             createToken(TokenType::IDENTIFIER, "x"),
             createToken(TokenType::OPERATOR, "<"),
@@ -319,7 +319,9 @@ TEST(ParserTest, ParseReturn) {
     std::vector<Token> tokens = {
             createToken(TokenType::START, "START"),
             createToken(TokenType::JUMP, "return"),
-            createToken(TokenType::IDENTIFIER, "x")
+            createToken(TokenType::IDENTIFIER, "x"),
+            createToken(TokenType::PUNCTUATION, ";")
+
     };
     Parser parser(tokens);
     auto node = parser.parseReturn();
@@ -359,7 +361,8 @@ TEST(ParserTest, ParseFunctionCall) {
             createToken(TokenType::IDENTIFIER, "foo"),
             createToken(TokenType::PUNCTUATION, "("),
             createToken(TokenType::IDENTIFIER, "x"),
-            createToken(TokenType::PUNCTUATION, ")")
+            createToken(TokenType::PUNCTUATION, ")"),
+            createToken(TokenType::PUNCTUATION, ";")
     };
     Parser parser(tokens);
     auto node = parser.parseFunctionCall();

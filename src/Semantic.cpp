@@ -82,60 +82,79 @@ void Kowalski::analyseNode(const std::shared_ptr<ASTNode>& node){
     switch(node->getType()){
         case nodeType::functionNode:
             kowalskiFunction(std::static_pointer_cast<FunctionNode>(node));
+            std::cout<<"functionNode"<<std::endl;
             break;
         case nodeType::functionCallNode:
             kowalskiFunctionCall(std::static_pointer_cast<FunctionCallNode>(node));
+            std::cout<<"functionCallNode"<<std::endl;
             break;
         case nodeType::randomNode:
             kowalskiRandom(std::static_pointer_cast<RandomNode>(node));
+            std::cout<<"randomNode"<<std::endl;
             break;
         case nodeType::declarationNode:
             kowalskiDeclaration(std::static_pointer_cast<DeclarationNode>(node));
+            std::cout<<"declaration"<<std::endl;
             break;
         case nodeType::charNode:
             kowalskiChar(std::static_pointer_cast<CharNode>(node));
+            std::cout<<"charNode"<<std::endl;
             break;
         case nodeType::ifNode:
             kowalskiIf(std::static_pointer_cast<IfNode>(node));
+            std::cout<<"ifNode"<<std::endl;
             break;
         case nodeType::floatNode:
             kowalskiFloat(std::static_pointer_cast<FloatNode>(node));
+            std::cout<<"floatNode"<<std::endl;
             break;
         case nodeType::stringNode:
             kowalskiString(std::static_pointer_cast<StringNode>(node));
+            std::cout<<"stringNode"<<std::endl;
             break;
         case nodeType::whileNode:
             kowalskiWhile(std::static_pointer_cast<WhileNode>(node));
+            std::cout<<"whileNode"<<std::endl;
             break;
         case nodeType::forLoopNode:
             kowalskiFor(std::static_pointer_cast<ForLoopNode>(node));
+            std::cout<<"forNode"<<std::endl;
             break;
         case nodeType::switchNode:
             kowalskiSwitch(std::static_pointer_cast<SwitchNode>(node));
+            std::cout<<"switchNode"<<std::endl;
             break;
         case nodeType::caseNode:
             kowalskiCase(std::static_pointer_cast<CaseNode>(node));
+            std::cout<<"caseNode"<<std::endl;
             break;
         case nodeType::conditionNode:
             kowalskiKondi(std::static_pointer_cast<ConditionNode>(node));
+            std::cout<<"conditionNode"<<std::endl;
             break;
         case nodeType::intNode:
             kowalskiInt(std::static_pointer_cast<IntNode>(node));
+            std::cout<<"intNode"<<std::endl;
             break;
         case nodeType::consoleNode:
             kowalskiConsole(std::static_pointer_cast<ConsoleNode>(node));
+            std::cout<<"consoleNode"<<std::endl;
             break;
         case nodeType::arrayNode:
             kowalskiArray(std::static_pointer_cast<ArrayNode>(node));
+            std::cout<<"arrayNode"<<std::endl;
             break;
         case nodeType::returnNode:
             kowalskiReturn(std::static_pointer_cast<ReturnNode>(node));
+            std::cout<<"returnNode"<<std::endl;
             break;
         case nodeType::valueNode:
             kowalskiValue(std::static_pointer_cast<ValueNode>(node));
+            std::cout<<"valueNode"<<std::endl;
             break;
         case nodeType::boolNode:
             kowalskiBool(std::static_pointer_cast<BoolNode>(node));
+            std::cout<<"boolNode"<<std::endl;
             break;
         default:
 
@@ -146,67 +165,81 @@ void Kowalski::analyseNode(const std::shared_ptr<ASTNode>& node){
 // todo: make sure the first 4 methods are using in methods going forward, approiatly :3
 // it goes through all nodes, some nodes needs to do nothing but still need a case so we don't default
 
-void Kowalski::kowalskiFunction(const std::shared_ptr<FunctionNode>& node){
+void Kowalski::kowalskiFunction(const std::shared_ptr<FunctionNode>& node) {
     std::string name = node->identifier;
     std::string type = node->type;
     std::vector<std::string> functionArgumentsString;
-    std::string tempType;
-    symbolTable.declareVariable(name,type);
-    std::cout<<std::to_string(node->arguments[0]->getType())<<std::endl;
-    for (int i = 0; i < node->arguments.size();i++){
-        functionArgumentsString.push_back(node->arguments[i]->type);
+
+    // Register function in symbol table
+    symbolTable.declareVariable(name, type);
+
+    // Register function arguments
+    for (const auto& arg : node->arguments) {
+        functionArgumentsString.push_back(arg->type);
     }
-    functionTable.declareFunction(name,functionArgumentsString);
+    functionTable.declareFunction(name, functionArgumentsString);
+
+    // Enter new scope for function body
     symbolTable.enterScope();
-    // checks args
-    for (int i = 0; i < node->arguments.size();i++){
-        analyseNode(node->arguments[i]);
+
+    // Process function arguments within the new scope
+    for (const auto& arg : node->arguments) {
+        analyseNode(arg);
     }
-    
-    //function body
-    for (int i = 0; i <node->body.size();i++){
-        analyseNode(node->body[i]);
+
+    // Process function body
+    for (const auto& stmt : node->body) {
+        analyseNode(stmt);
     }
+
+    // Exit scope after processing the function body
+    symbolTable.exitScope();
 }
-void Kowalski::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode> &node){
+void Kowalski::kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode>& node) {
     std::string name = node->identifier;
     std::vector<std::string> currentArgument;
     std::vector<std::string> expectedArgument;
-    for (int i = 0; i < node->arguments.size();i++){
-        switch (getType2(node->arguments[i])){
+
+    // Determine the types of current arguments
+    for (const auto& arg : node->arguments) {
+        switch (getType2(arg)) {
             case intNode:
-            currentArgument.push_back("int");
-            break;
-        case floatNode:
-            currentArgument.push_back("float");
-            break;
-        case usIntNode:
-            currentArgument.push_back("usint");
-            break;
-        case stringNode:
-            currentArgument.push_back("string");
-            break;
-        case charNode:
-            currentArgument.push_back("char");
-            break;
-        case boolNode:
-            currentArgument.push_back("bool");
-            break;
-        default:
-            break;  
+                currentArgument.push_back("int");
+                break;
+            case floatNode:
+                currentArgument.push_back("float");
+                break;
+            case usIntNode:
+                currentArgument.push_back("usint");
+                break;
+            case stringNode:
+                currentArgument.push_back("string");
+                break;
+            case charNode:
+                currentArgument.push_back("char");
+                break;
+            case boolNode:
+                currentArgument.push_back("bool");
+                break;
+            default:
+                throw std::runtime_error("Unknown argument type in function call");
         }
     }
-    expectedArgument = functionTable.lookUpFunction(node->identifier);
-    if(expectedArgument.size() == currentArgument.size()){
-        for (int i = 0; i < node->arguments.size();i++){
-            if (expectedArgument[i]!=currentArgument[i]){
-                throw std::runtime_error("Arguments do not match");
-            }
-        }
+
+    // Look up the expected function arguments
+    expectedArgument = functionTable.lookUpFunction(name);
+
+    // Check if the number of arguments match
+    if (expectedArgument.size() != currentArgument.size()) {
+        std::cout << "arg 1:" << std::to_string(expectedArgument.size()) << " and arg 2:" << std::to_string(currentArgument.size()) << std::endl;
+        throw std::runtime_error("too many/too few arguments for function called");
     }
-    else{
-        std::cout<<"arg 1:" << std::to_string(expectedArgument.size()) << "and arg 2:" <<std::to_string(currentArgument.size())<<std::endl;
-        throw std::runtime_error("too many/too few arguemnts for function called");
+
+    // Check if each argument type matches
+    for (size_t i = 0; i < expectedArgument.size(); ++i) {
+        if (expectedArgument[i] != currentArgument[i]) {
+            throw std::runtime_error("Arguments do not match");
+        }
     }
 }
 void Kowalski::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node){

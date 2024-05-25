@@ -57,12 +57,13 @@ TEST_F(AcceptanceTest, EndToEndTest) {
     // Step 3: Parse the tokens
     Parser parser(tokens);
     auto ast = parser.parseProgram();
+    std::cout<< "parser parsed"<< std::endl;
     ASSERT_FALSE(ast.empty()) << "Parser error: AST is empty";
 
     // Step 4: Semantic analysis
     Kowalski kowalski;
     ASSERT_NO_THROW(kowalski.Analyse(ast)) << "Semantic analysis error";
-
+    std::cout<< " semantics done" <<std::endl;
     // Step 5: Generate code
     CodeGenerator codeGenerator;
     std::string generatedCode = codeGenerator.generateBodyCode(ast);

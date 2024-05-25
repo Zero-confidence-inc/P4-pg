@@ -48,7 +48,7 @@ bool OperatorDFA::processChar(char c) {
             if (c == '-' || c == '='){
                 currentToken += c;
                 currentState = State::Operator;
-                return true;
+                return false;
 
             }
             return false;
@@ -59,7 +59,7 @@ bool OperatorDFA::processChar(char c) {
             if (c == '+' || c == '='){
                 currentToken += c;
                 currentState = State::Operator;
-                return true;
+                return false;
 
             }
             return false;
@@ -68,7 +68,7 @@ bool OperatorDFA::processChar(char c) {
             if (c == '='){
                 currentToken += c;
                 currentState = State::Operator;
-                return true;
+                return false;
 
             }
             return false;
@@ -77,7 +77,7 @@ bool OperatorDFA::processChar(char c) {
             if (c == '&'){
                 currentToken += c;
                 currentState = State::Operator;
-                return true;
+                return false;
 
             }
             return false;
@@ -86,7 +86,7 @@ bool OperatorDFA::processChar(char c) {
             if (c == '|'){
                 currentToken += c;
                 currentState = State::Operator;
-                return true;
+                return false;
 
             }
             return false;
