@@ -18,7 +18,7 @@ int main() {
     kowalski.Analyse(ast);
 
     CodeGenerator codeGenerator;
-    std::string code = codeGenerator.generateBodyCode(ast);
+    std::string code = codeGenerator.generateCode(ast);
 
 
     return 0;

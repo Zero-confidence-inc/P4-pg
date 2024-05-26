@@ -4,7 +4,11 @@
 CodeGenerator::CodeGenerator() {}
 
 std::string CodeGenerator::generateCode(std::vector<std::shared_ptr<ASTNode>>& root) {
-   std::string code = generateBodyCode(root);
+    std::string code;
+    code += "#include <string>";
+    code += "#include <iostream>";
+    code += "#include <stdlib>";
+    code += generateBodyCode(root);
     return code;
 }
 
