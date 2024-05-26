@@ -83,13 +83,6 @@ TEST_F(AcceptanceTest, EndToEndTest) {
     result = system(".\\output_executable.exe > result.txt");
     ASSERT_EQ(result, 0) << "Execution failed";
 
-    // Step 8: Check the output
-    std::ifstream resultFile("result.txt");
-    std::stringstream resultBuffer;
-    resultBuffer << resultFile.rdbuf();
-    std::string output = resultBuffer.str();
-    //EXPECT_EQ(output, "Result: 1\n") << "Unexpected output: " << output;
-
     // Clean up the result file
     remove("result.txt");
 }
