@@ -261,6 +261,7 @@ std::shared_ptr<ASTNode> Parser::parseValues() {
             auto valueFunctionCall = parseFunctionCall();
             std::cout<<"Parsed functionCallNode"<<std::endl;
             return valueFunctionCall;
+
         }else{
             auto identifier = std::make_shared<IdentifierNode>();
             identifier->identifier = tokens[++pos].value;
@@ -298,6 +299,9 @@ std::shared_ptr<ASTNode> Parser::parseFunctionCall() {
                 functionCallNode->arguments.push_back(argument);
             }else if (lookAhead(TokenType::BOOL)){
                 auto argument = parseBool();
+                functionCallNode->arguments.push_back(argument);
+            }else if (lookAhead(TokenType::STRING)){
+                auto argument = parseString();
                 functionCallNode->arguments.push_back(argument);
             }
         }
@@ -823,8 +827,8 @@ std::shared_ptr<ASTNode> Parser::parseConsole() {
     if (lookAhead(TokenType::CONSOLE)) {
         pos++;
         auto consoleNode = std::make_shared<ConsoleNode>();
-        pos++;
-        while (tokens[pos].value != ")") {
+
+        while (tokens[++pos].value != ")") {
             if (lookAhead(TokenType::CONST)) {
                 consoleNode->message.push_back(parseInt());
             } else if (lookAhead(TokenType::FLOAT_CONST)) {
@@ -838,7 +842,6 @@ std::shared_ptr<ASTNode> Parser::parseConsole() {
                     consoleNode->message.push_back(parseIdentifier());
                 }
             }
-            pos++;
         }
         std::cout<<"Parsed consoleNode"<<std::endl;
         return consoleNode;

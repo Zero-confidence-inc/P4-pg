@@ -48,7 +48,6 @@ bool ConsoleDFA::processChar(char c) {
         case State::Console_5:
             if (c == 'l'){
                 currentString += c;
-                currentToken = currentString;
                 currentState = State::Console_6;
                 return true;
             }
