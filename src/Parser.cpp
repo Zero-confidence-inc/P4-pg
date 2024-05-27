@@ -367,7 +367,7 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseLoopBody() {
             } else if(lookAhead(TokenType::LOOP)){
                 if(tokens[pos+1].value == "for"){
                     auto forStatement = parseForLoop();
-                    std::cout<<"pos/token " << pos << "/" << tokens[pos].value<<std::endl;
+
                     contents.push_back(forStatement);
                 }else if(tokens[pos+1].value == "while"){
                     auto whileStatement = parseWhileLoop();

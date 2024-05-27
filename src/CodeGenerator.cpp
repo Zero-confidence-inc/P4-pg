@@ -433,13 +433,9 @@ std::string CodeGenerator::generateCharCode(std::shared_ptr<CharNode>& node) {
 
 std::string CodeGenerator::generateStringCode(std::shared_ptr<StringNode>& node) {
     std::cout << "Generating string code." << std::endl;
-    std::cout << "String content: '" << node->StringOfChars << "'" << std::endl;
-    std::cout << "String length: " << node->StringOfChars.length() << std::endl;
     if (node->StringOfChars == "\"\"") {
-        std::cout << "Generating code for empty string represented by double quotes." << std::endl;
         return "\"\"";
     }
-    std::cout << "Generating non-empty string code: " << node->StringOfChars << std::endl;
     return '"' + node->StringOfChars + '"';
 }
 
