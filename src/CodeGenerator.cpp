@@ -433,10 +433,10 @@ std::string CodeGenerator::generateCharCode(std::shared_ptr<CharNode>& node) {
 
 std::string CodeGenerator::generateStringCode(std::shared_ptr<StringNode>& node) {
     std::cout << "Generating string code." << std::endl;
-    if (node->StringOfChars == "\"\"") {
-        return "\"\"";
-    }
-    return '"' + node->StringOfChars + '"';
+    //if (node->StringOfChars == "\"\"") {
+      //  return "\"\"";
+    //}
+    return node->StringOfChars; //no need to add extra " cuz its already
 }
 
 std::string CodeGenerator::generateIdentifierCode(std::shared_ptr<IdentifierNode>& node) {

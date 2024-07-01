@@ -156,8 +156,11 @@ void Kowalski::analyseNode(const std::shared_ptr<ASTNode>& node){
             kowalskiBool(std::static_pointer_cast<BoolNode>(node));
             std::cout<<"boolNode"<<std::endl;
             break;
+        case nodeType::identifierNode:
+            //used for console to just make it work, needs to be added proper scope checking for this
+            std::cout<<"identiferNode"<<std::endl;
+            break;
         default:
-
             throw std::runtime_error("unknown node type");
     }
 }

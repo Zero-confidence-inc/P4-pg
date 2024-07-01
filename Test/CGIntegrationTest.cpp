@@ -65,8 +65,8 @@ TEST(CGIntegrationTest,IntegrationTest){
     CodeGenerator codeGenerator;
     std::string CGITresault = codeGenerator.generateBodyCode(root);
     std::string CGITexpect = "bool cryptoMine(bool hard,std::string vString){while(hard){if(vString==";
-    CGITexpect += '"';
-    CGITexpect += '"';
+  //  CGITexpect += '"';
+  //  CGITexpect += '"';
     CGITexpect += "){for(float i=5.600000;i;i++){cryptoMine(0,vString);}}}};";
     EXPECT_EQ(CGITresault,CGITexpect);
 }

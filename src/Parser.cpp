@@ -162,7 +162,9 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
             } else if (lookAhead(TokenType::JUMP) && tokens[pos+1].value == "return"){
                 auto returns = parseReturn();
                 contents.push_back(returns);
-
+            } else if (lookAhead(TokenType::CONSOLE)){
+                auto returns = parseConsole();
+                contents.push_back(returns);
             }
         }
     std::cout<<"Parsed functionBody"<<std::endl;
@@ -838,11 +840,12 @@ std::shared_ptr<ASTNode> Parser::parseConsole() {
             } else if (lookAhead(TokenType::IDENTIFIER)) {
                 if (tokens[pos+2].value == "("){
                     consoleNode->message.push_back(parseFunctionCall());
-                } else {
+                } else
+                {
                     consoleNode->message.push_back(parseIdentifier());
                 }
             }
-        }
+        }pos++;
         std::cout<<"Parsed consoleNode"<<std::endl;
         return consoleNode;
     }

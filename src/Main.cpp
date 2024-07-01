@@ -43,9 +43,11 @@ int main() {
         return 1;
     }
     outputFile << code;
-    outputFile.close();
 
-    // Compile the generated file using g++
+    outputFile.close();
+    std::cout<<code<<std::endl;
+
+                                // Compile the generated file using g++
     int result = system("g++ output.cpp -o output_executable");
     if (result != 0) {
         std::cerr << "Compilation failed!" << std::endl;

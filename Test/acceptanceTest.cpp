@@ -27,7 +27,8 @@ protected:
         }
 
         int main() {
-            bool result = cryptoMine(true, "");
+            bool result = cryptoMine(true, "c");
+            console(result);
             return 0;
         }
         )";

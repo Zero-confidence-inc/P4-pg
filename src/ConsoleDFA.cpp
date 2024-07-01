@@ -1,4 +1,5 @@
 #include "ConsoleDFA.h"
+#include <iostream>
 
 ConsoleDFA::ConsoleDFA() : currentState(State::Start) {}
 
@@ -54,6 +55,7 @@ bool ConsoleDFA::processChar(char c) {
             else return false;
         case State::Console_6:
             if (c == 'e'){
+                std::cout<<"penis"<<std::endl;
                 currentString += c;
                 currentToken = currentString;
                 currentState = State::Console_7;

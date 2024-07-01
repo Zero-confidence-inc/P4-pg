@@ -72,9 +72,9 @@ TEST(CGTEST,ValueStringTest){
     std::string STresault = codeGenerator.generateValueCode(VTN_basicValueString);
     std::string STexpect;
     STexpect += "std::string leString=";
-    STexpect += '"';
+   // STexpect += '"';
     STexpect += "HELLO FRIEND";
-    STexpect += '"';
+   // STexpect += '"';
     STexpect += ";";
     EXPECT_EQ(STresault,STexpect);
 }
@@ -147,9 +147,9 @@ TEST(CGTEST,ConsoleTest){
     CodeGenerator codeGenerator;
     std::string ConsoleResault = codeGenerator.generateConsoleCode(ConsoleTest);
     std:: string ConsoleExpect = "std::cout <<";
-    ConsoleExpect += '"';
+   // ConsoleExpect += '"';
     ConsoleExpect += "x is an int, it is:";
-    ConsoleExpect += '"';
+   // ConsoleExpect += '"';
     ConsoleExpect += "+";
     ConsoleExpect += std::to_string(ConsoleExpectInt);
     ConsoleExpect += "<< std::endl;";
