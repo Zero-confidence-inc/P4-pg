@@ -71,7 +71,7 @@ std::shared_ptr<ASTNode> Parser::parseDeclaration() {
             structNode->identifier = identifier;
 
             structNode->body.push_back(parseStruct());
-            
+
             std::cout<<"Parsed structNode"<<std::endl;
             return structNode;
         } else if (tokens[pos + 1].type == TokenType::PUNCTUATION && tokens[pos + 1].value[0] == '[') {
@@ -273,10 +273,6 @@ std::shared_ptr<ASTNode> Parser::parseValues() {
             pos--;
             return identifier;
         }
-        auto valueIdentifier = std::make_shared<IdentifierNode>();
-        valueIdentifier->identifier = tokens[pos].value;
-        std::cout<<"Parsed identifierNode"<<std::endl;
-        return valueIdentifier;
     } else {
         std::cout << "parseRValues returning nullptr" << std::endl;
         return nullptr;}

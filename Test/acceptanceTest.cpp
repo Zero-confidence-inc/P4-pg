@@ -25,11 +25,11 @@ protected:
             }
             return true;
         }
-
         int main() {
             bool result = cryptoMine(true, "c");
             cout(result);
-
+            int x = 0;
+            cin(x);
             return 0;
         }
         )";

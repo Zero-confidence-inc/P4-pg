@@ -38,6 +38,13 @@ add_library(P4_pg_lib ${SOURCES})
 add_executable(P4_pg src/main.cpp)
 target_link_libraries(P4_pg P4_pg_lib)
 
+# Ensure we are building a console application
+if (MINGW)
+    target_link_options(P4_pg PRIVATE -mconsole)
+else()
+    target_link_options(P4_pg PRIVATE /SUBSYSTEM:CONSOLE)
+endif()
+
 # Define your test executable
 set(TEST_SOURCES
         Test/CGunitTests.cpp
