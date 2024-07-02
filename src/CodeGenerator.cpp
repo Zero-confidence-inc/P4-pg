@@ -256,7 +256,12 @@ std::string CodeGenerator::generateDeclartionCode(std::shared_ptr<DeclarationNod
 
 std::string CodeGenerator::generateConsoleCode(std::shared_ptr<ConsoleNode>& node){
     std::cout << "Generating console output code." << std::endl;
-    std::string CodeInString = "std::cout <<";
+    std::string CodeInString;
+    if(node->Cin ){
+    CodeInString =+ "std::cin >>";
+    }else{
+    CodeInString =+ "std::cout <<";
+    }
     for(int i = 0; i < node->message.size(); i++) {
         if (i > 0){ CodeInString += "+"; }
         if (node->message[i]->getType() == nodeType::intNode){
@@ -282,7 +287,13 @@ std::string CodeGenerator::generateConsoleCode(std::shared_ptr<ConsoleNode>& nod
             CodeInString += generateBoolCode(convertedNode);
         }
     }
-    CodeInString += "<< std::endl;";
+    if(node->Cin ){
+        CodeInString += ";";
+        //CodeInString += ">> std::endl;";
+    }else{
+        CodeInString += "<< std::endl;";
+    }
+
     return CodeInString;
 }
 

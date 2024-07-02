@@ -8,57 +8,46 @@ bool ConsoleDFA::processChar(char c) {
         case State::Start:
             if (c == 'c'){
                 currentString += c;
-                currentState = State::Console_1;
+                currentState = State::C_1;
                 return true;
             }else{
                 currentState = State::FAIL;
                 return false;
             }
-        case State::Console_1:
+        case State::C_1:
             if (c == 'o'){
                 currentString += c;
-                currentState = State::Console_2;
+                currentState = State::Cout_1;
+                return true;
+            }
+            else if (c == 'i'){
+                currentString += c;
+                currentState = State::Cin_1;
+                return true;
+            } else return false;
+
+        case State::Cout_1:
+            if (c == 'u'){
+                currentString+= c;
+                currentState = State::Cout_2;
                 return true;
             }
             else return false;
 
-        case State::Console_2:
+        case State::Cout_2:
+            if (c == 't'){
+                currentString+= c;
+                currentToken=currentString;
+                currentState = State::Cout_3;
+                return false;
+            }
+            else return false;
+
+        case State::Cin_1:
             if (c == 'n'){
                 currentString+= c;
-                currentState = State::Console_3;
-                return true;
-            }
-            else return false;
-
-        case State::Console_3:
-            if (c == 's'){
-                currentString+= c;
-                currentState = State::Console_4;
-                return true;
-            }
-            else return false;
-
-        case State::Console_4:
-            if (c == 'o'){
-                currentString+= c;
-                currentState = State::Console_5;
-                return true;
-            }
-            else return false;
-
-        case State::Console_5:
-            if (c == 'l'){
-                currentString += c;
-                currentState = State::Console_6;
-                return true;
-            }
-            else return false;
-        case State::Console_6:
-            if (c == 'e'){
-                std::cout<<"penis"<<std::endl;
-                currentString += c;
                 currentToken = currentString;
-                currentState = State::Console_7;
+                currentState = State::Cin_2;
                 return false;
             }
             else return false;

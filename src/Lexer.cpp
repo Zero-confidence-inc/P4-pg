@@ -54,7 +54,8 @@ std::vector<Token> Lexer::tokenize(const std::string& input) {
                     tokens.push_back(longestToken);
                     std::cout << "Added token: " << longestToken.value << std::endl;
                 }
-
+                if (longestToken.type == TokenType::CONSOLE)
+                {std::cout<<"its a consoleToken"<<std::endl;}
                 tokenStartIndex += longestLength;
                 break;
             }

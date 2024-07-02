@@ -28,7 +28,8 @@ protected:
 
         int main() {
             bool result = cryptoMine(true, "c");
-            console(result);
+            cout(result);
+
             return 0;
         }
         )";
@@ -82,6 +83,7 @@ TEST_F(AcceptanceTest, EndToEndTest) {
 
     // Step 7: Run the compiled executable
     result = system(".\\output_executable.exe > result.txt");
+
     ASSERT_EQ(result, 0) << "Execution failed";
 
     // Clean up the result file

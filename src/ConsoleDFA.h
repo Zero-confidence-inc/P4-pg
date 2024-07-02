@@ -16,19 +16,18 @@ public:
 private:
     enum class State{
         Start,
-        Console_1,
-        Console_2,
-        Console_3,
-        Console_4,
-        Console_5,
-        Console_6,
-        Console_7,
+        C_1,
+        Cin_1,
+        Cin_2,
+        Cout_1,
+        Cout_2,
+        Cout_3,
         FAIL
-        };
+    };
 
     State currentState;
     std::string currentString;
     std::string currentToken;
 };
 
-#endif //Console_DFA_H
+#endif //Console_DFA_h

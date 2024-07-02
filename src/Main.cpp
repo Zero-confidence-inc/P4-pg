@@ -10,18 +10,21 @@
 
 int main() {
 
-    std::ifstream inputFile("input.txt");
-    if (!inputFile) {
-        std::cerr << "Error opening file!" << std::endl;
-        return 1;
-    }
+    std::ifstream inputFile;
+    inputFile.open("input.txt");
+    std::string data;
+    inputFile>>data;
+    //if (!inputFile) {
+      //  std::cerr << "Error opening file!" << std::endl;
+        //return 1;
+    //}
 
     std::stringstream buffer;
     buffer << inputFile.rdbuf();
     std::string input = buffer.str();
 
     Lexer lexer;
-    auto tokens = lexer.tokenize(input);
+    auto tokens = lexer.tokenize(data);
 
     Parser parser(tokens);// this would be stupid if we ever planed on running it more than once per main call
     std::vector<std::shared_ptr<ASTNode>> ast = parser.parseProgram();
@@ -46,15 +49,15 @@ int main() {
 
     outputFile.close();
     std::cout<<code<<std::endl;
-
+    //system("cd \"C:\\MinGW\\bin\"");
                                 // Compile the generated file using g++
-    int result = system("g++ output.cpp -o output_executable");
+    int result = system("g++ -o output_executable.exe output.cpp");
     if (result != 0) {
         std::cerr << "Compilation failed!" << std::endl;
         return 1;
     }
 
     std::cout << "Compilation successful. Executable created: output_executable" << std::endl;
-
+    inputFile.close();
     return 0;
 }

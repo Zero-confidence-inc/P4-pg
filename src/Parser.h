@@ -61,6 +61,7 @@ struct ValueNode : DeclarationNode {
 
 struct ConsoleNode : ASTNode {
     nodeType getType() const override { return nodeType::consoleNode; }
+    bool Cin;
     std::vector<std::shared_ptr<ASTNode>> message;
 
 };

@@ -9,7 +9,8 @@
 // Test basic tokenization
 TEST(LexerTest, BasicTokenization) {
 Lexer lexer;
-std::string input = "int? abc = 5;"; // weird feature single character identifiers are now illegal and will be ignored
+//std::string input = "int? abc = 5;"; // weird feature single character identifiers are now illegal and will be ignored
+std::string input = "cin(5);";
 std::cout << "Input: " << input << std::endl;
 
 
@@ -24,10 +25,10 @@ auto tokens = lexer.tokenize(input);
     }
 //ASSERT_EQ(tokens.size(), 5);
 EXPECT_EQ(tokens[0].type, TokenType::START);
-EXPECT_EQ(tokens[1].type, TokenType::TYPE);
-EXPECT_EQ(tokens[2].type, TokenType::IDENTIFIER);
-EXPECT_EQ(tokens[3].type, TokenType::OPERATOR);
-EXPECT_EQ(tokens[4].type, TokenType::CONST);
+EXPECT_EQ(tokens[1].type, TokenType::CONSOLE);
+EXPECT_EQ(tokens[2].type, TokenType::PUNCTUATION);
+EXPECT_EQ(tokens[3].type, TokenType::CONST);
+EXPECT_EQ(tokens[4].type, TokenType::PUNCTUATION);
 EXPECT_EQ(tokens[5].type, TokenType::PUNCTUATION);
 }
 

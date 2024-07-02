@@ -133,6 +133,7 @@ void Parser::match(TokenType expectedType, const std::string& expectedValue) {
 
 std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
     std::vector<std::shared_ptr<ASTNode>> contents;
+    std::cout<<"plz no spam" <<std::endl;
     std::cout << "Entering parseFunctionBody at pos "<< pos <<" with token " << tokens[pos].value << std::endl;
         while (tokens[pos+1].value != "}") {
             if(lookAhead(TokenType::TYPE) && tokens[pos+1].value[tokens[pos+1].value.size()-1] == '?'){
@@ -829,7 +830,10 @@ std::shared_ptr<ASTNode> Parser::parseConsole() {
     if (lookAhead(TokenType::CONSOLE)) {
         pos++;
         auto consoleNode = std::make_shared<ConsoleNode>();
-
+        if (tokens[pos].value=="cin"){
+            consoleNode->Cin = true;
+        }else{
+            consoleNode->Cin = false;}
         while (tokens[++pos].value != ")") {
             if (lookAhead(TokenType::CONST)) {
                 consoleNode->message.push_back(parseInt());
