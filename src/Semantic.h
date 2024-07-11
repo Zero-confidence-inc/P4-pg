@@ -56,6 +56,7 @@ public:
     void kowalskiArray(const std::shared_ptr<ArrayNode>& node);
     void kowalskiReturn(const std::shared_ptr<ReturnNode>& node);
     nodeType getType2(const std::shared_ptr<ASTNode>& node);
+    nodeType kondiRecussion(const std::shared_ptr<ConditionNode> node);
     void kowalskiFunctionCall(const std::shared_ptr<FunctionCallNode>& node);
     void kowalskiRandom(const std::shared_ptr<RandomNode>& node);
     void kowalskiValue(const std::shared_ptr<ValueNode>& node);

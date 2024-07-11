@@ -45,7 +45,7 @@ Kowalski::Kowalski() {}
 
 void SymbolTable::declareVariable(const std::string& name,const std::string& type){
     if(!scopes.empty())
-    {
+    {   std::cout << "declared"+name <<std::endl;
         scopes.back()[name] = type;
     }else
     {
@@ -250,6 +250,11 @@ void Kowalski::kowalskiDeclaration(const std::shared_ptr<DeclarationNode>& node)
     std::string type = node->type;
     symbolTable.declareVariable(name,type);
 }
+void Kowalski::kowalskiValue(const std::shared_ptr<ValueNode>& node){
+    std::string name = node->identifier;
+    std::string type = node->type;
+    symbolTable.declareVariable(name,type);
+}
 void Kowalski::kowalskiRandom(const std::shared_ptr<RandomNode>& node){
     std::string name = node->identifier;
     std::string type = node->type;
@@ -336,26 +341,49 @@ for (int i = 0; i < node->Branch.size(); i++){
         }
     symbolTable.exitScope();
 }
+nodeType Kowalski::kondiRecussion(std::shared_ptr<ConditionNode> node) {
+    std::cout<<"a layer deeper in kondi statement"<<std::endl;
+    if(node->bNode->getType() == conditionNode)
+    {
+        if (getType2(node->aNode) == kondiRecussion(std::static_pointer_cast<ConditionNode>(node->bNode))){
+            return getType2(node->aNode);
+        }
+    } if (getType2(node->aNode) != getType2(node->bNode)){
+        throw std::runtime_error("differnt types of values in nested condition node");
+    }
+
+    return getType2(node->bNode);
+};
 
 void Kowalski::kowalskiKondi(const std::shared_ptr<ConditionNode>& node){
     std::string condition = node->condition;
     nodeType aSide = getType2(node->aNode);
+
     if (condition == "+=" || condition == "-=" || condition == "--" || condition == "++" || condition == "="){
         if (node->aNode->getType() != nodeType::identifierNode){
             throw std::runtime_error("Trying to reassign a non identifier");
         } else if (condition == "+=" || condition == "-=" || condition == "="){
-            if (node->bNode == nullptr)
-                throw std::runtime_error("Trying to reassign nothing");
-            if (getType2(node->aNode) == nodeType::intNode && getType2(node->bNode) != nodeType::intNode)
-                throw std::runtime_error("Trying to assign a non int to an int");
-            if (getType2(node->aNode) == nodeType::floatNode && getType2(node->bNode) != nodeType::intNode && getType2(node->bNode) != nodeType::floatNode)
-                throw std::runtime_error("Trying to assign a non int or float to a float");
-            if (getType2(node->aNode) == nodeType::charNode && getType2(node->bNode) != nodeType::charNode)
-                throw std::runtime_error("Trying to assign a non char to a char");
-            if (getType2(node->aNode) == nodeType::stringNode && getType2(node->bNode) != nodeType::stringNode && getType2(node->bNode) != nodeType::charNode)
-                throw std::runtime_error("Trying to assign non string or char to a char");
-            if (getType2(node->aNode) == nodeType::boolNode && getType2(node->bNode) != nodeType::boolNode)
-                throw std::runtime_error("Trying to assign non bool to a bool");
+           if (node->bNode->getType() == conditionNode) {
+
+                if (getType2(node->aNode) != kondiRecussion(std::static_pointer_cast<ConditionNode>(node->bNode)) ){
+
+                }
+            }else {
+               if (node->bNode == nullptr)
+                   throw std::runtime_error("Trying to reassign nothing");
+               if (getType2(node->aNode) == nodeType::intNode && getType2(node->bNode) != nodeType::intNode)
+                   throw std::runtime_error("Trying to assign a non int to an int");
+               if (getType2(node->aNode) == nodeType::floatNode && getType2(node->bNode) != nodeType::intNode &&
+                   getType2(node->bNode) != nodeType::floatNode)
+                   throw std::runtime_error("Trying to assign a non int or float to a float");
+               if (getType2(node->aNode) == nodeType::charNode && getType2(node->bNode) != nodeType::charNode)
+                   throw std::runtime_error("Trying to assign a non char to a char");
+               if (getType2(node->aNode) == nodeType::stringNode && getType2(node->bNode) != nodeType::stringNode &&
+                   getType2(node->bNode) != nodeType::charNode)
+                   throw std::runtime_error("Trying to assign non string or char to a char");
+               if (getType2(node->aNode) == nodeType::boolNode && getType2(node->bNode) != nodeType::boolNode)
+                   throw std::runtime_error("Trying to assign non bool to a bool");
+           }
         } else if (condition == "--" || condition == "++"){
             if (node->bNode != nullptr)
                 throw std::runtime_error("Trying to assign after \"++\" or \"--\"");
@@ -409,7 +437,7 @@ void Kowalski::kowalskiKondi(const std::shared_ptr<ConditionNode>& node){
 
 void Kowalski::kowalskiConsole(const std::shared_ptr<ConsoleNode>& node) {
         for (int i = 0; i < node->message.size(); i++){
-            analyseNode(node->message[i]);
+            getType2(node->message[i]);
         }
 }
 
@@ -439,9 +467,7 @@ void Kowalski::kowalskiArray(const std::shared_ptr<ArrayNode>& node) {
 
 void Kowalski::kowalskiReturn(const std::shared_ptr<ReturnNode>& node) {
 }
-void Kowalski::kowalskiValue(const std::shared_ptr<ValueNode>& node){
 
-}
 
 nodeType Kowalski::getType2(const std::shared_ptr<ASTNode>& node){
         if (node->getType() == nodeType::identifierNode){

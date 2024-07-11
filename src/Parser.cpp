@@ -166,6 +166,15 @@ std::vector<std::shared_ptr<ASTNode>> Parser::parseFunctionBody() {
             } else if (lookAhead(TokenType::CONSOLE)){
                 auto returns = parseConsole();
                 contents.push_back(returns);
+            } else if (lookAhead(TokenType::IDENTIFIER)){
+                if (tokens[pos+2].value == "("){
+                    auto returns = parseFunctionCall();
+                    contents.push_back(returns);
+                }else{
+                    auto returns = parseCondition();
+                    contents.push_back(returns);
+
+                }
             }
         }
     std::cout<<"Parsed functionBody"<<std::endl;
